@@ -1,0 +1,88 @@
+
+
+var params = {
+    alpha: 1,
+    costWeight: 0.2
+};
+
+// sample data — examples aggregated
+// data = [
+//     {n: 10, heads: 5}
+// ];
+
+
+var coinweightPrior = function () {
+    // Reparamaterize beta parameters (a, b) into mean and total samples (mu, v)
+    // mu = a / (a + b); v = a + b
+    // a = mu*v; b = (1 - mu)*v
+    var mu = uniform({ a: 0, b: 1 }); // hyperprior for mean
+    var v = gamma({ shape: 1, scale: 20 }); // hyperprior for total samples... andrew gelman says to do this
+
+    var a = mu * v;
+    var b = (1 - mu) * v;
+    return { a: a, b: b };
+};
+
+// literal learner (only for the purpose of speaker choosing examples)
+var L0 = function (examples, learnerPrior) {
+    return Infer({ method: 'MCMC' }, function () {
+        // var learnerPrior = coinweightPrior();
+        var theta = beta({a: learnerPrior.a, b: learnerPrior.b}); // learner prior on coin weights
+
+        observe(Binomial({ n: examples.n, p: theta }), examples.heads);
+
+        return theta;
+    });
+};
+
+// pragmatic speaker
+var S1 = function (theta, learnerPrior) {
+    return Infer({ method: 'enumerate' }, function () {
+        var nExamples = uniformDraw(_.range(1, 20)); // participants can (arbitrarily) select up to 20 examples
+        var nHeads = uniformDraw(_.range(0, nExamples));
+
+        var examples = { n: nExamples, heads: nHeads };
+
+        factor(params.alpha * (L0(examples, learnerPrior).score(theta) - params.costWeight * examples.n));
+        return examples;
+    });
+};
+
+// learner who has full knowledge about their own priors... aka listenerTheta is fixed, no uncertainty over theta
+var L0_actual = function (examples, learnerTruePrior) {
+    return Infer({ method: 'enumerate' }, function () {
+        var theta = sample(learnerTruePrior);
+
+        observe(Binomial({ n: examples.n, p: theta }), examples.heads);
+
+        return theta;
+    });
+};
+
+
+// at each step, draw a sample from S1
+// teacher updates information about the learner once they have feedback from the learner
+var updatePosterior = function () {
+    return Infer({ method: 'MCMC'}, function() {
+        var learnerPrior = coinweightPrior();
+
+        var learnerTruePrior = Beta({a: 5, b: 3}); // arbitrary set learner prior
+        var trueTheta = 0.8; // arbitrary true coin flip weight that speaker is trying to teach learner
+
+        // sample object speaker selected from S1
+        var speakerExamples = sample(S1(trueTheta, learnerPrior));
+
+        factor(L0_actual(speakerExamples, learnerTruePrior).score(trueTheta)); // can also do MAP estimation... condition on perfect speaker knowing the true hyptohesis
+
+        // factor statement for score of the actual learner
+        // goal is to learn the learner's mu and v
+
+        // return
+        return {
+            prior: learnerPrior
+        }
+    });
+};
+
+updatePosterior()
+// change params for learnerPrior
