@@ -11,11 +11,16 @@ var params = {
     }
 };
 
+var L0Mean = function(examples, learnerPrior) {
+    return (learnerPrior.a + examples.heads) / (learnerPrior.a + learnerPrior.b + examples.n)
+}
+// var L0Median
+// var L0Mode
+
 // literal learner
 var L0 = function (examples, learnerPrior) {
     return Beta({ a: _.toNumber(learnerPrior.a + examples.heads), b: _.toNumber(learnerPrior.b + examples.n - examples.heads) });
 };
-
 // console.log(L0({n: 20, heads: 0}, {a: 1, b: 1}))
 
 // pragmatic speaker
@@ -50,15 +55,17 @@ var S = function (theta) {
 }
 
 
-
 // rename learnerPrior to learnerHypers or something
 var updateLearnerPosterior = function (data) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(params.classes);
         var learnerPrior = params.classHypers[learnerClass];
-        var learnerEstimate = expectation(L0(data, learnerPrior));
-        var trueLearnerEstimate = expectation(L0(data, params.classHypers[params.trueLearnerClass]));
-        condition(learnerEstimate === trueLearnerEstimate);
+        var learnerEstimate = L0Mean(data, learnerPrior);
+        var trueLearnerEstimate = L0Mean(data, params.classHypers[params.trueLearnerClass]);
+
+        console.log(learnerEstimate)
+        console.log(trueLearnerEstimate)
+        factor(learnerEstimate === trueLearnerEstimate ? 1 : 0);
         return learnerClass;
     })
 }
