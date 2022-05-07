@@ -2,12 +2,12 @@ var params = {
     alpha: 4,
     costWeight: 0,
     trueTheta: .7, // true coin flip weight
-    nExamples: 20,
+    nExamples: 10,
     classes: [0, 1],
-    trueLearnerClass: 0,
+    trueLearnerClass: 1,
     classHypers: {
-        0: { a: 30, b: 30 },
-        1: { a: 1, b: 1 }
+        0: { a: 2, b: 8 },
+        1: { a: 8, b: 2 }
     }
 };
 
@@ -65,7 +65,7 @@ var updateLearnerPosterior = function (data) {
 
 //         console.log(learnerEstimate)
 //         console.log(trueLearnerEstimate)
-        factor(learnerEstimate === trueLearnerEstimate ? 1 : 0);
+        condition(learnerEstimate === trueLearnerEstimate);
         return learnerClass;
     })
 }
@@ -78,10 +78,14 @@ var model = function () {
 //       console.log(learnerPosterior)
         var secondExamples = sample(S1(params.trueTheta, params.classHypers[sample(learnerPosterior)]));
         return {
-            step1: firstExamples,
-            step2: secondExamples,
+            step1: firstExamples.heads,
+            step2: secondExamples.heads,
         }
     })
 }
 
-model()
+var posterior = model()
+
+viz.auto(posterior)
+// viz.marginals(posterior)
+// viz.table(posterior)
