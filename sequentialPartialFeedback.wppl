@@ -1,13 +1,13 @@
 var params = {
     alpha: 4,
     costWeight: 0,
-    trueTheta: .6, // true coin flip weight
+    trueTheta: .7, // true coin flip weight
     nExamples: 20,
     classes: [0, 1],
-    trueLearnerClass: 0, // true learner class
+    trueLearnerClass: 0,
     classHypers: {
-        0: {a: 3, b: 10},
-        1: {a: 10, b: 3}
+        0: {a: 30, b: 30},
+        1: {a: 1, b: 1}
     }
 };
 
@@ -16,6 +16,7 @@ var L0 = function (examples, learnerPrior) {
     return Beta({ a: _.toNumber(learnerPrior.a + examples.heads), b: _.toNumber(learnerPrior.b + examples.n - examples.heads) });
 };
 
+// pragmatic speaker
 var S1 = function (theta, learnerPrior) {
     return Infer({ method: 'enumerate' }, function () {
         var nExamples = params.nExamples;
@@ -26,41 +27,51 @@ var S1 = function (theta, learnerPrior) {
     });
 };
 
+// pragmatic learner (not used)
+var L1 = function (examples, learnerPrior) {
+    return Infer({method: 'enumerate'}, function () {
+        var theta = Beta({a: learnerPrior.a, b: learnerPrior.b});
+        observe(S1(theta, learnerPrior), examples);
+        return theta;
+    })
+}
 
-//////
-var firstUtt = S1_first(params.trueTheta, uncertain learner prior)
-var posterior = updatePosterior(data=firstUtt)
-var secondUtt = S1_second(params.trueTheta, marginalize(posterior, 'class'))
-
-// plot path dependency
-
-/// I think this is how you do it, don't optimize for uniform good stuff
-
-/////
-
-// perfect teacher:
-// teacher knows likelihood of learner inferring trueTheta given whatever examples the teacher selects
-var updatePosterior = function () {
-    return Infer({ method: 'MCMC', samples: 50000, burn: 1000 }, function () {
-        // sample object speaker selected from S1
-
+// pragmatic speaker, marginalizing over possible classrooms
+var S = function(theta) {
+    return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(params.classes);
         var learnerPrior = params.classHypers[learnerClass];
 
-        var speakerExamples = sample(S1(params.trueTheta, learnerPrior));
+        return sample(S1(theta, learnerPrior))
+    })
+}
 
-        factor(L0(speakerExamples, params.classHypers[params.trueLearnerClass]).score(params.trueTheta));
-        return { class: learnerClass, examples: speakerExamples }
-    });
-};
+// rename learnerPrior to learnerHypers or something
+var updateLearnerPosterior = function(data) {
+    return Infer({method: 'enumerate'}, function() {
+        var learnerClass = uniformDraw(params.classes);
+        var learnerPrior = params.classHypers[learnerClass];
 
-// first stage is non sequential partial but you update posterior
-// sample from S1
-// what is the posterior given response from S1?
-// and then sample from updated posterior dist
+        var learnerEstimate = MAP(L0(data, learnerPrior));
+        var trueLearnerEstimate = MAP(L0(data, params.classHypers[params.trueLearnerClass]));
+        condition(learnerEstimate.val === trueLearnerEstimate.val);
+        return learnerClass;
+    })
+}
 
-var results = updatePosterior()
+var model = function() {
+    return Infer({method: 'enumerate'}, function() {
+        var learnerPrior = uniformDraw(params.classes);
+        var firstExamples = sample(S1(params.trueTheta, params.classHypers[learnerPrior]));
+        var learnerPosterior = updateLearnerPosterior(firstExamples);
+        var secondExamples = sample(S1(params.trueTheta, params.classHypers[learnerPosterior]));
+        return {
+            step1: firstExamples,
+            step2: secondExamples,
+        }
+    })
+}
 
-
-viz.table(marginalize(results, 'examples'))
-viz.auto(marginalize(results, 'class'))
+// S1(params.trueTheta)
+// S(params.trueTheta);
+model()
