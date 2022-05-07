@@ -6,84 +6,63 @@ var params = {
     classes: [0, 1],
     trueLearnerClass: 1,
     classHypers: {
-        0: { a: 2, b: 8 },
-        1: { a: 8, b: 2 }
+        0: { a: 2, b: 7 },
+        1: { a: 7, b: 2 }
     }
 };
 
-var L0Mean = function(examples, learnerPrior) {
-    return (learnerPrior.a + examples.heads) / (learnerPrior.a + learnerPrior.b + examples.n)
-}
-// var L0Median
-// var L0Mode
+// var L0Mean = function (examples, learnerHypers) {
+//     return (learnerHypers.a + examples.heads) / (learnerHypers.a + learnerHypers.b + examples.n)
+// }
 
 // literal learner
-var L0 = function (examples, learnerPrior) {
-    return Beta({ a: _.toNumber(learnerPrior.a + examples.heads), b: _.toNumber(learnerPrior.b + examples.n - examples.heads) });
+var L0 = function (examples, learnerHypers) {
+    return Beta({ a: _.toNumber(learnerHypers.a + examples.heads), b: _.toNumber(learnerHypers.b + examples.n - examples.heads) });
 };
-// console.log(L0({n: 20, heads: 0}, {a: 1, b: 1}))
+
 
 // pragmatic speaker
-var S1 = function (theta, learnerPrior) {
+var S1 = function (theta, learnerHypers) {
     return Infer({ method: 'enumerate' }, function () {
         var nExamples = params.nExamples;
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var examples = { n: nExamples, heads: nHeads };
-        factor(params.alpha * (L0(examples, learnerPrior).score(theta) - params.costWeight * examples.n));
+        factor(params.alpha * (L0(examples, learnerHypers).score(theta) - params.costWeight * examples.n));
         return examples;
     });
 };
 
 
-// pragmatic learner (not used)
-var L1 = function (examples, learnerPrior) {
-    return Infer({ method: 'enumerate' }, function () {
-        var theta = Beta({ a: learnerPrior.a, b: learnerPrior.b });
-        observe(S1(theta, learnerPrior), examples);
-        return theta;
-    })
-}
-
-// pragmatic speaker, marginalizing over possible classrooms
-var S = function (theta) {
-    return Infer({ method: 'enumerate' }, function () {
+// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
+var updateSpeakerPosterior = function (data) {
+    return Infer({ method: 'MCMC', samples: 5000 }, function () {
         var learnerClass = uniformDraw(params.classes);
-        var learnerPrior = params.classHypers[learnerClass];
+        var learnerHypers = params.classHypers[learnerClass];
 
-        return sample(S1(theta, learnerPrior))
-    })
-}
+        var learnerDist = L0(data, learnerHypers);
+        var trueLearnerDist = L0(data, params.classHypers[params.trueLearnerClass])
+        var learnerEstimate = sample(trueLearnerDist)
 
+        observe(learnerDist, learnerEstimate)
 
-// rename learnerPrior to learnerHypers or something
-var updateLearnerPosterior = function (data) {
-    return Infer({ method: 'MCMC', samples: 5000}, function () {
-        var learnerClass = uniformDraw(params.classes);
-        var learnerPrior = params.classHypers[learnerClass];
-//         var learnerEstimate = L0Mean(data, learnerPrior);
-//         var trueLearnerEstimate = L0Mean(data, params.classHypers[params.trueLearnerClass]);
-      var learnerDist = L0(data, learnerPrior);
-      var trueLearnerDist = L0(data, params.classHypers[params.trueLearnerClass])
-      var learnerEstimate = sample(trueLearnerDist)
-//         condition(learnerEstimate === trueLearnerEstimate);
-      observe(learnerDist, learnerEstimate)
+        // var learnerEstimate = L0Mean(data, learnerHypers);
+        // var trueLearnerEstimate = L0Mean(data, params.classHypers[params.trueLearnerClass]);
+        // condition(learnerEstimate === trueLearnerEstimate);
+
         return learnerClass;
     })
 }
 
 var model = function () {
     return Infer({ method: 'enumerate' }, function () {
-//         var learnerPrior = uniformDraw(params.classes);
-      var firstExamples = sample(S(params.trueTheta))
-//         var firstExamples = sample(S1(params.trueTheta, params.classHypers[learnerPrior]));
-        var learnerPosterior = updateLearnerPosterior(firstExamples);
-//       console.log(learnerPosterior)
-        var secondExamples = sample(S1(params.trueTheta, params.classHypers[sample(learnerPosterior)]));
-//       factor(L0(secondExamples, params.classHypers[sample(learnerPosterior)]).score(params.trueTheta))
+        var learnerHypers = uniformDraw(params.classes);
+        var step1examples = sample(S1(params.trueTheta, params.classHypers[learnerHypers]))
+        var speakerPosterior = updateSpeakerPosterior(step1examples);
+        var step2examples = sample(S1(params.trueTheta, params.classHypers[sample(speakerPosterior)]));
+        // factor(L0(step2examples, params.classHypers[sample(speakerPosterior)]).score(params.trueTheta))
         return {
-            step1: firstExamples.heads,
-            step2: secondExamples.heads,
-          classroom: sample(learnerPosterior)
+            step1_nHeads: step1examples.heads,
+            step2_nHeads: step2examples.heads
         }
     })
 }
@@ -92,4 +71,4 @@ var posterior = model()
 
 viz.auto(posterior)
 viz.marginals(posterior)
-// viz.table(posterior)
+viz.table(posterior)

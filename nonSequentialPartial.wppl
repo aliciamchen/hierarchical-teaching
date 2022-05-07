@@ -12,17 +12,17 @@ var params = {
 };
 
 // literal learner
-var L0 = function (examples, learnerPrior) {
-    return Beta({ a: _.toNumber(learnerPrior.a + examples.heads), b: _.toNumber(learnerPrior.b + examples.n - examples.heads) });
+var L0 = function (examples, learnerHypers) {
+    return Beta({ a: _.toNumber(learnerHypers.a + examples.heads), b: _.toNumber(learnerHypers.b + examples.n - examples.heads) });
 };
 
 // pragmatic speaker
-var S1 = function (theta, learnerPrior) {
+var S1 = function (theta, learnerHypers) {
     return Infer({ method: 'enumerate' }, function () {
         var nExamples = params.nExamples;
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var examples = { n: nExamples, heads: nHeads };
-        factor(params.alpha * (L0(examples, learnerPrior).score(theta) - params.costWeight * examples.n));
+        factor(params.alpha * (L0(examples, learnerHypers).score(theta) - params.costWeight * examples.n));
         return examples;
     });
 };
@@ -30,9 +30,9 @@ var S1 = function (theta, learnerPrior) {
 var S = function(theta) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(params.classes);
-        var learnerPrior = params.classHypers[learnerClass];
+        var learnerHypers = params.classHypers[learnerClass];
 
-        return sample(S1(theta, learnerPrior))
+        return sample(S1(theta, learnerHypers))
     })
 }
 
