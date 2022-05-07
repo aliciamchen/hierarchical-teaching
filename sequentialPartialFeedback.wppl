@@ -6,8 +6,8 @@ var params = {
     classes: [0, 1],
     trueLearnerClass: 0,
     classHypers: {
-        0: {a: 30, b: 30},
-        1: {a: 1, b: 1}
+        0: { a: 30, b: 30 },
+        1: { a: 1, b: 1 }
     }
 };
 
@@ -15,6 +15,8 @@ var params = {
 var L0 = function (examples, learnerPrior) {
     return Beta({ a: _.toNumber(learnerPrior.a + examples.heads), b: _.toNumber(learnerPrior.b + examples.n - examples.heads) });
 };
+
+// console.log(L0({n: 20, heads: 0}, {a: 1, b: 1}))
 
 // pragmatic speaker
 var S1 = function (theta, learnerPrior) {
@@ -27,17 +29,18 @@ var S1 = function (theta, learnerPrior) {
     });
 };
 
+
 // pragmatic learner (not used)
 var L1 = function (examples, learnerPrior) {
-    return Infer({method: 'enumerate'}, function () {
-        var theta = Beta({a: learnerPrior.a, b: learnerPrior.b});
+    return Infer({ method: 'enumerate' }, function () {
+        var theta = Beta({ a: learnerPrior.a, b: learnerPrior.b });
         observe(S1(theta, learnerPrior), examples);
         return theta;
     })
 }
 
 // pragmatic speaker, marginalizing over possible classrooms
-var S = function(theta) {
+var S = function (theta) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(params.classes);
         var learnerPrior = params.classHypers[learnerClass];
@@ -46,21 +49,22 @@ var S = function(theta) {
     })
 }
 
+
+
 // rename learnerPrior to learnerHypers or something
-var updateLearnerPosterior = function(data) {
-    return Infer({method: 'enumerate'}, function() {
+var updateLearnerPosterior = function (data) {
+    return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(params.classes);
         var learnerPrior = params.classHypers[learnerClass];
-
-        var learnerEstimate = MAP(L0(data, learnerPrior));
-        var trueLearnerEstimate = MAP(L0(data, params.classHypers[params.trueLearnerClass]));
-        condition(learnerEstimate.val === trueLearnerEstimate.val);
+        var learnerEstimate = expectation(L0(data, learnerPrior));
+        var trueLearnerEstimate = expectation(L0(data, params.classHypers[params.trueLearnerClass]));
+        condition(learnerEstimate === trueLearnerEstimate);
         return learnerClass;
     })
 }
 
-var model = function() {
-    return Infer({method: 'enumerate'}, function() {
+var model = function () {
+    return Infer({ method: 'enumerate' }, function () {
         var learnerPrior = uniformDraw(params.classes);
         var firstExamples = sample(S1(params.trueTheta, params.classHypers[learnerPrior]));
         var learnerPosterior = updateLearnerPosterior(firstExamples);
@@ -72,6 +76,4 @@ var model = function() {
     })
 }
 
-// S1(params.trueTheta)
-// S(params.trueTheta);
 model()
