@@ -57,29 +57,33 @@ var S = function (theta) {
 
 // rename learnerPrior to learnerHypers or something
 var updateLearnerPosterior = function (data) {
-    return Infer({ method: 'enumerate' }, function () {
+    return Infer({ method: 'MCMC', samples: 5000}, function () {
         var learnerClass = uniformDraw(params.classes);
         var learnerPrior = params.classHypers[learnerClass];
-        var learnerEstimate = L0Mean(data, learnerPrior);
-        var trueLearnerEstimate = L0Mean(data, params.classHypers[params.trueLearnerClass]);
-
-//         console.log(learnerEstimate)
-//         console.log(trueLearnerEstimate)
-        condition(learnerEstimate === trueLearnerEstimate);
+//         var learnerEstimate = L0Mean(data, learnerPrior);
+//         var trueLearnerEstimate = L0Mean(data, params.classHypers[params.trueLearnerClass]);
+      var learnerDist = L0(data, learnerPrior);
+      var trueLearnerDist = L0(data, params.classHypers[params.trueLearnerClass])
+      var learnerEstimate = sample(trueLearnerDist)
+//         condition(learnerEstimate === trueLearnerEstimate);
+      observe(learnerDist, learnerEstimate)
         return learnerClass;
     })
 }
 
 var model = function () {
     return Infer({ method: 'enumerate' }, function () {
-        var learnerPrior = uniformDraw(params.classes);
-        var firstExamples = sample(S1(params.trueTheta, params.classHypers[learnerPrior]));
+//         var learnerPrior = uniformDraw(params.classes);
+      var firstExamples = sample(S(params.trueTheta))
+//         var firstExamples = sample(S1(params.trueTheta, params.classHypers[learnerPrior]));
         var learnerPosterior = updateLearnerPosterior(firstExamples);
 //       console.log(learnerPosterior)
         var secondExamples = sample(S1(params.trueTheta, params.classHypers[sample(learnerPosterior)]));
+//       factor(L0(secondExamples, params.classHypers[sample(learnerPosterior)]).score(params.trueTheta))
         return {
             step1: firstExamples.heads,
             step2: secondExamples.heads,
+          classroom: sample(learnerPosterior)
         }
     })
 }
@@ -87,5 +91,5 @@ var model = function () {
 var posterior = model()
 
 viz.auto(posterior)
-// viz.marginals(posterior)
+viz.marginals(posterior)
 // viz.table(posterior)
