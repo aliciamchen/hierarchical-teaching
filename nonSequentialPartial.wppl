@@ -4,7 +4,7 @@ var params = {
     trueTheta: .7, // true coin flip weight
     nExamples: 20,
     classes: [0, 1],
-    trueLearnerClass: 0, // true learner class
+    trueLearnerClass: 0,
     classHypers: {
         0: {a: 30, b: 30},
         1: {a: 1, b: 1}
@@ -17,11 +17,8 @@ var L0 = function (examples, learnerPrior) {
 };
 
 // pragmatic speaker
-var S1 = function (theta) {
+var S1 = function (theta, learnerPrior) {
     return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = uniformDraw(params.classes);
-        var learnerPrior = params.classHypers[learnerClass];
-
         var nExamples = params.nExamples;
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var examples = { n: nExamples, heads: nHeads };
@@ -30,4 +27,14 @@ var S1 = function (theta) {
     });
 };
 
-S1(params.trueTheta)
+var S = function(theta) {
+    return Infer({ method: 'enumerate' }, function () {
+        var learnerClass = uniformDraw(params.classes);
+        var learnerPrior = params.classHypers[learnerClass];
+
+        return sample(S1(theta, learnerPrior))
+    })
+}
+
+// S1(params.trueTheta)
+S(params.trueTheta);

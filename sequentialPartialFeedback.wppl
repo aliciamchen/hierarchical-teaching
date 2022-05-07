@@ -16,23 +16,7 @@ var L0 = function (examples, learnerPrior) {
     return Beta({ a: _.toNumber(learnerPrior.a + examples.heads), b: _.toNumber(learnerPrior.b + examples.n - examples.heads) });
 };
 
-
-// pragmatic speaker
-var S1_first = function (theta) {
-    return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = uniformDraw(params.classes);
-        var learnerPrior = params.classHypers[learnerClass];
-
-        var nExamples = params.nExamples;
-        var nHeads = uniformDraw(_.range(0, nExamples + 1));
-        var examples = { n: nExamples, heads: nHeads };
-        factor(params.alpha * (L0(examples, learnerPrior).score(theta) - params.costWeight * examples.n));
-        return examples;
-    });
-};
-
-
-var S1_second = function (theta, learnerPrior) {
+var S1 = function (theta, learnerPrior) {
     return Infer({ method: 'enumerate' }, function () {
         var nExamples = params.nExamples;
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
