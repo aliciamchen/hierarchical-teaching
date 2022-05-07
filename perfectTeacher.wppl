@@ -1,6 +1,10 @@
+// teacher giving one set of examples (draw from binomial distribution) to learner
+
 var params = {
-    alpha: 20,
-    costWeight: 0//.2
+    alpha: 5,
+    costWeight: 0.7,
+    learnerTruePrior: { a: 3, b: 3 },
+    trueTheta: .9 // actual coin flip weight
 };
 
 var coinweightPrior = function () {
@@ -8,14 +12,14 @@ var coinweightPrior = function () {
     // mu = a / (a + b); v = a + b
     // a = mu*v; b = (1 - mu)*v
     var mu = uniform({ a: 0, b: 1 }); // hyperprior for mean
-    var v = gamma({ shape: 1, scale: 100 }); // hyperprior for total samples... andrew gelman says to do this
+    var v = gamma({ shape: 1, scale: 30 }); // hyperprior for total samples... andrew gelman says to do this
 
     var a = mu * v;
     var b = (1 - mu) * v;
     return { a: a, b: b };
 };
 
-// literal learner (only for the purpose of speaker choosing examples)
+// literal learner
 var L0 = function (examples, learnerPrior) {
     return Beta({ a: _.toNumber(learnerPrior.a + examples.heads), b: _.toNumber(learnerPrior.b + examples.n - examples.heads) });
 };
@@ -24,7 +28,7 @@ var L0 = function (examples, learnerPrior) {
 var S1 = function (theta, learnerPrior) {
     return Infer({ method: 'enumerate' }, function () {
         var nExamples = uniformDraw(_.range(1, 10)); // participants can (arbitrarily) select up to 20 examples
-        var nHeads = uniformDraw(_.range(0, nExamples));
+        var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var examples = { n: nExamples, heads: nHeads };
         factor(params.alpha * (L0(examples, learnerPrior).score(theta) - params.costWeight * examples.n));
         return examples;
@@ -32,17 +36,19 @@ var S1 = function (theta, learnerPrior) {
 };
 
 
-// at each step, draw a sample from S1
-// teacher updates information about the learner once they have feedback from the learner
+// perfect teacher:
+// teacher knows likelihood of learner inferring trueTheta given whatever examples the teacher selects
 var updatePosterior = function () {
-    var learnerTruePrior = { a: 1, b: 1 }; // arbitrary set learner prior
-    var trueTheta = 0.5; // arbitrary true coin flip weight that speaker is trying to teach learner
-    return Infer({ method: 'MCMC', samples: 100000, burn: 1000 }, function () {
+    var learnerTruePrior = params.learnerTruePrior;
+    var trueTheta = params.trueTheta; // true coin flip weight that speaker is trying to teach learner
+    return Infer({ method: 'MCMC', samples: 50000, burn: 1000 }, function () {
         // sample object speaker selected from S1
         var learnerPrior = coinweightPrior();
         var speakerExamples = MAP(S1(trueTheta, learnerPrior));
-        print(learnerPrior)
-        print(speakerExamples.val)
+        // var speakerThetaEstimate =
+//         print(learnerPrior)
+//         print(speakerExamples.val)
+        // here the
         factor(L0(speakerExamples.val, learnerTruePrior).score(trueTheta)); // can also do MAP estimation... condition on perfect speaker knowing the true hyptohesis
         return { prior: learnerPrior, examples: speakerExamples.val }
     });
@@ -50,6 +56,6 @@ var updatePosterior = function () {
 
 var results = updatePosterior()
 viz.table(marginalize(results, 'examples'))
-  //viz.auto(marginalize(results, 'prior'))
+viz.auto(marginalize(results, 'prior'))
   //marginalize(, 'a')
   // change params for learnerPrior

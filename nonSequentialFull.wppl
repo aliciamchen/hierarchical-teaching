@@ -1,0 +1,25 @@
+var params = {
+    alpha: 4,
+    costWeight: 0,
+    learnerTruePrior: { a: 30, b: 30 },
+    trueTheta: .6, // actual coin flip weight
+    nExamples: 20
+};
+
+// literal learner
+var L0 = function (examples, learnerPrior) {
+    return Beta({ a: _.toNumber(learnerPrior.a + examples.heads), b: _.toNumber(learnerPrior.b + examples.n - examples.heads) });
+};
+
+// pragmatic speaker
+var S1 = function (theta, learnerPrior) {
+    return Infer({ method: 'enumerate' }, function () {
+        var nExamples = params.nExamples;
+        var nHeads = uniformDraw(_.range(0, nExamples + 1));
+        var examples = { n: nExamples, heads: nHeads };
+        factor(params.alpha * (L0(examples, learnerPrior).score(theta) - params.costWeight * examples.n));
+        return examples;
+    });
+};
+
+S1(params.trueTheta, params.learnerTruePrior)
