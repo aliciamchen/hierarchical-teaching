@@ -63,8 +63,8 @@ var updateLearnerPosterior = function (data) {
         var learnerEstimate = L0Mean(data, learnerPrior);
         var trueLearnerEstimate = L0Mean(data, params.classHypers[params.trueLearnerClass]);
 
-        console.log(learnerEstimate)
-        console.log(trueLearnerEstimate)
+//         console.log(learnerEstimate)
+//         console.log(trueLearnerEstimate)
         factor(learnerEstimate === trueLearnerEstimate ? 1 : 0);
         return learnerClass;
     })
@@ -75,7 +75,8 @@ var model = function () {
         var learnerPrior = uniformDraw(params.classes);
         var firstExamples = sample(S1(params.trueTheta, params.classHypers[learnerPrior]));
         var learnerPosterior = updateLearnerPosterior(firstExamples);
-        var secondExamples = sample(S1(params.trueTheta, params.classHypers[learnerPosterior]));
+//       console.log(learnerPosterior)
+        var secondExamples = sample(S1(params.trueTheta, params.classHypers[sample(learnerPosterior)]));
         return {
             step1: firstExamples,
             step2: secondExamples,
