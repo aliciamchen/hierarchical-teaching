@@ -13,8 +13,6 @@
     <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.0"></script>
 
-
-
     <link href="https://unpkg.com/jspsych@7.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
 
     <style>
@@ -178,37 +176,93 @@
         show_page_number: true
     }
 
-    timeline.push(instructions);
+    // timeline.push(instructions);
 
     /* Main logic of trials */
 
     var design = jsPsych.randomization.factorial(factors, 1)
 
+    var beginning = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: '<div style="font-size:30px;">Congrats on passing the comprehension quiz! The experiment will begin in a few seconds.</div>',
+        choices: "NO_KEYS",
+        trial_duration: 3000,
+    }
+
+    timeline.push(beginning);
+
     // Loop through individual trials in design to create timeline
     for (let i = 0; i < design.length; i++) {
         var currTrial = design[i];
+        console.log(currTrial);
+        var studentTrueClassroom = jsPsych.randomization.sampleWithoutReplacement(currTrial.classroomPairing, 1)[0];
 
         var classroomInfo = {
             type: jsPsychHtmlButtonResponse,
-            stimulus: `warawerawerawerwaerwaer test classroom info`,
+            stimulus: `
+            <h3>The next student comes from either Classroom ${currTrial.classroomPairing[0]} or Classroom ${currTrial.classroomPairing[1]}.</h3>
+            <p>The students in Classroom ${currTrial.classroomPairing[0]} have already seen \
+                ${classroomParams[currTrial.classroomPairing[0]].a} heads and ${classroomParams[currTrial.classroomPairing[0]].b} tails.</p>
+            <p>The students in Classroom ${currTrial.classroomPairing[1]} have already seen \
+                ${classroomParams[currTrial.classroomPairing[1]].a} heads and ${classroomParams[currTrial.classroomPairing[1]].b} tails.</p>
+            `,
             choices: ['Continue']
         }
 
         var firstExample = {
             type: jsPsychSurveyHtmlForm,
-            preamble: 'asdfasdf',
+            preamble: `
+                ${currTrial.condition === 'nonSeqFull' ? `
+                        <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
+                        <p>You are teaching a new student from classroom ${studentTrueClassroom}.</p>
+                        <h3>Select a set of examples to send to your student.</h3>
+                        <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
+                        ` : `
+                        <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
+                        <p>You are teaching a new student who has an equal probability of being from classroom ${currTrial.classroomPairing[0]} and classroom ${currTrial.classroomPairing[1]}.</p>
+                        <p>Remember:</p>
+                        <ul>
+                            <li>The students in Classroom ${currTrial.classroomPairing[0]} have already seen \
+                            ${classroomParams[currTrial.classroomPairing[0]].a} ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[0]].b} tails.</li>
+                            <li>The students in Classroom ${currTrial.classroomPairing[1]} have already seen \
+                            ${classroomParams[currTrial.classroomPairing[1]].a} heads and ${classroomParams[currTrial.classroomPairing[1]].b} tails.</li>
+                        </ul>
+                        <h3>Select a set of examples to send to your student.</h3>
+                        <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
+                        `
+                }`
+            ,
             html: `
-                <p> <input name="heads" type="number" required="true"/> heads </p>
-                <input name="tails" type="number" required="true"/> tails </p>`,
-            trial_duration: 10000
+                <p> <input name="heads" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> heads </p>
+                <p> <input name="tails" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> tails </p>`,
+            trial_duration: 10000,
+            data: {
+                condition: currTrial.condition,
+                trueTheta: currTrial.coinWeight,
+                classrooms: currTrial.classroomPairing,
+                studentTrueClassroom: studentTrueClassroom
+            }
         };
+
+        var firstExampleLoop = {
+            timeline: [firstExample],
+            loop_function: function (data) {
+
+                var totalFlips = parseInt(data.values()[0].response.heads) + parseInt(data.values()[0].response.tails)
+                if ((totalFlips <= params.maxFlips) && (totalFlips > 0)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
 
         var sending = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: 'werawerawer',
+            stimulus: 'Sending examples to student... ',
             choices: "NO_KEYS",
             trial_duration: function () {
-                return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+                return jsPsych.randomization.sampleWithoutReplacement([1250, 1500, 1750, 2000], 1)[0];
             }
         }
 
@@ -220,28 +274,49 @@
 
         var secondExample = {
             type: jsPsychSurveyHtmlForm,
-            preamble: 'asdfasdf',
+            preamble: `<h3>Select another set of examples to send to the same student.</h3>
+            <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
+            `,
             html: `
-        <p> <input name="heads" type="number" required="true"/> heads </p>
-        <input name="tails" type="number" required="true"/> tails </p>`,
-            trial_duration: 10000
+                <p> <input name="heads" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> heads </p>
+                <p> <input name="tails" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> tails </p>`,
+            trial_duration: 10000,
+            data: {
+                condition: currTrial.condition,
+                trueTheta: currTrial.coinWeight,
+                classrooms: currTrial.classroomPairing,
+                studentTrueClassroom: studentTrueClassroom
+            }
         };
+
+        var secondExampleLoop = {
+            timeline: [secondExample],
+            loop_function: function (data) {
+
+                var totalFlips = parseInt(data.values()[0].response.heads) + parseInt(data.values()[0].response.tails)
+                if ((totalFlips <= params.maxFlips) && (totalFlips > 0)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
 
         var sent = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: 'Sent!',
+            stimulus: 'Examples sent to student!',
             choices: "NO_KEYS",
             trial_duration: function () {
-                return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+                return jsPsych.randomization.sampleWithoutReplacement([1750, 2000, 2250, 2500], 1)[0];
             }
         }
 
         var fixation = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: '<div style="font-size:60px;">+</div>',
+            stimulus: '<div style="font-size:60px;">Next student</div>',
             choices: "NO_KEYS",
             trial_duration: function () {
-                return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+                return jsPsych.randomization.sampleWithoutReplacement([1750, 2000, 2250, 2500], 1)[0];
             },
             data: {
                 task: 'fixation'
@@ -249,10 +324,10 @@
         }
 
         const trialsInCondition = {
-            'nonSeqFull': [classroomInfo, firstExample, sending, sent, fixation],
-            'nonSeqPartial': [classroomInfo, firstExample, sending, sent, fixation],
-            'seqNoFeedback': [classroomInfo, firstExample, sending, sent, secondExample, sending, sent, fixation],
-            'seqFeedback': [classroomInfo, firstExample, sending, sent, studentFeedback, secondExample, sending, sent, fixation],
+            'nonSeqFull': [classroomInfo, firstExampleLoop, sending, sent, fixation],
+            'nonSeqPartial': [classroomInfo, firstExampleLoop, sending, sent, fixation],
+            'seqNoFeedback': [classroomInfo, firstExampleLoop, sending, sent, secondExampleLoop, sending, sent, fixation],
+            'seqFeedback': [classroomInfo, firstExampleLoop, sending, sent, studentFeedback, secondExampleLoop, sending, sent, fixation],
         }
 
         timeline.push(trialsInCondition[currTrial.condition])
