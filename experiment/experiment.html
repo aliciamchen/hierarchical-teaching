@@ -38,7 +38,8 @@
         completionMinutes: 15,
         basePay: 5,
         maxBonus: 2,
-        perTrialBonus: 0.5
+        perTrialBonus: 0.5,
+        exampleCost: 0.02
     };
 
     const classroomParams = {
@@ -329,7 +330,8 @@
                 condition: currTrial.condition,
                 trueTheta: currTrial.coinWeight,
                 classrooms: currTrial.classroomPairing,
-                studentTrueClassroom: studentTrueClassroom
+                studentTrueClassroom: studentTrueClassroom,
+                exampleSet: 'first'
             },
             on_finish: function(data) {
                 var nHeads = parseInt(data.response.heads);
@@ -337,12 +339,13 @@
                 var studentTrueHypers = classroomParams[data.studentTrueClassroom];
                 var studentGuess = (parseInt(studentTrueHypers.a) + nHeads) / (parseInt(studentTrueHypers.a) + parseInt(studentTrueHypers.b) + nHeads + nTails);
                 var delta = Math.abs(data.trueTheta - studentGuess);
-                var bonus = delta <= 0.1 ? params.perTrialBonus : 0
+                var reward = delta <= 0.1 ? params.perTrialBonus : 0
+                var cost = params.exampleCost * (nHeads + nTails)
 
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
-                data.bonus = bonus;
+                data.bonus = (reward - cost) > 0 ? (reward - cost).toPrecision(2) : 0
                 data.totalExamples = nHeads + nTails;
             }
         };
@@ -369,7 +372,7 @@
             }
         }
 
-        var studentFeedback = {
+        var feedback = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function () {
                 var rawResponses = jsPsych.data.get().values();
@@ -383,10 +386,11 @@
                 // console.log(nHeads)
                 // console.log(nTails)
                 // var hatTheta =
+
                 return `
                 <p>Student's guess for coin weight: ${twoTrialsAgo.studentGuess.toPrecision(2)}</p>
                 <p>You have received a bonus of ${twoTrialsAgo.bonus}</p>
-                <p>You will now give another set of examples to your student. Press any key to continue.</p>
+                <p>${twoTrialsAgo.condition === 'seqFeedback' ? 'You will now give another set of examples to your student.' : ''} Press any key to continue.</p>
                 `
             }
         }
@@ -405,7 +409,23 @@
                 condition: currTrial.condition,
                 trueTheta: currTrial.coinWeight,
                 classrooms: currTrial.classroomPairing,
-                studentTrueClassroom: studentTrueClassroom
+                studentTrueClassroom: studentTrueClassroom,
+                exampleSet: 'second'
+            },
+            on_finish: function(data) {
+                var nHeads = parseInt(data.response.heads);
+                var nTails = parseInt(data.response.tails);
+                var studentTrueHypers = classroomParams[data.studentTrueClassroom];
+                var studentGuess = (parseInt(studentTrueHypers.a) + nHeads) / (parseInt(studentTrueHypers.a) + parseInt(studentTrueHypers.b) + nHeads + nTails);
+                var delta = Math.abs(data.trueTheta - studentGuess);
+                var reward = delta <= 0.1 ? params.perTrialBonus : 0
+                var cost = params.exampleCost * (nHeads + nTails)
+
+                data.studentTrueHypers = studentTrueHypers;
+                data.studentGuess = studentGuess;
+                data.delta = delta;
+                data.bonus =  (reward - cost) > 0 ? (reward - cost).toPrecision(2) : 0;
+                data.totalExamples = nHeads + nTails;
             }
         };
 
@@ -431,10 +451,35 @@
             }
         }
 
-        var feedback = {
+        var finalSequentialFeedback = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function () {
+                // var rawResponses = jsPsych.data.get().values();
+                // var twoTrialsAgo = rawResponses[rawResponses.length - 3];
+                // console.log(twoTrialsAgo)
+                // var nHeads = parseInt(twoTrialsAgo.response.heads);
+                // var nTails = parseInt(twoTrialsAgo.response.tails);
+                // var studentTrueHypers = classroomParams[twoTrialsAgo.studentTrueClassroom];
 
+                // console.log(studentTrueHypers)
+                // console.log(nHeads)
+                // console.log(nTails)
+                // var hatTheta =
+
+                var blockData = jsPsych.data.get().last(7)
+                var firstResponse = blockData.filter({exampleSet: 'first'}).values()[0]
+                var secondResponse = blockData.filter({exampleSet: 'second'}).values()[0]
+
+                console.log(firstResponse)
+                console.log(secondResponse)
+
+                return `
+                <p>Student's first guess for coin weight: ${firstResponse.studentGuess.toPrecision(2)}</p>
+                <p>Student's second guess for coin weight: ${secondResponse.studentGuess.toPrecision(2)}</p>
+                <p>You have received a bonus of ${secondResponse.condition === 'seqNoFeedback' ? `$${firstResponse.bonus} for the first guess and` : ''} $${secondResponse.bonus} for the second guess.</p>
+                <p>Your total bonus for this student is $${parseInt(firstResponse.bonus) + parseInt(secondResponse.bonus)}.</p>
+                <p>Press any key to continue.</p>
+                `
             }
         }
 
@@ -452,31 +497,14 @@
 
 
         const trialsInCondition = {
-            'nonSeqFull': [classroomInfo, firstExampleLoop, sending, sent, fixation],
-            'nonSeqPartial': [classroomInfo, firstExampleLoop, sending, sent, fixation],
-            'seqNoFeedback': [classroomInfo, firstExampleLoop, sending, sent, secondExampleLoop, sending, sent, fixation],
-            'seqFeedback': [classroomInfo, firstExampleLoop, sending, sent, studentFeedback, secondExampleLoop, sending, sent, fixation],
+            'nonSeqFull': [classroomInfo, firstExampleLoop, sending, sent, feedback, fixation],
+            'nonSeqPartial': [classroomInfo, firstExampleLoop, sending, sent, feedback, fixation],
+            'seqNoFeedback': [classroomInfo, firstExampleLoop, sending, sent, secondExampleLoop, sending, sent, finalSequentialFeedback, fixation],
+            'seqFeedback': [classroomInfo, firstExampleLoop, sending, sent, feedback, secondExampleLoop, sending, sent, finalSequentialFeedback, fixation],
         }
 
         timeline.push(trialsInCondition[currTrial.condition])
     }
-
-
-    // console.log(trialsInCondition[jsPsych.timelineVariable('condition')])
-    // var allTrials = {
-    //     timeline: trialsInCondition[jsPsych.timelineVariable('condition')],
-    //     timeline_variables: design
-    // }
-
-    // timeline.push(allTrials);
-    // console.log(timeline)
-
-
-    var test_stimuli = [
-        { stimulus: 'img/blue.png', correct_response: 'f' },
-        { stimulus: 'img/orange.png', correct_response: 'j' }
-    ];
-
 
 
     var test = {
