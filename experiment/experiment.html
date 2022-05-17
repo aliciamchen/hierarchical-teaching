@@ -273,7 +273,7 @@
             type: jsPsychHtmlButtonResponse,
             stimulus: `
             <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
-            <p>In this block, you will be giving ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> set of examples' : '<b>two</b> sets of examples'} to this student.</p>
+            <p>In this block, you will be giving ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> set of examples' : '<b>two</b> sets of examples'} to your student.</p>
                 <p>${currTrial.condition === 'seqFeedback' ? `You will see the student's guess after sending them your first set of examples.` : ''}</p>
             `,
             choices: ['Continue']
@@ -324,6 +324,7 @@
                 var reward = delta <= params.perTrialBonusThreshold ? params.perTrialBonus : 0
                 var cost = params.exampleCost * (nHeads + nTails)
 
+                data.studentIndex = i;
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
@@ -372,7 +373,7 @@
                 return `
                 <p>Student's guess for coin weight: ${twoTrialsAgo.studentGuess.toPrecision(2)}</p>
                 <p>You received a bonus of $${twoTrialsAgo.bonus}</p>
-                <p>Total bonus so far: $${jsPsych.data.get().select('bonus').sum().toPrecision(3)}</p>
+                <p>Total bonus so far: $${Number(jsPsych.data.get().select('bonus').sum()).toPrecision(3)}</p>
                 <p>${twoTrialsAgo.condition === 'seqFeedback' ? 'You will now send another set of examples to your student.' : ''} Press any key to continue.</p>
                 `
             }
@@ -415,6 +416,7 @@
                 var reward = delta <= params.perTrialBonusThreshold ? params.perTrialBonus : 0
                 var cost = params.exampleCost * (nHeads + nTails)
 
+                data.studentIndex = i;
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
@@ -460,9 +462,11 @@
                 // console.log(nTails)
                 // var hatTheta =
 
-                var blockData = jsPsych.data.get().last(7)
-                var firstResponse = blockData.filter({exampleSet: 'first'}).values()[0]
-                var secondResponse = blockData.filter({exampleSet: 'second'}).values()[0]
+                var blockData = jsPsych.data.get()
+
+                // TODO: filter student id
+                var firstResponse = blockData.filter({studentIndex: i, exampleSet: 'first'}).values()[0]
+                var secondResponse = blockData.filter({studentIndex: i, exampleSet: 'second'}).values()[0]
 
                 console.log(firstResponse)
                 console.log(secondResponse)
@@ -472,7 +476,7 @@
                 <p>Student's second guess for coin weight: ${secondResponse.studentGuess.toPrecision(2)}</p>
                 <p>You have received a bonus of ${secondResponse.condition === 'seqNoFeedback' ? `$${firstResponse.bonus} for the first guess and` : ''} $${secondResponse.bonus} for the second guess.</p>
                 <p>Your total bonus for this student is $${(Number(firstResponse.bonus) + Number(secondResponse.bonus)).toPrecision(2)}.</p>
-                <p>Total bonus so far: $${jsPsych.data.get().select('bonus').sum().toPrecision(3)}</p>
+                <p>Total bonus so far: $${jsPsych.data.get().select('bonus').sum()}</p>
                 <p>Press any key to continue.</p>
                 `
             }
