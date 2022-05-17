@@ -14,7 +14,6 @@
     <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.0"></script>
 
-
     <link href="https://unpkg.com/jspsych@7.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
 
     <style>
@@ -28,6 +27,7 @@
 </head>
 
 <body></body>
+
 <script>
 
     /* Experiment parameters */
@@ -178,19 +178,18 @@
         show_page_number: true
     }
 
-    timeline.push(instructions);
 
     /* Comprehension check */
 
     var comprehensionCheck = {
-        type: jsPsychSurveyMultiSelect,
+        type: jsPsychSurveyMultiChoice,
         questions: [
             {
-                prompt: 'What is the difference between classrooms?',
+                prompt: 'What are the differences between different classrooms?',
                 options: [
-                    'Students in each classroom will have seen a different number of heads and tails before seeing the examples you select for them.',
-                    'Students in each classroom have seen a different proportion of fair and unfair coins before seeing the examples you select for them.',
-                    'The classrooms are all the same and aren’t helpful for deciding how to teach.'
+                    'Students in different classrooms will have seen a different number of heads and tails before seeing the examples you select for them.',
+                    'Students in different classrooms have seen a different proportion of fair and unfair coins before seeing the examples you select for them.',
+                    'The classrooms are all the same and aren’t helpful for deciding how you will teach.'
                 ],
                 required: true
             },
@@ -198,7 +197,7 @@
                 prompt: 'How can I earn a high performance bonus?',
                 options: [
                     'By giving as few examples as possible.',
-                    'By giving XXX examples (the maximum) on each trial and making sure that the students’ guesses are as accurate as possible.',
+                    `By giving ${params.maxFlips} examples (the maximum) on each trial and making sure that the students’ guesses are as accurate as possible.`,
                     'By teaching efficiently and accurately at the same time.'
                 ],
                 required: true
@@ -224,11 +223,47 @@
                 options: [
                     'The students are all on planet Earth, where they tend to believe the vast majority of coins will be fair.',
                     'The students are also on the same alien planet as you, where coins can be unfair.'
-                ]
+                ],
+                required: true
             }
         ],
-        randomize_question_order: true
+        randomize_question_order: true,
+
+        on_finish: function(data) {
+            data.pass = [data.response.Q0.includes('heads'), data.response.Q1.includes('time'), data.response.Q2.includes('heads'), data.response.Q3.includes('new'), data.response.Q4.includes('unfair')].every(Boolean)
+        }
     }
+
+    var fail = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: 'Oops, you have missed question(s) on the comprehension check! Here are the instructions again. Press any key to continue.'
+    }
+
+    var failNode = {
+        timeline: [fail],
+        conditional_function: function() {
+            var data = jsPsych.data.get()
+        }
+    }
+
+    var comprehensionLoop = {
+        timeline: [instructions, comprehensionCheck, fail],
+        loop_function: function (data) {
+            console.log(data.values()[0].responses)
+            var Q0correct = JSON.parse(data.last(1).values()[0].response).Q0.includes('heads');
+            var Q1correct = JSON.parse(data.last(1).values()[0].response).Q1.includes('time');
+            var Q2correct = JSON.parse(data.last(1).values()[0].response).Q2.includes('heads');
+            var Q3correct = JSON.parse(data.last(1).values()[0].response).Q3.includes('new');
+            var Q4correct = JSON.parse(data.last(1).values()[0].response).Q4.includes('unfair');
+            if ([Q0correct, Q1correct, Q2correct, Q3correct, Q4correct].every(Boolean)) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    timeline.push(comprehensionLoop);
 
     /* Main logic of trials */
 
@@ -327,7 +362,7 @@
 
         var studentFeedback = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: function() {
+            stimulus: function () {
                 var rawResponses = jsPsych.data.get().values();
                 var twoTrialsAgo = rawResponses[rawResponses.length - 3];
                 var nHeads = parseInt(twoTrialsAgo.response.heads);
