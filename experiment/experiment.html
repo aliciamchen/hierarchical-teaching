@@ -37,7 +37,8 @@
         maxFlips: 20,
         completionMinutes: 15,
         basePay: 5,
-        maxBonus: 2
+        maxBonus: 2,
+        perTrialBonus: 0.5
     };
 
     const classroomParams = {
@@ -107,7 +108,7 @@
         choices: ['I consent']
     };
 
-    timeline.push(consent);
+    // timeline.push(consent);
 
     var instructions = {
         type: jsPsychInstructions,
@@ -229,41 +230,35 @@
         ],
         randomize_question_order: true,
 
-        on_finish: function(data) {
+        on_finish: function (data) {
+            console.log(data.response.Q0)
+            console.log(data.response.Q0.includes('heads'))
             data.pass = [data.response.Q0.includes('heads'), data.response.Q1.includes('time'), data.response.Q2.includes('heads'), data.response.Q3.includes('new'), data.response.Q4.includes('unfair')].every(Boolean)
+            console.log(data.pass)
         }
     }
 
     var fail = {
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: 'Oops, you have missed question(s) on the comprehension check! Here are the instructions again. Press any key to continue.'
-    }
-
-    var failNode = {
-        timeline: [fail],
+        timeline: [{
+            type: jsPsychHtmlButtonResponse,
+            stimulus: `Oops, you have missed question(s) on the comprehension check! We'll show you the instructions again.`,
+            choices: ["Got it!"]
+        }],
         conditional_function: function() {
-            var data = jsPsych.data.get()
+            const responses = jsPsych.data.getLastTrialData();
+            return !responses.select("pass").values[0];
         }
     }
 
     var comprehensionLoop = {
         timeline: [instructions, comprehensionCheck, fail],
         loop_function: function (data) {
-            console.log(data.values()[0].responses)
-            var Q0correct = JSON.parse(data.last(1).values()[0].response).Q0.includes('heads');
-            var Q1correct = JSON.parse(data.last(1).values()[0].response).Q1.includes('time');
-            var Q2correct = JSON.parse(data.last(1).values()[0].response).Q2.includes('heads');
-            var Q3correct = JSON.parse(data.last(1).values()[0].response).Q3.includes('new');
-            var Q4correct = JSON.parse(data.last(1).values()[0].response).Q4.includes('unfair');
-            if ([Q0correct, Q1correct, Q2correct, Q3correct, Q4correct].every(Boolean)) {
-                return false;
-            } else {
-                return true;
-            }
+            return !data.select("pass").values[0];
         }
+
     }
 
-    timeline.push(comprehensionLoop);
+    // timeline.push(comprehensionLoop);
 
     /* Main logic of trials */
 
@@ -335,6 +330,20 @@
                 trueTheta: currTrial.coinWeight,
                 classrooms: currTrial.classroomPairing,
                 studentTrueClassroom: studentTrueClassroom
+            },
+            on_finish: function(data) {
+                var nHeads = parseInt(data.response.heads);
+                var nTails = parseInt(data.response.tails);
+                var studentTrueHypers = classroomParams[data.studentTrueClassroom];
+                var studentGuess = (parseInt(studentTrueHypers.a) + nHeads) / (parseInt(studentTrueHypers.a) + parseInt(studentTrueHypers.b) + nHeads + nTails);
+                var delta = Math.abs(data.trueTheta - studentGuess);
+                var bonus = delta <= 0.1 ? params.perTrialBonus : 0
+
+                data.studentTrueHypers = studentTrueHypers;
+                data.studentGuess = studentGuess;
+                data.delta = delta;
+                data.bonus = bonus;
+                data.totalExamples = nHeads + nTails;
             }
         };
 
@@ -365,16 +374,18 @@
             stimulus: function () {
                 var rawResponses = jsPsych.data.get().values();
                 var twoTrialsAgo = rawResponses[rawResponses.length - 3];
-                var nHeads = parseInt(twoTrialsAgo.response.heads);
-                var nTails = parseInt(twoTrialsAgo.response.tails);
-                var studentTrueHypers = classroomParams[twoTrialsAgo.studentTrueClassroom];
+                console.log(twoTrialsAgo)
+                // var nHeads = parseInt(twoTrialsAgo.response.heads);
+                // var nTails = parseInt(twoTrialsAgo.response.tails);
+                // var studentTrueHypers = classroomParams[twoTrialsAgo.studentTrueClassroom];
 
-                console.log(studentTrueHypers)
-                console.log(nHeads)
-                console.log(nTails)
+                // console.log(studentTrueHypers)
+                // console.log(nHeads)
+                // console.log(nTails)
                 // var hatTheta =
                 return `
-                <p>Student's guess for coin weight: ${((parseInt(studentTrueHypers.a) + nHeads) / (parseInt(studentTrueHypers.a) + parseInt(studentTrueHypers.b) + nHeads + nTails)).toPrecision(2)}</p>
+                <p>Student's guess for coin weight: ${twoTrialsAgo.studentGuess.toPrecision(2)}</p>
+                <p>You have received a bonus of ${twoTrialsAgo.bonus}</p>
                 <p>You will now give another set of examples to your student. Press any key to continue.</p>
                 `
             }
@@ -420,6 +431,13 @@
             }
         }
 
+        var feedback = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: function () {
+
+            }
+        }
+
         var fixation = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: '<div style="font-size:60px;">Next student</div>',
@@ -431,6 +449,7 @@
                 task: 'fixation'
             }
         }
+
 
         const trialsInCondition = {
             'nonSeqFull': [classroomInfo, firstExampleLoop, sending, sent, fixation],
