@@ -389,7 +389,7 @@
 
                 return `
                 <p>Student's guess for coin weight: ${twoTrialsAgo.studentGuess.toPrecision(2)}</p>
-                <p>You have received a bonus of ${twoTrialsAgo.bonus}</p>
+                <p>You have received a bonus of $${twoTrialsAgo.bonus}</p>
                 <p>${twoTrialsAgo.condition === 'seqFeedback' ? 'You will now give another set of examples to your student.' : ''} Press any key to continue.</p>
                 `
             }
@@ -477,7 +477,7 @@
                 <p>Student's first guess for coin weight: ${firstResponse.studentGuess.toPrecision(2)}</p>
                 <p>Student's second guess for coin weight: ${secondResponse.studentGuess.toPrecision(2)}</p>
                 <p>You have received a bonus of ${secondResponse.condition === 'seqNoFeedback' ? `$${firstResponse.bonus} for the first guess and` : ''} $${secondResponse.bonus} for the second guess.</p>
-                <p>Your total bonus for this student is $${parseInt(firstResponse.bonus) + parseInt(secondResponse.bonus)}.</p>
+                <p>Your total bonus for this student is $${(Number(firstResponse.bonus) + Number(secondResponse.bonus)).toPrecision(3)}.</p>
                 <p>Press any key to continue.</p>
                 `
             }
@@ -524,14 +524,14 @@
         type: jsPsychHtmlKeyboardResponse,
         stimulus: function () {
 
-            var trials = jsPsych.data.get().filter({ task: 'response' });
-            var correct_trials = trials.filter({ correct: true });
-            var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
-            var rt = Math.round(correct_trials.select('rt').mean());
+            var totalBonus = jsPsych.data.get().select('bonus').sum().toPrecision(3);
 
-            return `<p>You responded correctly on ${accuracy}% of the trials.</p>
-      <p>Your average response time was ${rt}ms.</p>
-      <p>Press any key to complete the experiment. Thank you!</p>`;
+            return `
+                <p>Thanks for participating in the experiment!</p>
+                <p>Your total bonus is $${totalBonus}.</p>
+                <p>If you were curious, you weren't interacting with a real learner.</p>
+                <p>Press any key to exit.</p>
+                `;
 
         }
     };
