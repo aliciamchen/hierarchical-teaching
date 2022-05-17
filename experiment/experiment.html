@@ -272,10 +272,18 @@
         trial_duration: 3000,
     }
 
-    timeline.push(beginning);
+    var firstStudentWarming = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: '<div style="font-size:30px;">First student</div>',
+        choices: "NO_KEYS",
+        trial_duration: 2000,
+    }
+
+    timeline.push(beginning, firstStudentWarming);
 
     // Loop through individual trials in design to create timeline
     for (let i = 0; i < design.length; i++) {
+
         var currTrial = design[i];
         console.log(currTrial);
         var studentTrueClassroom = jsPsych.randomization.sampleWithoutReplacement(currTrial.classroomPairing, 1)[0];
@@ -283,15 +291,9 @@
         var classroomInfo = {
             type: jsPsychHtmlButtonResponse,
             stimulus: `
-            <h3>The next student comes from either Classroom ${currTrial.classroomPairing[0]} or Classroom ${currTrial.classroomPairing[1]}.</h3>
-            <ul>
-                <li>The students in Classroom ${currTrial.classroomPairing[0]} have already seen \
-                ${classroomParams[currTrial.classroomPairing[0]].a} \
-                ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[0]].b} ${classroomParams[currTrial.classroomPairing[0]].b === 1 ? 'tail' : 'tails'}.</li>
-                <li>The students in Classroom ${currTrial.classroomPairing[1]} have already seen \
-                ${classroomParams[currTrial.classroomPairing[1]].a} \
-                ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[1]].b} ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'tail' : 'tails'}.</li>
-            </ul>
+            <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
+            <p>You will be giving ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? 'one set of examples' : 'two sets of examples'} to this student.</p>
+                <p>${currTrial.condition === 'seqFeedback' ? `You will see the student's guess after sending them your first set of examples.` : ''}</p>
             `,
             choices: ['Continue']
         }
@@ -301,14 +303,15 @@
             preamble: `
                 ${currTrial.condition === 'nonSeqFull' ? `
                         <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
-                        <p>You are teaching a new student from classroom ${studentTrueClassroom}, who has seen ${classroomParams[studentTrueClassroom].a} \
+                        <h4>Student info</h4>
+                        <p>Your student is from classroom ${studentTrueClassroom} and has seen ${classroomParams[studentTrueClassroom].a} \
                             ${classroomParams[studentTrueClassroom].a === 1 ? 'head' : 'heads'} and ${classroomParams[studentTrueClassroom].b} ${classroomParams[studentTrueClassroom].b === 1 ? 'tail' : 'tails'}.</p>
                         <h3>Select a set of examples to send to your student.</h3>
                         <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
                         ` : `
                         <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
-                        <p>You are teaching a new student who has an equal probability of being from classroom ${currTrial.classroomPairing[0]} and classroom ${currTrial.classroomPairing[1]}.</p>
-                        <p>Remember:</p>
+                        <h4>Student info</h4>
+                        <p>Your student is either from classroom ${currTrial.classroomPairing[0]} or classroom ${currTrial.classroomPairing[1]}.</p>
                         <ul>
                             <li>The students in Classroom ${currTrial.classroomPairing[0]} have already seen \
                             ${classroomParams[currTrial.classroomPairing[0]].a} \
@@ -390,7 +393,7 @@
                 return `
                 <p>Student's guess for coin weight: ${twoTrialsAgo.studentGuess.toPrecision(2)}</p>
                 <p>You have received a bonus of $${twoTrialsAgo.bonus}</p>
-                <p>${twoTrialsAgo.condition === 'seqFeedback' ? 'You will now give another set of examples to your student.' : ''} Press any key to continue.</p>
+                <p>${twoTrialsAgo.condition === 'seqFeedback' ? 'You will now send another set of examples to your student.' : ''} Press any key to continue.</p>
                 `
             }
         }
@@ -398,7 +401,18 @@
 
         var secondExample = {
             type: jsPsychSurveyHtmlForm,
-            preamble: `<h3>Select another set of examples to send to the same student.</h3>
+            preamble: `<h2>Select another set of examples to send to the same student.</h2>
+                        <p>Reminders:</p>
+                        <ul>
+                            <li>The weight of your coin is ${currTrial.coinWeight}.</li>
+                            <li>The student is either from classroom ${currTrial.classroomPairing[0]} and classroom ${currTrial.classroomPairing[1]}.</li>
+                            <li>The students in Classroom ${currTrial.classroomPairing[0]} have already seen \
+                            ${classroomParams[currTrial.classroomPairing[0]].a} \
+                            ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[0]].b} ${classroomParams[currTrial.classroomPairing[0]].b === 1 ? 'tail' : 'tails'}.</li>
+                            <li>The students in Classroom ${currTrial.classroomPairing[1]} have already seen \
+                            ${classroomParams[currTrial.classroomPairing[1]].a} \
+                            ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[1]].b} ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'tail' : 'tails'}.</li>
+                        </ul>
             <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
             `,
             html: `
@@ -477,7 +491,7 @@
                 <p>Student's first guess for coin weight: ${firstResponse.studentGuess.toPrecision(2)}</p>
                 <p>Student's second guess for coin weight: ${secondResponse.studentGuess.toPrecision(2)}</p>
                 <p>You have received a bonus of ${secondResponse.condition === 'seqNoFeedback' ? `$${firstResponse.bonus} for the first guess and` : ''} $${secondResponse.bonus} for the second guess.</p>
-                <p>Your total bonus for this student is $${(Number(firstResponse.bonus) + Number(secondResponse.bonus)).toPrecision(3)}.</p>
+                <p>Your total bonus for this student is $${(Number(firstResponse.bonus) + Number(secondResponse.bonus)).toPrecision(2)}.</p>
                 <p>Press any key to continue.</p>
                 `
             }
