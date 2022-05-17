@@ -36,8 +36,8 @@
         nStudents: 24,
         maxFlips: 20,
         completionMinutes: 15,
-        basePay: 5,
-        maxBonus: 2,
+        basePay: 10,
+        maxBonus: 12,
         perTrialBonus: 0.5,
         perTrialBonusThreshold: 0.1,
         exampleCost: 0.02
@@ -75,7 +75,8 @@
 
     var welcome = {
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: 'Welcome to the experiment. Press any key to begin.'
+        stimulus: 'Welcome to the experiment. Press any key to begin.',
+        trial_duration: 20000
     }
 
     timeline.push(welcome);
@@ -110,7 +111,7 @@
         choices: ['I consent']
     };
 
-    // timeline.push(consent);
+    timeline.push(consent);
 
     var instructions = {
         type: jsPsychInstructions,
@@ -125,37 +126,41 @@
 
             // Page 3
             `<p>You will be teaching students the weight of coins.</p>
-            <p>But aren’t all coins equally likely to land heads or tails? This is not the case here!\
+            <p>But aren't all coins equally likely to land heads or tails? This is not the case here!\
                 You (and your students) have landed on an alien planet where you have all been told that coins can be any weight.</p>
-            <p>We will represent coin weights with a number between 0 and 1. \
+            <p>We will represent coin weights with a <b>number between 0 and 1</b>. \
                 The higher the weight, the more likely the coin is to land heads.</p>
             <p>A weight of 0.5 means that the coin is fair, like the coins you are used to on planet Earth. \
                 A weight of 0.8 means that the coin is engineered so that it lands heads 80% of the time.</p>
             <p>You will be teaching a total of ${params.nStudents} students, for a total of ${params.nStudents} blocks. In each block, you will encounter a new student. \
-                You will receive a coin and we will tell you its weight. The student won’t know its weight.</p>`,
+                You will receive a coin and we will tell you its weight. The student won't know its weight.</p>`,
 
             // Page 4
             `<h3>What kind of information can I give to my students to lead them to the correct coin weights?</h3>
-            <p>You can only give information to the student in the form of example outcomes of coin flips. \
-                You can choose the number of heads and the number of tails to send to the student. \
-                Your goal is to provide examples to the student to lead them to the correct weight of the coin.</p>
-            <p>On each trial, you can give up to ${params.maxFlips} examples to each student.</p>`,
+            <p>You can only give information to students in the form of example outcomes of coin flips. \
+                You can choose the number of heads and the number of tails to send to your student.</p>
+            <p>Your goal is to provide examples to the student to lead them to the correct weight of the coin. \
+                The student will see your examples and will use this information to guess the weight of the coin.</p>
+            <p>Blocks consist of either one or two trials (we will tell you how many trials to expect at the beginning of each block). On each trial, you can send up to <b>${params.maxFlips}</b> examples to the student.</p>`,
 
             // Page 5
             `<p>However, you are not the first teacher your students have encountered, \
-                nor are the coin flips you show your students the first coin flips they have seen before! \
+                nor are the coin flips you show your students the first coin flips they have seen on this alien planet! \
                 Each student you see will come from one of four classrooms, where they have seen a bunch of flips before.</p>
-            <p>Every time you encounter a new student, you will be given information about their classroom. We will display information in <div style="color:DodgerBlue;">blue</div>.</p>
-            <p>To teach effectively, you will want to consider how a learner’s classroom affects \
+            <p>Every time you encounter a new student, you will be given information about their classroom. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
+            <p>To teach effectively, you will want to consider how a learner's classroom affects \
                 how they interpret the examples you give them.</p>`,
 
             // Page 6
             `<h3>How can I earn as much money as possible from this experiment?</h3>
             <p>You will want to teach <b>accurately</b> and <b>efficiently</b>.</p>
             <p>As the experiment is going on, your students will guess the coin weights. \
-                On each trial, you will receive $${params.perTrialBonus} if the student's guess is within ${params.perTrialBonusThreshold} of the actual coin weight.</p>
-            <p>However, each flip that you give <em>costs</em> ${params.exampleCost}.</p>
-            <p>This is similar to teaching in the real world: You want to lead the student to the right answer, but it's costly to give too much information!</p>`
+                On each trial, you will receive <b>$${params.perTrialBonus}</b> if the student's guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
+            <p>However, each flip that you give <em>costs</em> <b>$${params.exampleCost}</b>.</p>
+            <p>This is similar to teaching in the real world: You want to lead the student to the right answer, but it's costly to give too much information!</p>
+            <p>We will tell you how much you have earned at the end of each block.</p>
+            <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
+            `
         ],
         show_clickable_nav: true,
         show_page_number: true
@@ -172,15 +177,15 @@
                 options: [
                     'Students in different classrooms will have seen a different number of heads and tails before seeing the examples you select for them.',
                     'Students in different classrooms have seen a different proportion of fair and unfair coins before seeing the examples you select for them.',
-                    'The classrooms are all the same and aren’t helpful for deciding how you will teach.'
+                    `The classrooms are all the same and aren't helpful for deciding how to teach.`
                 ],
                 required: true
             },
             {
-                prompt: 'How can I earn a high performance bonus?',
+                prompt: 'How can you earn a high performance bonus?',
                 options: [
                     'By giving as few examples as possible.',
-                    `By giving ${params.maxFlips} examples (the maximum) on each trial and making sure that the students’ guesses are as accurate as possible.`,
+                    `By giving ${params.maxFlips} examples (the maximum) on each trial and making sure that the students' guesses are as accurate as possible.`,
                     'By teaching efficiently and accurately at the same time.'
                 ],
                 required: true
@@ -194,10 +199,10 @@
                 required: true
             },
             {
-                prompt: 'Is there a chance you’ll encounter the same student in two different blocks?',
+                prompt: `Is there a chance you'll encounter the same student in two different blocks?`,
                 options: [
                     'Yes, I might encounter the same student twice.',
-                    'No, I will teach a new student on each block.'
+                    'No, I will teach a <b>new</b> student on each block.'
                 ],
                 required: true
             },
@@ -213,10 +218,7 @@
         randomize_question_order: true,
 
         on_finish: function (data) {
-            console.log(data.response.Q0)
-            console.log(data.response.Q0.includes('heads'))
             data.pass = [data.response.Q0.includes('heads'), data.response.Q1.includes('time'), data.response.Q2.includes('heads'), data.response.Q3.includes('new'), data.response.Q4.includes('unfair')].every(Boolean)
-            console.log(data.pass)
         }
     }
 
@@ -240,7 +242,7 @@
 
     }
 
-    // timeline.push(comprehensionLoop);
+    timeline.push(comprehensionLoop);
 
     /* Main logic of trials */
 
@@ -257,7 +259,7 @@
         type: jsPsychHtmlKeyboardResponse,
         stimulus: '<div style="font-size:30px;">First student</div>',
         choices: "NO_KEYS",
-        trial_duration: 2000,
+        trial_duration: 3000,
     }
 
     timeline.push(beginning, firstStudentWarming);
@@ -272,9 +274,10 @@
         var classroomInfo = {
             type: jsPsychHtmlButtonResponse,
             stimulus: `
-            <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
-            <p>In this block, you will be giving ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> set of examples' : '<b>two</b> sets of examples'} to your student.</p>
-                <p>${currTrial.condition === 'seqFeedback' ? `You will see the student's guess after sending them your first set of examples.` : ''}</p>
+            <h4 style="color:Orange;">Student ${i+1}</h4>
+            <h2>The weight of your coin is <b style="color:Tomato;">${currTrial.coinWeight}</b>.</h2>
+            <p>In this block, you will be giving ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> set of examples' : '<b>two</b> sets of examples'} to Student ${i+1}.</p>
+                <p>${currTrial.condition === 'seqFeedback' ? `You will see the student's guess after the first set of examples. You will also receive feedback at the end of the block.` : 'You will receive feedback at the end of the block.'}</p>
             `,
             choices: ['Continue']
         }
@@ -283,21 +286,21 @@
             type: jsPsychSurveyHtmlForm,
             preamble: `
                 ${currTrial.condition === 'nonSeqFull' ? `
-                        <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
-                        <p style="color:DodgerBlue;"><b>Student info: </b> Your student is from classroom ${studentTrueClassroom}, where they have seen ${classroomParams[studentTrueClassroom].a} \
+                        <h2>The weight of your coin is <b style="color:Tomato;">${currTrial.coinWeight}</b>.</h2>
+                        <p style="color:DodgerBlue;"><b>Student info: </b> Student ${i+1} is from Classroom ${studentTrueClassroom}, where they have seen ${classroomParams[studentTrueClassroom].a} \
                             ${classroomParams[studentTrueClassroom].a === 1 ? 'head' : 'heads'} and ${classroomParams[studentTrueClassroom].b} ${classroomParams[studentTrueClassroom].b === 1 ? 'tail' : 'tails'}.</p>
                         <h3>Select a set of examples to send to your student.</h3>
                         <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
                         ` : `
-                        <h2>The weight of your coin is ${currTrial.coinWeight}.</h2>
-                        <p style="color:DodgerBlue;"><b>Student info: </b>Your student is from either classroom ${currTrial.classroomPairing[0]} or classroom ${currTrial.classroomPairing[1]}.</p>
+                        <h2>The weight of your coin is <b style="color:Tomato;">${currTrial.coinWeight}</b>.</h2>
+                        <p style="color:DodgerBlue;"><b>Student info: </b> Student ${i+1} is from <b>either</b> classroom ${currTrial.classroomPairing[0]} or classroom ${currTrial.classroomPairing[1]}.</p>
                         <ul style="color:DodgerBlue;">
                             <li>The students in Classroom ${currTrial.classroomPairing[0]} have already seen \
-                            ${classroomParams[currTrial.classroomPairing[0]].a} \
-                            ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[0]].b} ${classroomParams[currTrial.classroomPairing[0]].b === 1 ? 'tail' : 'tails'}.</li>
+                            <b>${classroomParams[currTrial.classroomPairing[0]].a} \
+                            ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[0]].b} ${classroomParams[currTrial.classroomPairing[0]].b === 1 ? 'tail' : 'tails'}.</b></li>
                             <li>The students in Classroom ${currTrial.classroomPairing[1]} have already seen \
-                            ${classroomParams[currTrial.classroomPairing[1]].a} \
-                            ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[1]].b} ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'tail' : 'tails'}.</li>
+                            <b>${classroomParams[currTrial.classroomPairing[1]].a} \
+                            ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[1]].b} ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'tail' : 'tails'}.</b></li>
                         </ul>
                         <h3>Select a set of examples to send to your student.</h3>
                         <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
@@ -307,7 +310,7 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> heads </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> tails </p>`,
-            trial_duration: 10000,
+            trial_duration: 20000,
             data: {
                 condition: currTrial.condition,
                 trueTheta: currTrial.coinWeight,
@@ -328,7 +331,7 @@
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
-                data.bonus = (reward - cost) > 0 ? (reward - cost).toPrecision(2) : 0
+                data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0)
                 data.totalExamples = nHeads + nTails;
             }
         };
@@ -358,9 +361,12 @@
         var feedback = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function () {
-                var rawResponses = jsPsych.data.get().values();
-                var twoTrialsAgo = rawResponses[rawResponses.length - 3];
-                console.log(twoTrialsAgo)
+                // var rawResponses = jsPsych.data.get().values();
+                // var twoTrialsAgo = rawResponses[rawResponses.length - 3];
+                // console.log(twoTrialsAgo)
+
+                var blockData = jsPsych.data.get()
+                var firstResponse = blockData.filter({studentIndex: i, exampleSet: 'first'}).values()[0]
                 // var nHeads = parseInt(twoTrialsAgo.response.heads);
                 // var nTails = parseInt(twoTrialsAgo.response.tails);
                 // var studentTrueHypers = classroomParams[twoTrialsAgo.studentTrueClassroom];
@@ -370,36 +376,39 @@
                 // console.log(nTails)
                 // var hatTheta =
 
+                console.log(firstResponse);
+
                 return `
-                <p>Student's guess for coin weight: ${twoTrialsAgo.studentGuess.toPrecision(2)}</p>
-                <p>You received a bonus of $${twoTrialsAgo.bonus}</p>
-                <p>Total bonus so far: $${Number(jsPsych.data.get().select('bonus').sum()).toPrecision(3)}</p>
-                <p>${twoTrialsAgo.condition === 'seqFeedback' ? 'You will now send another set of examples to your student.' : ''} Press any key to continue.</p>
+                <p>Student's guess for coin weight: <b>${firstResponse.studentGuess.toFixed(2)}</b></p>
+                <p>You received a bonus of <b>$${firstResponse.bonus}</b></p>
+                <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
+                <p>${firstResponse.condition === 'seqFeedback' ? 'You will now send another set of examples to your student.' : ''} Press any key to continue.</p>
                 `
-            }
+            },
+            trial_duration: 20000
         }
         // add function that samples from student class, saves info, and calculates hypers based on teacher's data
 
         var secondExample = {
             type: jsPsychSurveyHtmlForm,
             preamble: `<h2>Select another set of examples to send to the same student.</h2>
-                        <p style="color:DodgerBlue;">Reminders:</p>
+                        <p style="color:DodgerBlue; text-align: center;">Reminders:</p>
                         <ul style="color:DodgerBlue;">
                             <li>The weight of your coin is ${currTrial.coinWeight}.</li>
-                            <li>The student is from either classroom ${currTrial.classroomPairing[0]} and classroom ${currTrial.classroomPairing[1]}.</li>
+                            <li>Student ${i+1} is from <b>either</b> Classroom ${currTrial.classroomPairing[0]} or Classroom ${currTrial.classroomPairing[1]}.</li>
                             <li>The students in Classroom ${currTrial.classroomPairing[0]} have already seen \
-                            ${classroomParams[currTrial.classroomPairing[0]].a} \
-                            ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[0]].b} ${classroomParams[currTrial.classroomPairing[0]].b === 1 ? 'tail' : 'tails'}.</li>
+                            <b>${classroomParams[currTrial.classroomPairing[0]].a} \
+                            ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[0]].b} ${classroomParams[currTrial.classroomPairing[0]].b === 1 ? 'tail' : 'tails'}.</b></li>
                             <li>The students in Classroom ${currTrial.classroomPairing[1]} have already seen \
-                            ${classroomParams[currTrial.classroomPairing[1]].a} \
-                            ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[1]].b} ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'tail' : 'tails'}.</li>
+                            <b>${classroomParams[currTrial.classroomPairing[1]].a} \
+                            ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[1]].b} ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'tail' : 'tails'}.</b></li>
                         </ul>
             <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
             `,
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> heads </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> tails </p>`,
-            trial_duration: 10000,
+            trial_duration: 20000,
             data: {
                 condition: currTrial.condition,
                 trueTheta: currTrial.coinWeight,
@@ -420,7 +429,7 @@
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
-                data.bonus =  (reward - cost) > 0 ? (reward - cost).toPrecision(2) : 0;
+                data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0);
                 data.totalExamples = nHeads + nTails;
             }
         };
@@ -443,7 +452,7 @@
             stimulus: 'Examples sent to student!',
             choices: "NO_KEYS",
             trial_duration: function () {
-                return jsPsych.randomization.sampleWithoutReplacement([1750, 2000, 2250, 2500], 1)[0];
+                return jsPsych.randomization.sampleWithoutReplacement([3000, 3500, 4000, 4500, 5000], 1)[0];
             }
         }
 
@@ -472,14 +481,15 @@
                 console.log(secondResponse)
 
                 return `
-                <p>Student's first guess for coin weight: ${firstResponse.studentGuess.toPrecision(2)}</p>
-                <p>Student's second guess for coin weight: ${secondResponse.studentGuess.toPrecision(2)}</p>
-                <p>You have received a bonus of ${secondResponse.condition === 'seqNoFeedback' ? `$${firstResponse.bonus} for the first guess and` : ''} $${secondResponse.bonus} for the second guess.</p>
-                <p>Your total bonus for this student is $${(Number(firstResponse.bonus) + Number(secondResponse.bonus)).toPrecision(2)}.</p>
-                <p>Total bonus so far: $${jsPsych.data.get().select('bonus').sum()}</p>
+                <p>Student ${i+1}'s first guess for coin weight: <b>${firstResponse.studentGuess.toFixed(2)}</b></p>
+                <p>Student ${i+1}'s second guess for coin weight: <b>${secondResponse.studentGuess.toFixed(2)}</b></p>
+                <p>You received a bonus of ${secondResponse.condition === 'seqNoFeedback' ? `<b>$${firstResponse.bonus.toFixed(2)}</b> for the first guess and` : ''} $<b>${secondResponse.bonus.toFixed(2)}</b> for the second guess.</p>
+                <p>Your total bonus for student ${i+1} is <b>$${(Number(firstResponse.bonus) + Number(secondResponse.bonus)).toFixed(2)}</b>.</p>
+                <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
                 <p>Press any key to continue.</p>
                 `
-            }
+            },
+            trial_duration: 20000
         }
 
         var fixation = {
@@ -487,7 +497,7 @@
             stimulus: '<div style="font-size:60px;">Next student</div>',
             choices: "NO_KEYS",
             trial_duration: function () {
-                return jsPsych.randomization.sampleWithoutReplacement([1750, 2000, 2250, 2500], 1)[0];
+                return jsPsych.randomization.sampleWithoutReplacement([2000, 2250, 2500, 3000], 1)[0];
             },
             data: {
                 task: 'fixation'
@@ -523,11 +533,12 @@
         type: jsPsychHtmlKeyboardResponse,
         stimulus: function () {
 
-            var totalBonus = jsPsych.data.get().select('bonus').sum().toPrecision(3);
+            var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
 
             return `
                 <p>Thanks for participating in the experiment!</p>
-                <p>Your total bonus is $${totalBonus}.</p>
+                <p>Your total bonus is <b>$${totalBonus}</b>.</p>
+                <p>Your total pay is <b>$${totalBonus + params.basePay}</b></p>
                 <p>If you were curious, you weren't interacting with a real learner.</p>
                 <p>Press any key to exit.</p>
                 `;
