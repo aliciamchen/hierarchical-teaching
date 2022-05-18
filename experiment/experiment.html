@@ -97,7 +97,7 @@
         coinWeights: coinWeights
     })
 
-    const local_testing = true;
+    const local_testing = false;
 
     function save_data_json(name, data) {
         var xhr = new XMLHttpRequest();
@@ -132,7 +132,7 @@
     var welcome = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: 'Welcome to the experiment. Press any key to begin.',
-        trial_duration: 20000
+        trial_duration: 30000
     }
 
     timeline.push(welcome);
@@ -322,7 +322,7 @@
 
     // Loop through individual trials in design to create timeline
     // i < design.length
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < design.length; i++) {
 
         var currTrial = design[i];
         console.log(currTrial);
@@ -367,7 +367,7 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> heads </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> tails </p>`,
-            trial_duration: 20000,
+            trial_duration: 30000,
             data: {
                 type: 'response',
                 condition: currTrial.condition,
@@ -434,7 +434,7 @@
                 <p>${firstResponse.condition === 'seqFeedback' ? 'You will now send another set of examples to your student.' : ''} Press any key to continue.</p>
                 `
             },
-            trial_duration: 20000
+            trial_duration: 30000
         }
         // add function that samples from student class, saves info, and calculates hypers based on teacher's data
 
@@ -457,7 +457,7 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> heads </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> tails </p>`,
-            trial_duration: 20000,
+            trial_duration: 30000,
             data: {
                 type: 'response',
                 condition: currTrial.condition,
@@ -529,7 +529,7 @@
                 <p>Press any key to continue.</p>
                 `
             },
-            trial_duration: 20000
+            trial_duration: 30000
         }
 
         var fixation = {
@@ -578,7 +578,7 @@
         on_finish:
             function (data) {
                 var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
-                data.totalBonus = totalBonus;
+                data.totalBonus = Number(totalBonus);
             },
     }
 
