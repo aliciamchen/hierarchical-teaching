@@ -16,7 +16,6 @@
     <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.0"></script>
 
-
     <link href="https://unpkg.com/jspsych@7.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
 
     <style>
@@ -116,7 +115,8 @@
     const save_data = {
         type: jsPsychCallFunction,
         func: function () {
-            save_data_json(subjectId + "_output", jsPsych.data.get().json());
+            save_data_json(subjectId + "_output_all", jsPsych.data.get().json());
+            save_data_json(subjectId + "_output_responsesOnly", jsPsych.data.get().filter({type: 'response'}).json())
         },
         timing_post_trial: 0
     };
@@ -142,24 +142,24 @@
         type: jsPsychHtmlButtonResponse,
         stimulus: `
         <h3>Please read this consent agreement carefully before deciding whether to participate in this experiment.</h3>
-        <p>Purpose of the research: To examine how people teach effectively.</p>
-        <p>What you will do in this research: You will teach students the weights of different coins.</p>
-        <p>Time required: This experiment will take ${params.completionMinutes} minutes to complete.</p>
-        <p>Risks: There are no anticipated risks associated with participating in this study. \
+        <p><b>Purpose of the research:</b> To examine how people teach effectively.</p>
+        <p><b>What you will do in this research:</b> You will teach students the weights of different coins.</p>
+        <p><b>Time required:</b> This experiment will take ${params.completionMinutes} minutes to complete.</p>
+        <p><b>Risks:</b> There are no anticipated risks associated with participating in this study. \
             The effects of participating should be comparable to those you would experience from viewing a computer monitor \
             and using a mouse and keyboard for the duration of the experiment.</p>
-        <p>Benefits: The study provides important information about the nature of teaching.</p>
-        <p>Compensation: You will receive $${params.basePay} for completing the experiment and a performance bonus of up to $${params.maxBonus}.</p>
-        <p>Confidentiality: Your participation in this study will remain confidential. \
+        <p><b>Benefits:</b> The study provides important information about the nature of teaching.</p>
+        <p><b>Compensation:</b> You will receive $${params.basePay} for completing the experiment and a performance bonus of up to $${params.maxBonus}.</p>
+        <p><b>Confidentiality:</b> Your participation in this study will remain confidential. \
             No personally identifiable information will be associated with your data. \
             Your de-identified data may be shared with other researchers and used in future projects.</p>
-        <p>Participation and withdrawal: Your participation in this study is completely voluntary and \
+        <p><b>Participation and withdrawal:</b> Your participation in this study is completely voluntary and \
             you may refuse to participate or you may choose to withdraw at any time without penalty or loss of
             benefits to which you are otherwise entitled.</p>
-        <p>How to contact the researcher: If you have questions or concerns about your participation\
+        <p><b>How to contact the researcher:</b> If you have questions or concerns about your participation\
             or payment, or want to request a summary of research findings, please contact
             Alicia Chen, aliciachen@college.harvard.edu.</p>
-        <p>Whom to contact about your rights in this research: For questions, concerns, suggestions, \
+        <p><b>Whom to contact about your rights in this research:</b> For questions, concerns, suggestions, \
             or complaints that have not been or cannot be addressed by the researcher, or to report \
             research-related harm, please contact the Committee on the Use of Human Subjects in Research at Harvard University, \
             1414 Massachusetts Avenue, Second Floor, Cambridge, MA 02138. Phone: 617-496-2847. Email: cuhs@fas.harvard.edu.</p>
@@ -193,31 +193,31 @@
 
             // Page 4
             `<h3>What kind of information can I give to my students to lead them to the correct coin weights?</h3>
-            <p>You can only give information to students in the form of <b>example outcomes</b> of coin flips. \
+            <p>You can only give information to students in the form of <b>example outcomes</b> ("examples") of coin flips. \
                 You can choose the number of heads and the number of tails to send to your student.</p>
             <p>Your goal is to provide examples for the student to lead them to the correct weight of the coin. \
                 The student will see your examples and will use this information to guess the weight of the coin.</p>`,
 
             // Page 5
-            `<p>Again, you will be teaching <b>${params.nStudents}</b> students — one student per block. Each block consists of either one or two trials (we will tell you how many trials to expect at the beginning of each block). \
-                On each trial, you can send up to <b>${params.maxFlips}</b> examples to the student.</p>`,
-
-            // Page 5
-            `<p><b>Important:</b> you are not the first teacher your students have encountered, \
-                nor are the coin flips you show your students the first coin flips they have seen on this alien planet! \
-                Each student you see will come from one of four classrooms, where they have seen a bunch of flips before.</p>
-            <p>Every time you encounter a new student, you will be given information about their classroom. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
-            <p>To teach effectively, you will want to consider how a learner's classroom affects \
-                how they interpret the examples you give them.</p>`,
+            `<p>Again, you will be teaching <b>${params.nStudents}</b> students - one student per block. Each block consists of either one or two trials (we will tell you how many trials to expect at the beginning of each block). \
+                On each trial, you can send up to <b>${params.maxFlips}</b> examples to send to the student.</p>`,
 
             // Page 6
+            `<p><b>Important:</b> you are not the first teacher your students have encountered, \
+                nor are the coin flips you show your students the first coin flips they have seen on this alien planet! \
+                Each student you see will come from one of four classrooms, from which they have already seen a certain number of <b>coin flip outcomes</b>.</p>
+            <p>Every time you encounter a new student, you will be given information about their classroom. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
+            <p>To teach effectively, you will want to consider how a student's classroom affects \
+                how they interpret the examples you give them.</p>`,
+
+            // Page 7
             `<h3>How can I earn as much money as possible from this experiment?</h3>
-            <p>You will want to teach <b>accurately</b> and <b>efficiently</b>.</p>
+            <p>You will want to teach <b>helpfully</b> and <b>efficiently</b>.</p>
             <p>As the experiment is going on, your students will guess the coin weights. \
-                In addition to the base pay of $${params.basePay}, for each student you can earn an extra <b>$${params.perTrialBonus}</b> if their guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
+                In addition to the base pay of <b>$${params.basePay}</b>, for each student you can earn an extra <b>$${params.perTrialBonus}</b> if their guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
             <p>(On the blocks with two trials, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the examples you have \
                 given them on <em>both</em> trials.)</p>
-            <p>However, each flip that you give <em>costs</em> <b>$${params.exampleCost}</b>.</p>
+            <p>However, each example that you give <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, sending 20 heads costs more than sending 10 heads.)</p>
             <p>We will tell you how much you have earned at the end of each block.</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
@@ -246,7 +246,7 @@
                 options: [
                     'By giving as few examples as possible.',
                     `By giving ${params.maxFlips} examples (the maximum) on each trial so I can make sure that the students' guesses are as accurate as possible.`,
-                    'By teaching efficiently and accurately at the same time.'
+                    'By teaching efficiently and accurately/helpfully at the same time (because each example I give to the student costs money!).'
                 ],
                 required: true
             },
@@ -410,6 +410,8 @@
                 if (data.condition === 'nonSeqFull' || data.condition === 'nonSeqPartial') {
                     data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0)
                 }
+
+                data.bonusSoFar = Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)
             }
         };
 
@@ -439,14 +441,14 @@
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function () {
 
-                var blockData = jsPsych.data.get()
-                var firstResponse = blockData.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
+                var dataSoFar = jsPsych.data.get()
+                var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
 
                 console.log(firstResponse);
 
                 return `
                 <p>Student's guess for coin weight: <b style="color:Tomato;">${firstResponse.studentGuess.toFixed(2)}</b></p>
-                <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
+                <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}</b>. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
                 <p>${firstResponse.condition === 'seqFeedback' ? 'You will now send another set of examples to your student.' : ''} Press any key to continue.</p>
                 `
             },
@@ -484,8 +486,8 @@
             },
             on_finish: function (data) {
 
-                var blockData = jsPsych.data.get()
-                var firstResponse = blockData.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
+                var dataSoFar = jsPsych.data.get()
+                var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
                 console.log(firstResponse);
 
                 var firstResponseHeads = firstResponse.heads;
@@ -510,6 +512,7 @@
                 data.studentGuess = studentGuess;
                 data.delta = delta;
                 data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0);
+                data.bonusSoFar = Number(dataSoFar.select('bonus').sum()).toFixed(2)
                 data.totalExamples = totalHeads + totalTails;
             }
         };
@@ -540,10 +543,10 @@
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function () {
 
-                var blockData = jsPsych.data.get()
+                var dataSoFar = jsPsych.data.get()
 
-                var firstResponse = blockData.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
-                var secondResponse = blockData.filter({ studentIndex: i, exampleSet: 'second' }).values()[0]
+                var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
+                var secondResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'second' }).values()[0]
 
                 console.log(firstResponse)
                 console.log(secondResponse)
@@ -551,7 +554,7 @@
                 return `
                 <p>Student ${i + 1}'s first guess for coin weight: <b style="color:Tomato";>${firstResponse.studentGuess.toFixed(2)}</b></p>
                 <p>Student ${i + 1}'s second guess for coin weight: <b style="color:Tomato";>${secondResponse.studentGuess.toFixed(2)}</b></p>
-                <p>You received a bonus of $<b>${secondResponse.bonus.toFixed(2)}</b>.</p>
+                <p>You received a bonus of <b>$${secondResponse.bonus.toFixed(2)}</b> based on the student's second guess.</p>
                 <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
                 <p>Press any key to continue.</p>
                 `
@@ -602,6 +605,7 @@
             { prompt: 'Let us know if you have any comments below.', rows: 7 }
         ],
         button_label: ['Continue, save data, and collect bonus!'],
+        data: {type: 'response'},
         on_finish:
             function (data) {
                 var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
@@ -633,7 +637,6 @@
     };
 
     timeline.push(debrief_block);
-
 
     jsPsych.run(timeline.flat());
 
