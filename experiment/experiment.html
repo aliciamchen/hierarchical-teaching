@@ -575,12 +575,11 @@
             {prompt: 'Let us know if you have any comments below.', rows: 7}
         ],
         button_label: ['Continue, save data, and collect bonus!'],
-        on_finish: {
+        on_finish:
             function (data) {
                 var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
                 data.totalBonus = totalBonus;
-            }
-        },
+            },
     }
 
     timeline.push(survey);
