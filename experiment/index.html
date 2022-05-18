@@ -196,8 +196,12 @@
             <p>You can only give information to students in the form of example outcomes of coin flips. \
                 You can choose the number of heads and the number of tails to send to your student.</p>
             <p>Your goal is to provide examples to the student to lead them to the correct weight of the coin. \
-                The student will see your examples and will use this information to guess the weight of the coin.</p>
-            <p>Blocks consist of either one or two trials (we will tell you how many trials to expect at the beginning of each block). On each trial, you can send up to <b>${params.maxFlips}</b> examples to the student.</p>`,
+                The student will see your examples and will use this information to guess the weight of the coin.</p>`,
+
+            // Page 5
+            `<p>Blocks consist of either one or two trials (we will tell you how many trials to expect at the beginning of each block). \
+                On each trial, you can send up to <b>${params.maxFlips}</b> examples to the student.</p>\
+            <p>On the blocks with two trials, you will be awarded a bonus</p>`,
 
             // Page 5
             `<p>However, you are not the first teacher your students have encountered, \
@@ -211,9 +215,10 @@
             `<h3>How can I earn as much money as possible from this experiment?</h3>
             <p>You will want to teach <b>accurately</b> and <b>efficiently</b>.</p>
             <p>As the experiment is going on, your students will guess the coin weights. \
-                On each trial, you will receive <b>$${params.perTrialBonus}</b> if the student's guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
+                You will receive <b>$${params.perTrialBonus}</b> if the student's guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
+            <p>(On the blocks with two trials, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the examples you have \
+                given them on <em>both</em> trials.)</p>
             <p>However, each flip that you give <em>costs</em> <b>$${params.exampleCost}</b>.</p>
-            <p>This is similar to teaching in the real world: You want to lead the student to the right answer, but it's costly to give too much information!</p>
             <p>We will tell you how much you have earned at the end of each block.</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
@@ -241,7 +246,7 @@
                 prompt: 'How can you earn a high performance bonus?',
                 options: [
                     'By giving as few examples as possible.',
-                    `By giving ${params.maxFlips} examples (the maximum) on each trial and making sure that the students' guesses are as accurate as possible.`,
+                    `By giving ${params.maxFlips} examples (the maximum) on each trial so I can make sure that the students' guesses are as accurate as possible.`,
                     'By teaching efficiently and accurately at the same time.'
                 ],
                 required: true
@@ -392,8 +397,11 @@
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
-                data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0)
                 data.totalExamples = nHeads + nTails;
+
+                if (data.condition === 'nonSeqFull' || data.condition === 'nonSeqPartial') {
+                    data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0)
+                }
             }
         };
 
