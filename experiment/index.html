@@ -193,18 +193,17 @@
 
             // Page 4
             `<h3>What kind of information can I give to my students to lead them to the correct coin weights?</h3>
-            <p>You can only give information to students in the form of example outcomes of coin flips. \
+            <p>You can only give information to students in the form of <b>example outcomes</b> of coin flips. \
                 You can choose the number of heads and the number of tails to send to your student.</p>
-            <p>Your goal is to provide examples to the student to lead them to the correct weight of the coin. \
+            <p>Your goal is to provide examples for the student to lead them to the correct weight of the coin. \
                 The student will see your examples and will use this information to guess the weight of the coin.</p>`,
 
             // Page 5
-            `<p>Blocks consist of either one or two trials (we will tell you how many trials to expect at the beginning of each block). \
-                On each trial, you can send up to <b>${params.maxFlips}</b> examples to the student.</p>\
-            <p>On the blocks with two trials, you will be awarded a bonus</p>`,
+            `<p>Again, you will be teaching <b>${params.nStudents}</b> students — one student per block. Each block consists of either one or two trials (we will tell you how many trials to expect at the beginning of each block). \
+                On each trial, you can send up to <b>${params.maxFlips}</b> examples to the student.</p>`,
 
             // Page 5
-            `<p>However, you are not the first teacher your students have encountered, \
+            `<p><b>Important:</b> you are not the first teacher your students have encountered, \
                 nor are the coin flips you show your students the first coin flips they have seen on this alien planet! \
                 Each student you see will come from one of four classrooms, where they have seen a bunch of flips before.</p>
             <p>Every time you encounter a new student, you will be given information about their classroom. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
@@ -215,7 +214,7 @@
             `<h3>How can I earn as much money as possible from this experiment?</h3>
             <p>You will want to teach <b>accurately</b> and <b>efficiently</b>.</p>
             <p>As the experiment is going on, your students will guess the coin weights. \
-                You will receive <b>$${params.perTrialBonus}</b> if the student's guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
+                In addition to the base pay of $${params.basePay}, for each student you can earn an extra <b>$${params.perTrialBonus}</b> if their guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
             <p>(On the blocks with two trials, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the examples you have \
                 given them on <em>both</em> trials.)</p>
             <p>However, each flip that you give <em>costs</em> <b>$${params.exampleCost}</b>.</p>
@@ -274,12 +273,21 @@
                     'The students are also on the same alien planet as you, where coins can be unfair.'
                 ],
                 required: true
+            },
+            {
+                prompt: 'How will my bonus be calculated on the blocks with two trials?',
+                options: [
+                    `Based on the student's first guess.`,
+                    `Based on the student's second (and final) guess.`,
+                    'Based on both guesses.'
+                ],
+                required: true
             }
         ],
         randomize_question_order: true,
 
         on_finish: function (data) {
-            data.pass = [data.response.Q0.includes('heads'), data.response.Q1.includes('time'), data.response.Q2.includes('heads'), data.response.Q3.includes('new'), data.response.Q4.includes('unfair')].every(Boolean)
+            data.pass = [data.response.Q0.includes('heads'), data.response.Q1.includes('time'), data.response.Q2.includes('heads'), data.response.Q3.includes('new'), data.response.Q4.includes('unfair'), data.response.Q5.includes('second')].every(Boolean)
         }
     }
 
@@ -438,8 +446,7 @@
 
                 return `
                 <p>Student's guess for coin weight: <b style="color:Tomato;">${firstResponse.studentGuess.toFixed(2)}</b></p>
-                <p>You received a bonus of <b>$${firstResponse.bonus}</b></p>
-                <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
+                <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
                 <p>${firstResponse.condition === 'seqFeedback' ? 'You will now send another set of examples to your student.' : ''} Press any key to continue.</p>
                 `
             },
@@ -476,22 +483,34 @@
                 exampleSet: 'second'
             },
             on_finish: function (data) {
+
+                var blockData = jsPsych.data.get()
+                var firstResponse = blockData.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
+                console.log(firstResponse);
+
+                var firstResponseHeads = firstResponse.heads;
+                var firstResponseTails = firstResponse.tails;
+
                 var nHeads = parseInt(data.response.heads);
                 var nTails = parseInt(data.response.tails);
+                var totalHeads = firstResponseHeads + nHeads;
+                var totalTails = firstResponseTails + nTails;
                 var studentTrueHypers = classroomParams[data.studentTrueClassroom];
-                var studentGuess = (parseInt(studentTrueHypers.a) + nHeads) / (parseInt(studentTrueHypers.a) + parseInt(studentTrueHypers.b) + nHeads + nTails);
+                var studentGuess = (parseInt(studentTrueHypers.a) + totalHeads) / (parseInt(studentTrueHypers.a) + parseInt(studentTrueHypers.b) + totalHeads + totalTails);
                 var delta = Math.abs(data.trueTheta - studentGuess);
                 var reward = delta <= params.perTrialBonusThreshold ? params.perTrialBonus : 0
-                var cost = params.exampleCost * (nHeads + nTails)
+                var cost = params.exampleCost * (totalHeads + totalTails)
 
-                data.heads = nHeads;
-                data.tails = nTails;
+                data.firstResponseHeads = firstResponseHeads;
+                data.firstResponseTails = firstResponseTails;
+                data.secondResponseHeads = nHeads;
+                data.secondResponseTails = nTails;
                 data.studentIndex = i;
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
                 data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0);
-                data.totalExamples = nHeads + nTails;
+                data.totalExamples = totalHeads + totalTails;
             }
         };
 
@@ -532,8 +551,7 @@
                 return `
                 <p>Student ${i + 1}'s first guess for coin weight: <b style="color:Tomato";>${firstResponse.studentGuess.toFixed(2)}</b></p>
                 <p>Student ${i + 1}'s second guess for coin weight: <b style="color:Tomato";>${secondResponse.studentGuess.toFixed(2)}</b></p>
-                <p>You received a bonus of ${secondResponse.condition === 'seqNoFeedback' ? `<b>$${firstResponse.bonus.toFixed(2)}</b> for the first guess and` : ''} $<b>${secondResponse.bonus.toFixed(2)}</b> for the second guess.</p>
-                <p>Your total bonus for student ${i + 1} is <b>$${(Number(firstResponse.bonus) + Number(secondResponse.bonus)).toFixed(2)}</b>.</p>
+                <p>You received a bonus of $<b>${secondResponse.bonus.toFixed(2)}</b>.</p>
                 <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
                 <p>Press any key to continue.</p>
                 `
