@@ -34,23 +34,11 @@
 <script>
 
 
-    /* Saving stuff */
-
-    /**
-     * Using the save_data.php file, creates, names, and writes data to a file as
-     * specified by params
-     *
-     * @param {String} name name of the folder to create
-     * @param {CSV} data all the experiment data in csv format (usually gotten by
-     * using jsPsych.data.get().csv())
-     */
-
-
     /* Experiment parameters */
 
     const params = {
         nStudents: 24,
-        maxFlips: 20,
+        maxFlips: 30,
         completionMinutes: 15,
         basePay: 10,
         maxBonus: 12,
@@ -97,8 +85,18 @@
         coinWeights: coinWeights
     })
 
+    /* Saving stuff */
+
     const local_testing = false;
 
+    /**
+     * Using the save_data.php file, creates, names, and writes data to a file as
+     * specified by params
+     *
+     * @param {String} name name of the folder to create
+     * @param {CSV} data all the experiment data in csv format (usually gotten by
+     * using jsPsych.data.get().csv())
+     */
     function save_data_json(name, data) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "./save_data.php");
@@ -122,6 +120,8 @@
         },
         timing_post_trial: 0
     };
+
+
 
     /* Experiment */
 
@@ -299,6 +299,7 @@
     }
 
     timeline.push(comprehensionLoop);
+
 
     /* Main logic of trials */
 
@@ -572,7 +573,7 @@
         <p>You have reached the end of the experiment!</p>
         `,
         questions: [
-            {prompt: 'Let us know if you have any comments below.', rows: 7}
+            { prompt: 'Let us know if you have any comments below.', rows: 7 }
         ],
         button_label: ['Continue, save data, and collect bonus!'],
         on_finish:
