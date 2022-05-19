@@ -67,6 +67,8 @@
 
     /* Start experiment */
 
+    const local_testing = false;
+
     var jsPsych = initJsPsych({
         on_finish: function () {
             if (local_testing) {
@@ -84,18 +86,9 @@
         coinWeights: coinWeights
     })
 
-    /* Saving stuff */
 
-    const local_testing = false;
+    /* Save stuff */
 
-    /**
-     * Using the save_data.php file, creates, names, and writes data to a file as
-     * specified by params
-     *
-     * @param {String} name name of the folder to create
-     * @param {CSV} data all the experiment data in csv format (usually gotten by
-     * using jsPsych.data.get().csv())
-     */
     function save_data_json(name, data) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "./save_data.php");
@@ -133,6 +126,8 @@
 
     var timeline = [];
 
+
+    // Welcome and introduction
 
     var welcome = {
         type: jsPsychHtmlKeyboardResponse,
@@ -232,8 +227,6 @@
         show_page_number: true
     }
 
-
-    /* Comprehension check */
 
     var comprehensionCheck = {
         type: jsPsychSurveyMultiChoice,
