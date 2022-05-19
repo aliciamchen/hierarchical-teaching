@@ -38,9 +38,9 @@
     const params = {
         nStudents: 24,
         maxFlips: 30,
-        completionMinutes: 15,
-        basePay: 10,
-        maxBonus: 12,
+        completionMinutes: 45,
+        basePay: 12,
+        maxBonus: 9,
         perTrialBonus: 0.5,
         perTrialBonusThreshold: 0.1,
         exampleCost: 0.02
@@ -149,7 +149,7 @@
             The effects of participating should be comparable to those you would experience from viewing a computer monitor \
             and using a mouse and keyboard for the duration of the experiment.</p>
         <p><b>Benefits:</b> The study provides important information about the nature of teaching.</p>
-        <p><b>Compensation:</b> You will receive $${params.basePay} for completing the experiment and a performance bonus of up to $${params.maxBonus}.</p>
+        <p><b>Compensation:</b> You will receive <b>$${params.basePay}</b> for completing the experiment and a performance bonus of up to <b>$${params.maxBonus}</b>.</p>
         <p><b>Confidentiality:</b> Your participation in this study will remain confidential. \
             No personally identifiable information will be associated with your data. \
             Your de-identified data may be shared with other researchers and used in future projects.</p>
@@ -183,23 +183,24 @@
             // Page 3
             `<p>You will be teaching students the weight of coins.</p>
             <p>But aren't all coins equally likely to land heads or tails? This is not the case here!\
-                You (and your students) have landed on an alien planet where you have all been told that coins can be any weight.</p>
+                You (and your students) have landed on an alien planet where you have all been told that coins can be unfair.</p>
             <p>We will represent coin weights with a <b>number between 0 and 1</b>. \
                 The higher the weight, the more likely the coin is to land heads.</p>
             <p>A weight of 0.5 means that the coin is fair, like the coins you are used to on planet Earth. \
                 A weight of 0.8 means that the coin is engineered so that it lands heads 80% of the time.</p>
-            <p>You will be teaching a total of ${params.nStudents} students, for a total of ${params.nStudents} blocks. In each block, you will encounter a new student. \
-                You will receive a coin and we will tell you its weight. The student won't know its weight.</p>`,
+            <p>You will be teaching a total of ${params.nStudents} students. For each student, \
+                you will receive a coin and we will tell you its weight. The student won't know its weight.</p>`,
 
             // Page 4
             `<h3>What kind of information can I give to my students to lead them to the correct coin weights?</h3>
             <p>You can only give information to students in the form of <b>example outcomes</b> ("examples") of coin flips. \
                 You can choose the number of heads and the number of tails to send to your student.</p>
+            <p>In other words, you can give information to your students by telling them how many tosses ended up in heads and how many ended up in tails.</>
             <p>Your goal is to provide examples for the student to lead them to the correct weight of the coin. \
                 The student will see your examples and will use this information to guess the weight of the coin.</p>`,
 
             // Page 5
-            `<p>Again, you will be teaching <b>${params.nStudents}</b> students - one student per block. Each block consists of either one or two trials (we will tell you how many trials to expect at the beginning of each block). \
+            `<p>Again, you will be teaching <b>${params.nStudents}</b> students. You will teach each student over either one or two trials (we will tell you how many trials to expect when you encounter a new student). \
                 On each trial, you can send up to <b>${params.maxFlips}</b> examples to send to the student.</p>`,
 
             // Page 6
@@ -214,11 +215,11 @@
             `<h3>How can I earn as much money as possible from this experiment?</h3>
             <p>You will want to teach <b>helpfully</b> and <b>efficiently</b>.</p>
             <p>As the experiment is going on, your students will guess the coin weights. \
-                In addition to the base pay of <b>$${params.basePay}</b>, for each student you can earn an extra <b>$${params.perTrialBonus}</b> if their guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
-            <p>(On the blocks with two trials, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the examples you have \
+                In addition to the base pay of <b>$${params.basePay}</b>, for each student you will earn an extra <b>$${params.perTrialBonus}</b> if their guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
+            <p>(For the students that you'll teach over two trials, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the examples you have \
                 given them on <em>both</em> trials.)</p>
             <p>However, each example that you give <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, sending 20 heads costs more than sending 10 heads.)</p>
-            <p>We will tell you how much you have earned at the end of each block.</p>
+            <p>After you finish teaching a student tell you how much you have earned for that student.</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
         ],
@@ -259,10 +260,10 @@
                 required: true
             },
             {
-                prompt: `Is there a chance you'll encounter the same student in two different blocks?`,
+                prompt: `Is there a chance you'll encounter the same student twice?`,
                 options: [
                     'Yes, I might encounter the same student twice.',
-                    'No, I will teach a <b>new</b> student on each block.'
+                    'No, I will teach a <b>new</b> student each time.'
                 ],
                 required: true
             },
@@ -275,7 +276,7 @@
                 required: true
             },
             {
-                prompt: 'How will my bonus be calculated on the blocks with two trials?',
+                prompt: `For the students to which I'll give two sets of examples, how will my bonus be calculated?`,
                 options: [
                     `Based on the student's first guess.`,
                     `Based on the student's second (and final) guess.`,
@@ -411,7 +412,7 @@
                     data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0)
                 }
 
-                data.bonusSoFar = Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)
+                data.bonusSoFar = Number(jsPsych.data.get().select('bonus').sum().toFixed(2))
             }
         };
 
@@ -512,7 +513,7 @@
                 data.studentGuess = studentGuess;
                 data.delta = delta;
                 data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0);
-                data.bonusSoFar = Number(dataSoFar.select('bonus').sum()).toFixed(2)
+                data.bonusSoFar = Number(dataSoFar.select('bonus').sum().toFixed(2))
                 data.totalExamples = totalHeads + totalTails;
             }
         };
@@ -597,13 +598,24 @@
 
 
     var survey = {
-        type: jsPsychSurveyText,
+        type: jsPsychSurveyHtmlForm,
         preamble: `
-        <p>You have reached the end of the experiment!</p>
+        <p>You have reached the end of the experiment! To collect your bonus, please complete the following questions. </p>
         `,
-        questions: [
-            { prompt: 'Let us know if you have any comments below.', rows: 7 }
-        ],
+        html:
+        '<p><div style="margin-left:0%;text-align: left">Which gender do you most identify with?</div>'+
+      	  '<div style="margin-left:0%;text-align: left"><input type="radio" id="genderChoice1" name="gender" value="male"><label for="genderChoice1">Male</label></div>'+
+      	  '<div style="margin-left:0%;text-align: left"><input type="radio" id="genderChoice2" name="gender" value="female"><label for="genderChoice2">Female</label></div>' +
+      	  '<div style="margin-left:0%;text-align: left"><input type="radio" id="genderChoice3" name="gender" value="nonconforming"><label for="genderChoice3">Gender Variant/Non-Conforming</label></div>' +
+      	  '<div style="margin-left:0%;text-align: left"><input type="radio" id="genderChoice4" name="gender" value="abstain" required><label for="genderChoice4">Prefer not to answer</label></div></p>' +
+      	  '<p><div style="margin-left:0%;text-align: left"><label for="age">Enter your age:</label></div>'+
+      	  '<div style="margin-left:0%;text-align: left"><input type="text" id="age" name="age" required></div></p>' +
+      	  '<p><div style="margin-left:0%;text-align: left"> Did you understand the instructions?</div>'+
+      	  '<div style="margin-left:0%;text-align: left"><input type="radio" id="understoodChoice1" name="understood" value="yes" required><label for="understoodChoice1">Yes</label></div>'+
+      	  '<div style="margin-left:0%;text-align: left"><input type="radio" id="understoodChoice2" name="understood" value="no"><label for="understoodChoice2">No</label></div></p>' +
+      	  '<p><div style="margin-left:0%;text-align: left"><label for="comments">Comments or suggestions?</label></div>'+
+      	  '<div style="margin-left:0%;text-align: left"><input type="text" id="comments" name="comments"></div></p>'
+        ,
         button_label: ['Continue, save data, and collect bonus!'],
         data: {type: 'response'},
         on_finish:
