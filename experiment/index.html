@@ -39,11 +39,11 @@
         nStudents: 24,
         maxFlips: 30,
         completionMinutes: 45,
-        basePay: 12,
+        basePay: 8,
         maxBonus: 9,
         perTrialBonus: 0.5,
         perTrialBonusThreshold: 0.1,
-        exampleCost: 0.02
+        exampleCost: 0.01
     };
 
     const classroomParams = {
@@ -110,7 +110,12 @@
             ? jsPsych.randomization.randomID(12)
             : turkInfo.workerId;
 
-    jsPsych.data.addProperties({ subjectId: subjectId });
+    jsPsych.data.addProperties({
+        subjectId: subjectId,
+        assignmentId: turkInfo.assignmentId,
+        hitId: turkInfo.hitId,
+        url: window.location.href
+    });
 
     const save_data = {
         type: jsPsychCallFunction,
@@ -340,7 +345,7 @@
     for (let i = 0; i < design.length; i++) {
 
         var currTrial = design[i];
-        console.log(currTrial);
+        // console.log(currTrial);
         var studentTrueClassroom = jsPsych.randomization.sampleWithoutReplacement(currTrial.classroomPairing, 1)[0];
 
         var classroomInfo = {
@@ -445,7 +450,7 @@
                 var dataSoFar = jsPsych.data.get()
                 var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
 
-                console.log(firstResponse);
+                // console.log(firstResponse);
 
                 return `
                 <p>Student's guess for coin weight: <b style="color:Tomato;">${firstResponse.studentGuess.toFixed(2)}</b></p>
@@ -489,7 +494,7 @@
 
                 var dataSoFar = jsPsych.data.get()
                 var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
-                console.log(firstResponse);
+                // console.log(firstResponse);
 
                 var firstResponseHeads = firstResponse.heads;
                 var firstResponseTails = firstResponse.tails;
@@ -549,8 +554,8 @@
                 var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
                 var secondResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'second' }).values()[0]
 
-                console.log(firstResponse)
-                console.log(secondResponse)
+                // console.log(firstResponse)
+                // console.log(secondResponse)
 
                 return `
                 <p>Student ${i + 1}'s first guess for coin weight: <b style="color:Tomato";>${firstResponse.studentGuess.toFixed(2)}</b></p>
