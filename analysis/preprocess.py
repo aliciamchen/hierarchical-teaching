@@ -60,6 +60,10 @@ for filename in filenames:
     df_data.loc[(df_data['block_type'] == "seqNoFeedback") & (
         df_data['trial_num'] == 0), ['student_guess', 'delta']] = np.nan
 
+    # get rid of delta in sequential feedback case (cause first guess doesn't matter)
+    df_data.loc[(df_data['block_type'] == "seqFeedback") & (
+        df_data['trial_num'] == 0), ['delta']] = np.nan
+
     dfs_demographics.append(df_demographics)
     dfs_data.append(df_data)
 
