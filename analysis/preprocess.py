@@ -48,6 +48,11 @@ for filename in filenames:
         df_data.loc[i, 'student_guess'] = trial['studentGuess']
         df_data.loc[i, 'delta'] = trial['delta']
 
+        try:
+            df_data.loc[i, 'bonus'] = trial['bonus']
+        except:
+            df_data.loc[i, 'bonus'] = np.nan
+
         if trial['exampleSet'] == 'second':
             df_data.loc[i, 'heads'] = trial['secondResponseHeads']
             # ugh is is cluncky, should have saved it differently
