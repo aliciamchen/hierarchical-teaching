@@ -1,3 +1,5 @@
 .DS_Store
 data/raw
 old
+analysis/scratchpad.ipynb
+.ipynb_checkpoints
