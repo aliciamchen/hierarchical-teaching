@@ -12,6 +12,7 @@ filenames = sorted(glob.glob(in_dir + "/*.json"))
 
 dfs_demographics = []
 dfs_data = []
+dfs_bonuses = []
 
 # Loop over individual participant files
 for filename in filenames:
@@ -23,7 +24,7 @@ for filename in filenames:
     data = raw_json_data[:-1]
 
     # Make survey/demographics dataframe
-    df_demographics = df_demographics = pd.DataFrame(data={
+    df_demographics = pd.DataFrame(data={
         'subject_id': demographics['subjectId'],
         'time_elapsed': demographics['time_elapsed'],
         'gender': demographics['response']['gender'],
@@ -46,7 +47,7 @@ for filename in filenames:
         df_data.loc[i, 'student_b'] = trial['studentTrueHypers']['b']
         df_data.loc[i, 'student_class'] = trial['studentTrueClassroom']
         df_data.loc[i, 'student_guess'] = trial['studentGuess']
-        df_data.loc[i, 'delta'] = trial['delta']
+        df_data.loc[i, 'error'] = trial['delta']
 
         try:
             df_data.loc[i, 'bonus'] = trial['bonus']
@@ -63,17 +64,28 @@ for filename in filenames:
 
     # get rid of student guess in sequential no feedback case
     df_data.loc[(df_data['block_type'] == "seqNoFeedback") & (
-        df_data['trial_num'] == 0), ['student_guess', 'delta']] = np.nan
+        df_data['trial_num'] == 0), ['student_guess', 'error']] = np.nan
 
     # get rid of delta in sequential feedback case (cause first guess doesn't matter)
     df_data.loc[(df_data['block_type'] == "seqFeedback") & (
-        df_data['trial_num'] == 0), ['delta']] = np.nan
+        df_data['trial_num'] == 0), ['error']] = np.nan
+
+
+    # Make csv of bonuses
+    df_bonus = pd.DataFrame(data={
+        'subject_id': demographics['subjectId'],
+        'total_bonus': demographics['totalBonus']
+        }, index=[0])
+
 
     dfs_demographics.append(df_demographics)
     dfs_data.append(df_data)
+    dfs_bonuses.append(df_bonus)
 
 df_demographics_all = pd.concat(dfs_demographics, ignore_index=True)
 df_data_all = pd.concat(dfs_data, ignore_index=True)
+df_bonuses_all = pd.concat(dfs_bonuses, ignore_index=True)
 
 df_demographics_all.to_csv(os.path.join(out_dir, "demographics_pilot1.csv"))
 df_data_all.to_csv(os.path.join(out_dir, "data_pilot1.csv"))
+df_bonuses_all.to_csv(os.path.join(out_dir, "bonuses_pilot1.csv"), header=None, index=False)

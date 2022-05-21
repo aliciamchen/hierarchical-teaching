@@ -1,4 +1,4 @@
-,subject_id,student_idx,block_type,trial_num,true_theta,student_a,student_b,student_class,heads,tails,student_guess,delta,bonus
+,subject_id,student_idx,block_type,trial_num,true_theta,student_a,student_b,student_class,heads,tails,student_guess,error,bonus
 0,A10BH9PYCYUKDJ,0,nonSeqPartial,0,0.5,8,2,D,5,5,0.65,0.15000000000000002,0.0
 1,A10BH9PYCYUKDJ,1,nonSeqPartial,0,0.2,8,2,D,0,1,0.7272727272727273,0.5272727272727273,0.0
 2,A10BH9PYCYUKDJ,2,nonSeqFull,0,0.2,8,2,D,3,1,0.7857142857142857,0.5857142857142856,0.0
