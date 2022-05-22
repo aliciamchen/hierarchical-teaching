@@ -37,13 +37,13 @@
 
     const params = {
         nStudents: 24,
-        maxFlips: 30,
+        maxFlips: 25,
         completionMinutes: 45,
         basePay: 8,
         maxBonus: 9,
         perTrialBonus: 0.5,
-        perTrialBonusThreshold: 0.1,
-        exampleCost: 0.01
+        perTrialBonusThreshold: 0.05,
+        exampleCost: 0.02
     };
 
     const classroomParams = {
@@ -201,15 +201,16 @@
 
             // Page 5
             `<p>Again, you will be teaching <b>${params.nStudents}</b> students. You will teach each student over either one or two trials (we will tell you how many trials to expect when you encounter a new student). \
-                On each trial, you can send up to <b>${params.maxFlips}</b> examples to send to the student.</p>`,
+                On each trial, you can send up to <b>${params.maxFlips}</b> examples to the student.</p>`,
 
             // Page 6
-            `<p><b>Important:</b> you are not the first teacher your students have encountered, \
+            `<h2 style="color:Tomato;">Important</h2>
+            <p>You are not the first teacher your students have encountered, \
                 nor are the coin flips you show your students the first coin flips they have seen on this alien planet! \
                 Each student you see will come from one of four classrooms, from which they have already seen a certain number of <b>coin flip outcomes</b>.</p>
             <p>Every time you encounter a new student, you will be given information about their classroom. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
-            <p>To teach effectively, you will want to consider how a student's classroom affects \
-                how they interpret the examples you give them.</p>`,
+            <p><b style="color:Tomato;">To teach effectively, you will want to consider how a student's classroom affects \
+                how they interpret the examples you give them.</b></p>`,
 
             // Page 7
             `<h3>How can I earn as much money as possible from this experiment?</h3>
@@ -245,7 +246,7 @@
                 options: [
                     'By giving as few examples as possible.',
                     `By giving ${params.maxFlips} examples (the maximum) on each trial so I can make sure that the students' guesses are as accurate as possible.`,
-                    'By teaching efficiently and accurately/helpfully at the same time (because each example I give to the student costs money!).'
+                    `By <b>considering the student's classroom information</b> so that I can teach efficiently and accurately/helpfully at the same time (because each example I give to the student costs money!).`
                 ],
                 required: true
             },
@@ -348,7 +349,7 @@
             <h2>The weight of your coin is <b style="color:Tomato;">${currTrial.coinWeight}</b>.</h2>
             <p>In this block, you will be giving ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> set of examples' : '<b>two</b> sets of examples'} to Student ${i + 1}.</p>
                 <p>${currTrial.condition === 'seqFeedback' ? `You will see the student's guess after the first set of examples. You will also receive feedback at the end of the block.` : 'You will receive feedback at the end of the block.'}</p>
-            `,
+            <p>${currTrial.condition == 'seqFeedback' ? `To earn the highest bonus, you will have to <b>take into consideration the student's guess</b> when you choose your second set of examples.`: ''}</p>`,
             choices: ['Continue']
         }
 
@@ -448,7 +449,8 @@
                 return `
                 <p>Student's guess for coin weight: <b style="color:Tomato;">${firstResponse.studentGuess.toFixed(2)}</b></p>
                 <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}</b>. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
-                <p>${firstResponse.condition === 'seqFeedback' ? 'You will now send another set of examples to your student.' : ''} Press any key to continue.</p>
+                <p>${firstResponse.condition === 'seqFeedback' ? `You will now send another set of examples to your student. <b>Remember to take your student's guess into consideration so that you can earn the highest bonus possible!</b> ` : ''}</p>
+                <p>Press any key to continue.</p>
                 `
             },
             trial_duration: 30000
