@@ -5,10 +5,12 @@ import os
 import numpy as np
 import pandas as pd
 
-in_dir = "../data/raw/2022-05-19_pilot_responsesOnly"
-out_dir = "../data/2022-05-19_pilot"
+in_dir = "../data/raw/2022-05-22_pilot_responsesOnly"
+out_dir = "../data/2022-05-22_pilot"
 
 filenames = sorted(glob.glob(in_dir + "/*.json"))
+
+# print(filenames)
 
 dfs_demographics = []
 dfs_data = []
@@ -32,6 +34,8 @@ for filename in filenames:
         'understood': demographics['response']['understood'],
         'comments': demographics['response']['comments']
     }, index=[0])
+
+    # print(df_demographics)
 
     # Make data dataframe
     cols = ['subject_id', 'student_idx', 'block_type', 'trial_num', 'true_theta',
@@ -86,6 +90,6 @@ df_demographics_all = pd.concat(dfs_demographics, ignore_index=True)
 df_data_all = pd.concat(dfs_data, ignore_index=True)
 df_bonuses_all = pd.concat(dfs_bonuses, ignore_index=True)
 
-df_demographics_all.to_csv(os.path.join(out_dir, "demographics_pilot1.csv"))
-df_data_all.to_csv(os.path.join(out_dir, "data_pilot1.csv"))
-df_bonuses_all.to_csv(os.path.join(out_dir, "bonuses_pilot1.csv"), header=None, index=False)
+df_demographics_all.to_csv(os.path.join(out_dir, "demographics_pilot2.csv"))
+df_data_all.to_csv(os.path.join(out_dir, "data_pilot2.csv"))
+df_bonuses_all.to_csv(os.path.join(out_dir, "bonuses_pilot2.csv"), header=None, index=False)

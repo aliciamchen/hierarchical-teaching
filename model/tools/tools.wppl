@@ -1,0 +1,11 @@
+
+
+var sampleWithReplacement = function (objects) {
+    // first choose the number of samples to make, then uniformly choose
+    var nSamples = discrete({ ps: ones([objects.length, 1]) }) + 1
+    return mapN(function (x) { return categorical({ vs: objects }) }, nSamples)
+}
+
+var sampleWithoutReplacement = function(objects) {
+    return sort(_.union(sampleWithReplacement(objects)))
+}

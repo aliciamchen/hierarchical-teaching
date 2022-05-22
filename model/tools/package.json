@@ -1,0 +1,13 @@
+{
+    "name": "tools",
+    "webppl": {
+      "wppl": [
+        "tools.wppl"
+      ]
+    },
+    "main": "main.js",
+    "dependencies": {
+      "babyparse": "*",
+      "lodash": "~4.17.13"
+    }
+  }
