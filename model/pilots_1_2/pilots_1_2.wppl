@@ -2,9 +2,9 @@
 
 var params = {
     participants: 30,
-    inferOptions: { method: 'MCMC', samples: 2500 },
-    alpha: 4,
-    costWeight: 0.1,
+    inferOptions: { method: 'MCMC', samples: 1000 },
+    alpha: 5,
+    costWeight: 0.2,
     coinWeights: [0.2, 0.5, 0.8], // true coin flip weight
     maxFlips: 25,
     conditions: ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'],
@@ -19,7 +19,7 @@ var params = {
 
 
 var f = csv.open('./output/' + 'pilot_2' + '.csv')
-csv.writeLine('block_type,trial_num,true_theta,student_a,student_b,student_class,heads,tails', f)
+csv.writeLine('block_type,trial_num,true_theta,student_class,heads,tails', f)
 
 var makeTrials = function () {
     return _.flattenDeep(
@@ -30,6 +30,7 @@ var makeTrials = function () {
                         return {
                             condition: condition,
                             coinWeight: coinWeight,
+                            classroomOptions: classroomPairing,
                             classroom: _.sample(classroomPairing)
                         }
                     }, params.classroomPairings)
@@ -42,7 +43,127 @@ var makeTrials = function () {
 
 // console.log(makeData())
 
+//// Model
 
+// literal learner
+var L0 = function (examples, learnerHypers) {
+    return Beta({ a: _.toNumber(learnerHypers.a + examples.heads), b: _.toNumber(learnerHypers.b + examples.n - examples.heads) });
+};
+
+// pragmatic speaker
+var S1 = cache(function (theta, learnerHypers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var nExamples = uniformDraw(_.range(1, params.maxFlips + 1));
+        var nHeads = uniformDraw(_.range(0, nExamples + 1));
+        var examples = { n: nExamples, heads: nHeads };
+        factor(params.alpha * (L0(examples, learnerHypers).score(theta) - params.costWeight * examples.n));
+        return examples;
+    });
+});
+
+// speaker reasoning about uncertainty w/ classroom ID
+var S = cache(function (theta, classroomOptions) {
+    return Infer({ method: 'enumerate' }, function () {
+        var learnerClass = uniformDraw(classroomOptions);
+        var learnerHypers = params.classHypers[learnerClass];
+
+        return sample(S1(theta, learnerHypers))
+    })
+});
+
+// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
+var updateSpeakerPosterior = cache(function (data, classroomOptions, condition, classroom) {
+    return Infer(params.inferOptions, function () {
+        var learnerClass = uniformDraw(classroomOptions);
+        var learnerHypers = params.classHypers[learnerClass];
+
+        var learnerDist = L0(data, learnerHypers);
+        var trueLearnerDist = L0(data, params.classHypers[classroom])
+        var learnerEstimate = sample(trueLearnerDist)
+
+        if (condition === 'seqFeedback') {
+            observe(learnerDist, learnerEstimate)
+        }
+
+        // var learnerEstimate = L0Mean(data, learnerHypers);
+        // var trueLearnerEstimate = L0Mean(data, params.classHypers[params.trueLearnerClass]);
+        // condition(learnerEstimate === trueLearnerEstimate);
+
+        return learnerClass;
+    })
+})
+
+var sequentialModel = cache(function (classroomOptions, condition, coinWeight, classroom) {
+    return Infer({ method: 'enumerate' }, function () {
+        var learnerClass = uniformDraw(classroomOptions);
+        var step1examples = sample(S1(coinWeight, params.classHypers[learnerClass]))
+        var speakerPosterior = updateSpeakerPosterior(step1examples, classroomOptions, condition, classroom);
+        var step2examples = sample(S1(coinWeight, params.classHypers[sample(speakerPosterior)]));
+        // factor(L0(step2examples, params.classHypers[sample(speakerPosterior)]).score(params.trueTheta))
+        return {
+            step1examples: step1examples,
+            step2examples: step2examples
+        }
+    })
+})
+
+
+
+///
+
+var trials = makeTrials();
+
+map(function (trial) {
+    if (trial.condition === 'nonSeqFull') {
+        var response = sample(S1(trial.coinWeight, params.classHypers[trial.classroom]));
+        // console.log(response)
+        csv.writeLine([
+            trial.condition,
+            0,
+            trial.coinWeight,
+            trial.classroom,
+            response.heads,
+            response.n - response.heads
+        ].join(','), f)
+        // csv.writeLine(`nonSeqFull,0,${trial.coinWeight},${trial.classroom},${response.heads},${response.n - response.heads}`, f)
+    }
+
+    else if (trial.condition === 'nonSeqPartial') {
+        var response = sample(S(trial.coinWeight, trial.classroomOptions));
+
+        csv.writeLine([
+            trial.condition,
+            0,
+            trial.coinWeight,
+            trial.classroom,
+            response.heads,
+            response.n - response.heads
+        ].join(','), f)
+    }
+
+    else { // sequential conditions
+        var response = sample(sequentialModel(trial.classroomOptions, trial.condition, trial.coinWeight, trial.classroom));
+
+        csv.writeLine([
+            trial.condition,
+            0,
+            trial.coinWeight,
+            trial.classroom,
+            response.step1examples.heads,
+            response.step1examples.n - response.step1examples.heads
+        ].join(','), f)
+
+        csv.writeLine([
+            trial.condition,
+            1,
+            trial.coinWeight,
+            trial.classroom,
+            response.step2examples.heads,
+            response.step2examples.n - response.step2examples.heads
+        ].join(','), f)
+
+    }
+}, trials)
 
 csv.close(f);
 

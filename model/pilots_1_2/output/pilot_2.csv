@@ -1,0 +1,15 @@
+block_type,trial_num,true_theta,student_class,heads,tails
+nonSeqFull,0,0.2,B,0,9
+nonSeqFull,0,0.2,D,0,13
+nonSeqFull,0,0.5,B,0,2
+nonSeqFull,0,0.5,D,0,5
+nonSeqFull,0,0.8,A,4,0
+nonSeqFull,0,0.8,C,16,0
+nonSeqPartial,0,0.2,B,0,10
+nonSeqPartial,0,0.2,D,0,2
+nonSeqPartial,0,0.5,B,1,4
+nonSeqPartial,0,0.5,D,0,3
+nonSeqPartial,0,0.8,A,4,0
+nonSeqPartial,0,0.8,C,13,0
+seqNoFeedback,0,0.2,A,0,7
+seqNoFeedback,1,0.2,A,0,8

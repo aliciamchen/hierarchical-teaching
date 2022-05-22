@@ -8,3 +8,5 @@
 - max 25 examples (0.5/0.02)
 - 0.05 bonus threshold
 - added reminder to consider student feedback
+- Issues
+    - on 2 & 8 trials, impossible to get a bonus
