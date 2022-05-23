@@ -10,3 +10,8 @@
 - added reminder to consider student feedback
 - Issues
     - on 2 & 8 trials, impossible to get a bonus
+
+## Pilot 3
+- 0.01 cost weight
+- max 30 examples
+- 0.05 bonus threshold
