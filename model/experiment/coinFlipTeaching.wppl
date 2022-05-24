@@ -1,4 +1,4 @@
-// webppl pilots_1_2.wppl --require webppl-csv --random-seed 114
+// webppl coinFlipTeaching.wppl --require webppl-csv --random-seed 114
 
 var params = {
     type: 'point',
