@@ -5,8 +5,8 @@ import os
 import numpy as np
 import pandas as pd
 
-in_dir = "../data/raw/2022-05-22_pilot_responsesOnly"
-out_dir = "../data/2022-05-22_pilot"
+in_dir = "../data/raw/2022-05-23_pilot_responsesOnly"
+out_dir = "../data/2022-05-23_pilot"
 
 filenames = sorted(glob.glob(in_dir + "/*.json"))
 
@@ -41,6 +41,8 @@ for filename in filenames:
     cols = ['subject_id', 'student_idx', 'block_type', 'trial_num', 'true_theta',
             'student_a', 'student_b', 'student_class', 'heads', 'tails', 'student_guess']
     df_data = pd.DataFrame(columns=cols)
+
+
     for i, trial in enumerate(data):
         df_data.loc[i, 'subject_id'] = trial['subjectId']
         df_data.loc[i, 'student_idx'] = trial['studentIndex']
@@ -74,6 +76,10 @@ for filename in filenames:
     df_data.loc[(df_data['block_type'] == "seqFeedback") & (
         df_data['trial_num'] == 0), ['error']] = np.nan
 
+    # Add bonus info and understood instructions (for exclusion criteria)
+    df_data['total_bonus'] = demographics['totalBonus']
+    df_data['understood'] = demographics['response']['understood']
+
 
     # Make csv of bonuses
     df_bonus = pd.DataFrame(data={
@@ -90,6 +96,6 @@ df_demographics_all = pd.concat(dfs_demographics, ignore_index=True)
 df_data_all = pd.concat(dfs_data, ignore_index=True)
 df_bonuses_all = pd.concat(dfs_bonuses, ignore_index=True)
 
-df_demographics_all.to_csv(os.path.join(out_dir, "demographics_pilot2.csv"))
-df_data_all.to_csv(os.path.join(out_dir, "data_pilot2.csv"))
-df_bonuses_all.to_csv(os.path.join(out_dir, "bonuses_pilot2.csv"), header=None, index=False)
+df_demographics_all.to_csv(os.path.join(out_dir, "demographics_pilot3.csv"))
+df_data_all.to_csv(os.path.join(out_dir, "data_pilot3.csv"))
+df_bonuses_all.to_csv(os.path.join(out_dir, "bonuses_pilot3.csv"), header=None, index=False)
