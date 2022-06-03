@@ -37,7 +37,7 @@
 
     const params = {
         nStudents: 24,
-        maxFlips: 30,
+        maxExamples: 30,
         completionMinutes: 45,
         basePay: 8,
         maxBonus: 9,
@@ -181,45 +181,44 @@
             `<p>You are a teacher. You will be paired with students and your goal is to teach effectively.</p>`,
 
             // Page 3
-            `<p>You will be teaching students the weight of coins.</p>
-            <p>But aren't all coins equally likely to land heads or tails? This is not the case here!\
-                You (and your students) have landed on an alien planet where you have all been told that coins can be unfair.</p>
-            <p>We will represent coin weights with a <b>number between 0 and 1</b>. \
-                The higher the weight, the more likely the coin is to land heads.</p>
-            <p>A weight of 0.5 means that the coin is fair, like the coins you are used to on planet Earth. \
-                A weight of 0.8 means that the coin is engineered so that it lands heads 80% of the time.</p>
-            <p>You will be teaching a total of ${params.nStudents} students. For each student, \
-                you will receive a coin and we will tell you its weight. The student won't know its weight.</p>`,
+            `You have just landed on a new archipelago, consisting of a bunch of different islands. \
+            Each island has a certain proportion of <b>orange turtles</b> and <b>blue turtles</b>`,
+
+            //
+            `<p>You will be teaching a total of ${params.nStudents} students.</p>
+            <p>For each student, you will be shown a new island and we will tell you the <b>true</b> proportion of orange and blue turtles \
+                that live on the island.</p>
+            <p>We will give you this information by telling you the number of orange and purple turtles to expect out of 100 turtles.</p>
+            <p>The student won't know this information. Your goal is to give the student information \
+                to help them guess the turtle composition of the island.<p>`,
 
             // Page 4
-            `<h3>What kind of information can I give to my students to lead them to the correct coin weights?</h3>
-            <p>You can only give information to students in the form of <b>example outcomes</b> ("examples") of coin flips. \
-                You can choose the number of heads and the number of tails to send to your student.</p>
-            <p>In other words, you can give information to your students by telling them how many tosses ended up in heads and how many ended up in tails.</>
-            <p>Your goal is to provide examples for the student to lead them to the correct weight of the coin. \
-                The student will see your examples and will use this information to guess the weight of the coin.</p>`,
+            `<h3>What kind of information can I give to my students to lead them to the correct answers?</h3>
+            <p>You can only give information to students by <b>showing them turtles</b> from the island. \
+                You can choose the number of orange and blue turtles to show to your student.</p>
+            <p>The student will see your example turtles and will use this information to guess the island's turtle composition.</p>`,
 
             // Page 5
             `<p>Again, you will be teaching <b>${params.nStudents}</b> students. You will teach each student over either one or two trials (we will tell you how many trials to expect when you encounter a new student). \
-                On each trial, you can send up to <b>${params.maxFlips}</b> examples to the student.</p>`,
+                On each trial, you can send up to <b>${params.maxExamples}</b> turtles to the student.</p>`,
 
             // Page 6
             `<h2 style="color:Tomato;">Important</h2>
             <p>You are not the first teacher your students have encountered, \
-                nor are the coin flips you show your students the first coin flips they have seen on this alien planet! \
-                Each student you see will come from one of four classrooms, from which they have already seen a certain number of <b>coin flip outcomes</b>.</p>
+                nor are the turtles you show your students the first turtles they have seen from the island! \
+                Each student you see will come from one of four classrooms, from which they have <b>already</b> seen a certain number of orange and purple turtles.</p>
             <p>Every time you encounter a new student, you will be given information about their classroom. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
             <p><b style="color:Tomato;">To teach effectively, you will want to consider how a student's classroom affects \
-                how they interpret the examples you give them.</b></p>`,
+                how they interpret the example turtles you send to them.</b></p>`,
 
             // Page 7
             `<h3>How can I earn as much money as possible from this experiment?</h3>
             <p>You will want to teach <b>helpfully</b> and <b>efficiently</b>.</p>
-            <p>As the experiment is going on, your students will guess the coin weights. \
-                In addition to the base pay of <b>$${params.basePay}</b>, for each student you will earn an extra <b>$${params.perTrialBonus}</b> if their guess is within <b>${params.perTrialBonusThreshold}</b> of the actual coin weight.</p>
-            <p>(For the students that you'll teach over two trials, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the examples you have \
+            <p>As the experiment is going on, your students will guess the turtle compositions of each island (by entering how many orange and blue turtles they expect to see out of 100 turtles). \
+                In addition to the base pay of <b>$${params.basePay}</b>, for each student you will earn an extra <b>$${params.perTrialBonus}</b> if their guess is within <b>${params.perTrialBonusThreshold * 100}</b> of the actual turtle breakdown.</p>
+            <p>(For the students that you'll teach over two trials, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the turtles you have \
                 given them on <em>both</em> trials.)</p>
-            <p>However, each example that you give <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, sending 20 heads costs more than sending 10 heads.)</p>
+            <p>However, each turtle that you give <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, sending 20 turtles costs more than sending 10 turtles.)</p>
             <p>After you finish teaching a student, we will tell you how much you have earned for that student.</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
@@ -245,7 +244,7 @@
                 prompt: 'How can you earn a high performance bonus?',
                 options: [
                     'By giving as few examples as possible.',
-                    `By giving ${params.maxFlips} examples (the maximum) on each trial so I can make sure that the students' guesses are as accurate as possible.`,
+                    `By giving ${params.maxExamples} examples (the maximum) on each trial so I can make sure that the students' guesses are as accurate as possible.`,
                     `By <b>considering the student's classroom information</b> so that I can teach efficiently and accurately/helpfully at the same time (because each example I give to the student costs money!).`
                 ],
                 required: true
@@ -361,7 +360,7 @@
                         <p style="color:DodgerBlue;"><b>Student info: </b> Student ${i + 1} is from Classroom ${studentTrueClassroom}, where they have seen ${classroomParams[studentTrueClassroom].a} \
                             ${classroomParams[studentTrueClassroom].a === 1 ? 'head' : 'heads'} and ${classroomParams[studentTrueClassroom].b} ${classroomParams[studentTrueClassroom].b === 1 ? 'tail' : 'tails'}.</p>
                         <h3>Select a set of examples to send to your student.</h3>
-                        <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
+                        <p>Remember you can only select a max of ${params.maxExamples} examples.</p>
                         ` : `
                         <h2>The weight of your coin is <b style="color:Tomato;">${currTrial.coinWeight}</b>.</h2>
                         <p style="color:DodgerBlue;"><b>Student info: </b> Student ${i + 1} is from <b>either</b> classroom ${currTrial.classroomPairing[0]} or classroom ${currTrial.classroomPairing[1]}.</p>
@@ -374,13 +373,13 @@
                             ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[1]].b} ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'tail' : 'tails'}.</b></li>
                         </ul>
                         <h3>Select a set of examples to send to your student.</h3>
-                        <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
+                        <p>Remember you can only select a max of ${params.maxExamples} examples.</p>
                         `
                 }`
             ,
             html: `
-                <p> <input name="heads" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> heads </p>
-                <p> <input name="tails" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> tails </p>`,
+                <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> heads </p>
+                <p> <input name="tails" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> tails </p>`,
             trial_duration: 30000,
             data: {
                 type: 'response',
@@ -420,7 +419,7 @@
             loop_function: function (data) {
 
                 var totalFlips = parseInt(data.values()[0].response.heads) + parseInt(data.values()[0].response.tails)
-                if ((totalFlips <= params.maxFlips) && (totalFlips > 0)) {
+                if ((totalFlips <= params.maxExamples) && (totalFlips > 0)) {
                     return false;
                 } else {
                     return true;
@@ -471,11 +470,11 @@
                             <b>${classroomParams[currTrial.classroomPairing[1]].a} \
                             ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'head' : 'heads'} and ${classroomParams[currTrial.classroomPairing[1]].b} ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'tail' : 'tails'}.</b></li>
                         </ul>
-            <p>Remember you can only select a max of ${params.maxFlips} examples.</p>
+            <p>Remember you can only select a max of ${params.maxExamples} examples.</p>
             `,
             html: `
-                <p> <input name="heads" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> heads </p>
-                <p> <input name="tails" type="number" required="true" min="0" max="${params.maxFlips}" value="0"/> tails </p>`,
+                <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> heads </p>
+                <p> <input name="tails" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> tails </p>`,
             trial_duration: 30000,
             data: {
                 type: 'response',
@@ -525,7 +524,7 @@
             loop_function: function (data) {
 
                 var totalFlips = parseInt(data.values()[0].response.heads) + parseInt(data.values()[0].response.tails)
-                if ((totalFlips <= params.maxFlips) && (totalFlips > 0)) {
+                if ((totalFlips <= params.maxExamples) && (totalFlips > 0)) {
                     return false;
                 } else {
                     return true;
