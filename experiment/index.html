@@ -339,7 +339,7 @@
             <h4 style="color:Blue;">Student ${i + 1}</h4>
             <h2>On this island, <b style="color:Orange;">${currTrial.coinWeight * 10}</b> out of every 10 turtles are orange and <b style="color:Purple;">${(1 - currTrial.coinWeight).toFixed(1) * 10}</b> out of every 10 turtles are purple.</h2>
             <p>In this block, you will be sending ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> set of turtles' : '<b>two</b> sets of turtles'} to Student ${i + 1}.</p>
-                <p>${currTrial.condition === 'seqFeedback' ? `You will see the student's guess after the first set of turtles. You will also receive feedback at the end of the block.` : 'You will receive feedback at the end of the block.'}</p>
+                <p>${currTrial.condition === 'seqFeedback' ? `<b>You will see the student's guess after the first set of turtles.</b> You will also receive feedback at the end of the block.` : 'You will receive feedback after the second set of turtles.'}</p>
             <p>${currTrial.condition == 'seqFeedback' ? `To earn the highest bonus, you will have to <b>take into consideration the student's guess</b> when you choose your second set of turtles.` : ''}</p>`,
             choices: ['Continue']
         }
@@ -353,8 +353,8 @@
                         <p style="color:DodgerBlue;">
                             Student ${i + 1} has already seen \
                             <b>${classroomParams[studentTrueClassroom].a + classroomParams[studentTrueClassroom].b}</b> turtles, \
-                            of which <b style="color:Orange;">${classroomParams[studentTrueClassroom].a}</b> are orange \
-                            and <b style="color:Purple;">${classroomParams[studentTrueClassroom].b}</b> are purple.
+                            of which <b style="color:Orange;">${classroomParams[studentTrueClassroom].a}</b> ${classroomParams[studentTrueClassroom].a == 1 ? 'is' : 'are'} orange \
+                            and <b style="color:Purple;">${classroomParams[studentTrueClassroom].b}</b> ${classroomParams[studentTrueClassroom].b == 1 ? 'is' : 'are'} purple.
                             </p>
 
                         <h3>Select a set of turtles to send to your student to help them figure out the turtle composition of this island.</h3>
