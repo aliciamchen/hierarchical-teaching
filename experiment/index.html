@@ -44,26 +44,24 @@
     /* Experiment parameters */
 
     const params = {
-        nStudents: 24,
-        maxExamples: 40,
-        completionMinutes: 45,
-        basePay: 8,
-        maxBonus: 10,
+        nStudents: 8,
+        maxExamples: 50,
+        completionMinutes: 25,
+        basePay: 3,
+        maxBonus: 4,
         perTrialBonus: 0.5,
         perTrialBonusThreshold: 0.08,
         exampleCost: 0.01
     };
 
     const classroomParams = {
-        A: { a: 1, b: 4 },
-        B: { a: 4, b: 1 },
-        C: { a: 2, b: 8 },
-        D: { a: 8, b: 2 }
+        A: { a: 1, b: 9 },
+        B: { a: 9, b: 1 }
     };
 
     const conditions = ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'];
-    const classroomPairings = [['A', 'B'], ['C', 'D']];
-    const coinWeights = [0.2, 0.5, 0.8];
+    const classroomPairings = [['A', 'B']];
+    const coinWeights = [0.3, 0.7];
 
     const factors = {
         condition: conditions,
