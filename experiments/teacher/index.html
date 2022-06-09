@@ -32,7 +32,6 @@
             margin-left: 5px;
             list-style-position: outside;
         } */
-
     </style>
 </head>
 
@@ -402,9 +401,9 @@
                 studentTrueClassroom: studentTrueClassroom,
                 exampleSet: 'first'
             },
-            on_load: function() {
+            on_load: function () {
                 var start_time = performance.now();
-                var end_test_timer = setTimeout(function() {
+                var end_test_timer = setTimeout(function () {
                     jsPsych.finishTrial();
                 }, 3000)
             }
@@ -530,7 +529,6 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Orange;">orange</b> turtles  </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Purple;">purple</b> turtles  </p>`,
-            trial_duration: 30000,
             data: {
                 type: 'response',
                 condition: currTrial.condition,
@@ -538,6 +536,12 @@
                 classrooms: currTrial.classroomPairing,
                 studentTrueClassroom: studentTrueClassroom,
                 exampleSet: 'second'
+            },
+            on_load: function () {
+                var start_time = performance.now();
+                var end_test_timer = setTimeout(function () {
+                    jsPsych.finishTrial();
+                }, 3000)
             },
             on_finish: function (data) {
 
@@ -548,8 +552,14 @@
                 var firstResponseHeads = firstResponse.heads;
                 var firstResponseTails = firstResponse.tails;
 
-                var nHeads = parseInt(data.response.heads);
-                var nTails = parseInt(data.response.tails);
+                if (typeof data.response !== 'undefined') { // if timeout
+                    var nHeads = parseInt(data.response.heads);
+                    var nTails = parseInt(data.response.tails);
+                } else {
+                    var nHeads = 0;
+                    var nTails = 0;
+                }
+
                 var totalHeads = firstResponseHeads + nHeads;
                 var totalTails = firstResponseTails + nTails;
                 var studentTrueHypers = classroomParams[data.studentTrueClassroom];
@@ -578,9 +588,11 @@
             timeline: [secondExample],
             loop_function: function (data) {
 
-                var totalFlips = parseInt(data.values()[0].response.heads) + parseInt(data.values()[0].response.tails)
-                if ((totalFlips <= params.maxExamples) && (totalFlips > 0)) {
-                    return false;
+                var totalFlips = parseInt(data.values()[0].secondResponseHeads) + parseInt(data.values()[0].secondResponseTails)
+                console.log(totalFlips)
+                if (totalFlips <= params.maxExamples) {
+                    clearTimeout(end_test_timer)
+                    return false; // proceed
                 } else {
                     return true;
                 }
