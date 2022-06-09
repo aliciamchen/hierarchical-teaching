@@ -63,10 +63,16 @@
     const classroomPairings = [['A', 'B']];
     const coinWeights = [0.3, 0.7];
 
+    const trueClassrooms = classroomPairings.flat();
+
+    var start_time;
+    var end_test_timer;
+
     const factors = {
         condition: conditions,
         classroomPairing: classroomPairings,
-        coinWeight: coinWeights
+        coinWeight: coinWeights,
+        trueClassroom: trueClassrooms
     }
 
 
@@ -307,7 +313,7 @@
 
     }
 
-    timeline.push(comprehensionLoop);
+    // timeline.push(comprehensionLoop);
 
 
     /* Main logic of trials */
@@ -336,7 +342,7 @@
 
         var currTrial = design[i];
         // console.log(currTrial);
-        var studentTrueClassroom = jsPsych.randomization.sampleWithoutReplacement(currTrial.classroomPairing, 1)[0];
+        var studentTrueClassroom = currTrial.trueClassroom // could pass this in directly but this is quick change from before when it was randomized
 
         var classroomInfo = {
             type: jsPsychHtmlButtonResponse,
@@ -388,7 +394,6 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Orange;">orange</b> turtles </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Purple;">purple</b> turtles </p>`,
-            trial_duration: 30000,
             data: {
                 type: 'response',
                 condition: currTrial.condition,
@@ -397,9 +402,28 @@
                 studentTrueClassroom: studentTrueClassroom,
                 exampleSet: 'first'
             },
+            on_load: function() {
+                var start_time = performance.now();
+                var end_test_timer = setTimeout(function() {
+                    jsPsych.finishTrial();
+                }, 3000)
+            }
+            ,
             on_finish: function (data) {
-                var nHeads = parseInt(data.response.heads);
-                var nTails = parseInt(data.response.tails);
+
+
+                if (typeof data.response !== 'undefined') { // if timeout
+                    var nHeads = parseInt(data.response.heads);
+                    var nTails = parseInt(data.response.tails);
+                } else {
+                    var nHeads = 0;
+                    var nTails = 0;
+                }
+
+                console.log(nHeads)
+                console.log(nTails)
+
+
                 var studentTrueHypers = classroomParams[data.studentTrueClassroom];
                 var studentGuess = ((parseInt(studentTrueHypers.a) + nHeads) / (parseInt(studentTrueHypers.a) + parseInt(studentTrueHypers.b) + nHeads + nTails)).toFixed(2);
                 var delta = Math.abs(data.trueTheta - studentGuess);
@@ -426,11 +450,13 @@
             timeline: [firstExample],
             loop_function: function (data) {
 
-                var totalFlips = parseInt(data.values()[0].response.heads) + parseInt(data.values()[0].response.tails)
-                if ((totalFlips <= params.maxExamples) && (totalFlips > 0)) {
-                    return false;
+                var totalFlips = parseInt(data.values()[0].heads) + parseInt(data.values()[0].tails)
+                console.log(totalFlips)
+                if (totalFlips <= params.maxExamples) {
+                    clearTimeout(end_test_timer)
+                    return false; // proceed
                 } else {
-                    return true;
+                    return true; // prompt again for answer
                 }
             }
         }
@@ -679,6 +705,7 @@
                 <p>Your total pay is <b>$${totalPay}</b></p>
                 <p>If you were curious, you weren't interacting with a real learner.</p>
                 <p>Press any key to exit and collect your bonus.</p>
+                <p>After you exit, it is safe to close the screen and your responses will be saved automatically.</p>
                 `;
 
         }
