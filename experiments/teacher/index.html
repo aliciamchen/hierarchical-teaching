@@ -238,6 +238,8 @@
             <p>(Don't worry, <b>you can't lose money for each student</b>. And for each student, \
                 turtles only cost money if you earned a bonus for that student.)</p>
             <p>After you finish teaching a student, we will tell you how much you have earned for that student.</p>
+            <p>Make sure to submit a set of turtles during each lesson. You have 30 seconds to send your turtles for each lesson. If you don't submit a response within the 30 seconds, or if you don't send any turtles to your student, \
+                you will still see your student's guess but <b>cannot earn a bonus for that student</b>.</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
         ],
@@ -393,6 +395,7 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Orange;">orange</b> turtles </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Purple;">purple</b> turtles </p>`,
+            button_label: 'Send turtles to student',
             data: {
                 type: 'response',
                 condition: currTrial.condition,
@@ -438,7 +441,7 @@
                 data.totalExamples = nHeads + nTails;
 
                 if (data.condition === 'nonSeqFull' || data.condition === 'nonSeqPartial') {
-                    data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0)
+                    data.bonus = Number((((reward - cost) > 0) && (data.totalExamples > 0)) ? (reward - cost).toFixed(2) : 0)
                 }
 
                 data.bonusSoFar = Number(jsPsych.data.get().select('bonus').sum().toFixed(2))
@@ -482,13 +485,13 @@
                 <p>The student guessed that <b style="color:Orange;">${Math.round(firstResponse.studentGuess * 100)}</b> out of every 100 turtles are \
                     orange and <b style="color:Purple;">${Math.round((1 - firstResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
                 <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}</b>. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
+                ${firstResponse.totalExamples == 0 ? `<p>You could not receive a bonus for this student because you did not send any turtles to your student. Make sure to send at least one turtle next time!</p>` :''}
                 <p>${firstResponse.condition === 'seqFeedback' ? `You will now send another set of turtles to your student.` : ''}</p>
-                <p>Press any key to continue.</p>
-                `
+                <p>Press any key to continue.</p>`
+
             },
             trial_duration: 30000
         }
-        // add function that samples from student class, saves info, and calculates hypers based on teacher's data
 
         var secondExample = {
             type: jsPsychSurveyHtmlForm,
@@ -529,6 +532,7 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Orange;">orange</b> turtles  </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Purple;">purple</b> turtles  </p>`,
+            button_label: 'Send turtles to student',
             data: {
                 type: 'response',
                 condition: currTrial.condition,
@@ -578,7 +582,7 @@
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
-                data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0);
+                data.bonus = Number((((reward - cost) > 0) && (firstResponseHeads > 0) && (firstResponseTails > 0) && (secondResponseHeads > 0) && (secondResponseTails > 0)) ? (reward - cost).toFixed(2) : 0);
                 data.bonusSoFar = Number(dataSoFar.select('bonus').sum().toFixed(2))
                 data.totalExamples = totalHeads + totalTails;
             }
@@ -589,7 +593,7 @@
             loop_function: function (data) {
 
                 var totalFlips = parseInt(data.values()[0].secondResponseHeads) + parseInt(data.values()[0].secondResponseTails)
-                console.log(totalFlips)
+
                 if (totalFlips <= params.maxExamples) {
                     clearTimeout(end_test_timer)
                     return false; // proceed
@@ -628,6 +632,7 @@
                 <p>The student's second guess was that <b style="color:Orange;">${Math.round(secondResponse.studentGuess * 100)}</b> out of every 100 turtles are \
                     orange and <b style="color:Purple;">${Math.round((1 - secondResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
                 <p>You received a bonus of <b>$${secondResponse.bonus.toFixed(2)}</b> based on the student's second guess.</p>
+                ${(firstResponse.totalExamples == 0 || secondResponse.totalExamples == 0) ? `<p>You could not receive a bonus for this student because you did not send any turtles to your student for at least one lesson. Make sure to send at least one turtle next time!</p>` :''}
                 <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
                 <p>Press any key to continue.</p>
                 `
