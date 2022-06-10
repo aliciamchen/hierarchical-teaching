@@ -25,13 +25,6 @@
             margin-bottom: 15px;
             text-align: left
         }
-
-        /* ul {
-            display: inline-block;
-            text-align: left;
-            margin-left: 5px;
-            list-style-position: outside;
-        } */
     </style>
 </head>
 
@@ -43,11 +36,11 @@
     /* Experiment parameters */
 
     const params = {
-        nStudents: 8,
+        nStudents: 16,
         maxExamples: 70,
-        completionMinutes: 15,
-        basePay: 3,
-        maxBonus: 6,
+        completionMinutes: 30,
+        basePay: 5,
+        maxBonus: 12,
         perTrialBonus: 0.7,
         perTrialBonusThreshold: 0.08,
         exampleCost: 0.01
@@ -64,15 +57,15 @@
 
     const trueClassrooms = classroomPairings.flat();
 
-    var start_time;
-    var end_test_timer;
-
     const factors = {
         condition: conditions,
         classroomPairing: classroomPairings,
         coinWeight: coinWeights,
         trueClassroom: trueClassrooms
     }
+
+    var start_time;
+    var end_test_timer;
 
 
 
@@ -144,7 +137,7 @@
     var welcome = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: 'Welcome to the experiment. Press any key to begin.',
-        trial_duration: 30000
+        trial_duration: 10000
     }
 
     timeline.push(welcome);
@@ -219,7 +212,7 @@
             `<h2 style="color:Tomato;">Important</h2>
             <p>The turtles you show your students are not the first turtles they have seen from the island!</p>
             <p>Each student already has some island experience: they have <b>already</b> wandered around the island, where they have seen a selection of orange and purple turtles.</p>
-            <p>However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. <b>Your job is to correct these initial impressions.</b></p>
+            <p style="color:Tomato ;">However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. <b>Your job is to correct these initial impressions.</b></p>
             <p>Each student belonged to one of two groups. The two groups wandered around different parts of the island. For some students, you might not know which group they belonged to.</p>
             <p>Every time you encounter a new student, you will be given information about their past experience. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
             <p><b style="color:Tomato;">To teach effectively, you will want to consider how a student's experience affects \
@@ -238,7 +231,7 @@
             <p>(Don't worry, <b>you can't lose money for each student</b>. And for each student, \
                 turtles only cost money if you earned a bonus for that student.)</p>
             <p>After you finish teaching a student, we will tell you how much you have earned for that student.</p>
-            <p>Make sure to submit a set of turtles during each lesson. You have 30 seconds to send your turtles for each lesson. If you don't submit a response within the 30 seconds, or if you don't send any turtles to your student, \
+            <p><b>Make sure to submit a set of turtles during every lesson.</b> You have 30 seconds to send your turtles for each lesson. If you don't submit a response within the 30 seconds, or if you don't send any turtles to your student, \
                 you will still see your student's guess but <b>cannot earn a bonus for that student</b>.</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
@@ -265,7 +258,7 @@
                 options: [
                     'By sending as few turtles as possible.',
                     `By sending ${params.maxExamples} turtles (the maximum) on each lesson so I can make sure that the students' guesses are as accurate as possible.`,
-                    `By <b>considering the student's past experience</b> so that I can teach efficiently and accurately/helpfully at the same time (because each turtle I send to the student costs money!).`
+                    `By <b>considering the student's past experience</b> to correct their assumptions, so that I can teach efficiently and accurately/helpfully at the same time.`
                 ],
                 required: true
             },
@@ -314,7 +307,7 @@
 
     }
 
-    // timeline.push(comprehensionLoop);
+    timeline.push(comprehensionLoop);
 
 
     /* Main logic of trials */
@@ -340,6 +333,8 @@
     // Loop through individual trials in design to create timeline
     // i < design.length
     for (let i = 0; i < design.length; i++) {
+
+
 
         var currTrial = design[i];
         // console.log(currTrial);
@@ -406,15 +401,22 @@
             },
             on_load: function () {
                 var start_time = performance.now();
-                var end_test_timer = setTimeout(function () {
-                    jsPsych.finishTrial();
-                }, 3000)
+                console.log(start_time)
+                end_test_timer = jsPsych.pluginAPI.setTimeout(function () {
+                    var end_time = performance.now();
+                    var elapsed_time = end_time - start_time;
+                    console.log("elapsed time: ", elapsed_time);
+                    jsPsych.finishTrial({status: 'timeout'});
+                }, 30000)
             }
             ,
             on_finish: function (data) {
 
+                jsPsych.pluginAPI.clearAllTimeouts()
+                // jsPsych.pluginAPI.clearTimeout(end_test_timer);
+                var end_test_timer = null;
 
-                if (typeof data.response !== 'undefined') { // if timeout
+                if (data.response != null) { // if timeout
                     var nHeads = parseInt(data.response.heads);
                     var nTails = parseInt(data.response.tails);
                 } else {
@@ -422,8 +424,8 @@
                     var nTails = 0;
                 }
 
-                console.log(nHeads)
-                console.log(nTails)
+                // console.log(nHeads)
+                // console.log(nTails)
 
 
                 var studentTrueHypers = classroomParams[data.studentTrueClassroom];
@@ -453,9 +455,8 @@
             loop_function: function (data) {
 
                 var totalFlips = parseInt(data.values()[0].heads) + parseInt(data.values()[0].tails)
-                console.log(totalFlips)
+                // console.log(totalFlips)
                 if (totalFlips <= params.maxExamples) {
-                    clearTimeout(end_test_timer)
                     return false; // proceed
                 } else {
                     return true; // prompt again for answer
@@ -485,12 +486,12 @@
                 <p>The student guessed that <b style="color:Orange;">${Math.round(firstResponse.studentGuess * 100)}</b> out of every 100 turtles are \
                     orange and <b style="color:Purple;">${Math.round((1 - firstResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
                 <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}</b>. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
-                ${firstResponse.totalExamples == 0 ? `<p>You could not receive a bonus for this student because you did not send any turtles to your student. Make sure to send at least one turtle next time!</p>` :''}
+                ${(firstResponse.totalExamples == 0) && (firstResponse.condition != 'seqFeedback') ? `<p style="color:Red;">You could not receive a bonus for this student because you did not send any turtles to your student. Make sure to send at least one turtle next time!</p>` :''}
                 <p>${firstResponse.condition === 'seqFeedback' ? `You will now send another set of turtles to your student.` : ''}</p>
                 <p>Press any key to continue.</p>`
 
             },
-            trial_duration: 30000
+            trial_duration: 20000
         }
 
         var secondExample = {
@@ -543,11 +544,20 @@
             },
             on_load: function () {
                 var start_time = performance.now();
-                var end_test_timer = setTimeout(function () {
-                    jsPsych.finishTrial();
-                }, 3000)
+                console.log(start_time)
+                end_test_timer = jsPsych.pluginAPI.setTimeout(function () {
+                    var end_time = performance.now();
+                    var elapsed_time = end_time - start_time;
+                    console.log("elapsed time: ", elapsed_time);
+
+                    jsPsych.finishTrial({status: 'timeout'});
+                }, 30000)
             },
             on_finish: function (data) {
+
+                jsPsych.pluginAPI.clearAllTimeouts();
+                // clearTimeout(end_test_timer);
+                // end_test_timer = null;
 
                 var dataSoFar = jsPsych.data.get()
                 var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
@@ -556,7 +566,7 @@
                 var firstResponseHeads = firstResponse.heads;
                 var firstResponseTails = firstResponse.tails;
 
-                if (typeof data.response !== 'undefined') { // if timeout
+                if (data.response != null) { // if timeout... (technically you can put this in the place where you call the timeout too)
                     var nHeads = parseInt(data.response.heads);
                     var nTails = parseInt(data.response.tails);
                 } else {
@@ -582,7 +592,7 @@
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
-                data.bonus = Number((((reward - cost) > 0) && (firstResponseHeads > 0) && (firstResponseTails > 0) && (secondResponseHeads > 0) && (secondResponseTails > 0)) ? (reward - cost).toFixed(2) : 0);
+                data.bonus = Number((((reward - cost) > 0) && (firstResponseHeads + firstResponseTails > 0) && (nHeads + nTails > 0)) ? (reward - cost).toFixed(2) : 0);
                 data.bonusSoFar = Number(dataSoFar.select('bonus').sum().toFixed(2))
                 data.totalExamples = totalHeads + totalTails;
             }
@@ -595,7 +605,7 @@
                 var totalFlips = parseInt(data.values()[0].secondResponseHeads) + parseInt(data.values()[0].secondResponseTails)
 
                 if (totalFlips <= params.maxExamples) {
-                    clearTimeout(end_test_timer)
+
                     return false; // proceed
                 } else {
                     return true;
@@ -632,12 +642,12 @@
                 <p>The student's second guess was that <b style="color:Orange;">${Math.round(secondResponse.studentGuess * 100)}</b> out of every 100 turtles are \
                     orange and <b style="color:Purple;">${Math.round((1 - secondResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
                 <p>You received a bonus of <b>$${secondResponse.bonus.toFixed(2)}</b> based on the student's second guess.</p>
-                ${(firstResponse.totalExamples == 0 || secondResponse.totalExamples == 0) ? `<p>You could not receive a bonus for this student because you did not send any turtles to your student for at least one lesson. Make sure to send at least one turtle next time!</p>` :''}
+                ${(firstResponse.totalExamples == 0) || (secondResponse.secondResponseHeads + secondResponse.secondResponseTails == 0) ? `<p style="color:Red;">You could not receive a bonus for this student because you failed to send turtles for both lessons. Make sure to send at least one turtle for both lessons next time!</p>` :''}
                 <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
                 <p>Press any key to continue.</p>
                 `
             },
-            trial_duration: 30000
+            trial_duration: 20000
         }
 
         var fixation = {
