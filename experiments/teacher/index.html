@@ -25,14 +25,6 @@
             margin-bottom: 15px;
             text-align: left
         }
-
-        /* ul {
-            display: inline-block;
-            text-align: left;
-            margin-left: 5px;
-            list-style-position: outside;
-        } */
-
     </style>
 </head>
 
@@ -44,11 +36,11 @@
     /* Experiment parameters */
 
     const params = {
-        nStudents: 8,
+        nStudents: 16,
         maxExamples: 70,
-        completionMinutes: 15,
-        basePay: 3,
-        maxBonus: 6,
+        completionMinutes: 30,
+        basePay: 5,
+        maxBonus: 12,
         perTrialBonus: 0.7,
         perTrialBonusThreshold: 0.08,
         exampleCost: 0.01
@@ -65,15 +57,15 @@
 
     const trueClassrooms = classroomPairings.flat();
 
-    var start_time;
-    var end_test_timer;
-
     const factors = {
         condition: conditions,
         classroomPairing: classroomPairings,
         coinWeight: coinWeights,
         trueClassroom: trueClassrooms
     }
+
+    var start_time;
+    var end_test_timer;
 
 
 
@@ -145,7 +137,7 @@
     var welcome = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: 'Welcome to the experiment. Press any key to begin.',
-        trial_duration: 30000
+        trial_duration: 10000
     }
 
     timeline.push(welcome);
@@ -190,41 +182,50 @@
             If your answers on the comprehension quiz indicate that you have not read the instructions, \
             we will repeat them.</p>`,
 
-
             // Page 2
             `<p>You are a teacher. You will be paired with students and your goal is to teach effectively.</p>`,
 
             // Page 3
-            `You have just landed on a new archipelago, consisting of many different islands. \
-            Each island has a certain composition of <b style="color:Orange;">orange turtles</b> and <b style="color:Purple;">purple turtles</b>.`,
+            `<p>You have just landed on a new archipelago, consisting of many different islands. \
+            Each island has a certain composition of <b style="color:Orange;">orange turtles</b> and <b style="color:Purple;">purple turtles</b>, all hidden around the island.</p>`,
+            // TODO: add image of sample island
 
             //
             `<p>You will be teaching a total of ${params.nStudents} students.</p>
             <p>For each student, you will be shown a <b>new island</b> and we will tell you the turtle composition of the island: the <b>actual</b> \
                 proportion of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles \
                 that live on the island.</p>
-            <p>The student won't know this information. Your goal is to give the student information \
-                to <b>help them guess the turtle composition of the island.</b><p>`,
+            <p>The student won't know this information. Your goal is to give the student new information \
+                to <b>lead them to the actual turtle composition of the island.</b><p>`,
+            // TODO: add image of sample island with stuff shaded
 
             // Page 4
             `<h3>What kind of information can I give to my students to lead them to the correct answers?</h3>
-            <p>You can only give information to students by <b>showing them turtles</b> from the island. \
-                You can choose the number of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles to show to each student.</p>
-            <p>Each student will see your example turtles and will use this information to guess the island's turtle composition.</p>`,
+            <p>You can only give information to students by <b>walking the students to different parts of the island to show them more turtles</b>.</p>
+            <p>You know where all the turtles live on the island!</p>
+            <p>So you can choose the number of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles to show to each student.</p>`,
+
+            `<h2 style="color:Tomato;">Important</h2>
+            <p>The turtles you show your students are not the first turtles they have seen from the island!</p>
+            <p>Each student already has some island experience: they have <b>already</b> wandered a bit around the island, where they have seen a selection of orange and purple turtles.</p>
+            <p>However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. \
+                <b style="color:Tomato;">By walking the student around the island to show them more turtles, your job is to correct these initial impressions.</b></p>`,
+
+            `
+            <p>So for each student, your goal is to show them <b>more</b> turtles from the island to help them figure out the island's actual turtle composition.</p>
+            `,
+
+            // Page 6
+            `<h2>Two groups of students</h2>
+            <p>Before interacting with you, each student belonged to one of two groups. The two groups have wandered around different parts of the island.</p>
+            <p>For some students, you might not know which group they belonged to.</p>
+            <p>Every time you encounter a new student, you will be given information about their past experience wandering around the island. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
+            <p><b style="color:Tomato;">To teach effectively, you will want to consider how a student's experience affects \
+                how they interpret the additional turtles you send to them.</b></p>`,
 
             // Page 5
             `<p>You will teach each student over either one or two lessons (we will tell you how many lessons to expect each time you encounter a new student). \
-                During each lesson, you can send up to <b>${params.maxExamples}</b> turtles to the student.</p>`,
-
-            // Page 6
-            `<h2 style="color:Tomato;">Important</h2>
-            <p>The turtles you show your students are not the first turtles they have seen from the island!</p>
-            <p>Each student already has some island experience: they have <b>already</b> wandered around the island, where they have seen a selection of orange and purple turtles.</p>
-            <p>However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. <b>Your job is to correct these initial impressions.</b></p>
-            <p>Each student belonged to one of two groups. The two groups wandered around different parts of the island. For some students, you might not know which group they belonged to.</p>
-            <p>Every time you encounter a new student, you will be given information about their past experience. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
-            <p><b style="color:Tomato;">To teach effectively, you will want to consider how a student's experience affects \
-                how they interpret the turtles you send to them.</b></p>`,
+                During each lesson, you can show up to <b>${params.maxExamples}</b> turtles to the student.</p>`,
 
             // Page 7
             `<h3>How can I earn as much money as possible from this experiment?</h3>
@@ -232,13 +233,15 @@
             <p>As the experiment is going on, your students will guess the turtle compositions of each island (by entering the proportion of orange and purple turtles they expect to see out of 100 turtles). \
                 In addition to the base pay of <b>$${params.basePay}</b>, for each student you will earn an extra <b>$${params.perTrialBonus.toFixed(2)}</b> if their guess is within <b>${params.perTrialBonusThreshold * 100}</b> turtles of the actual turtle breakdown.</p>
             <p>(For the students that you'll teach over two lessons, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the turtles you have \
-                given them for <em>both</em> lessons.)</p>`,
+                shown them for <em>both</em> lessons.)</p>`,
 
             `<h3>How can I earn as much money as possible from this experiment?</h3>
-            <p>However, each turtle that you send <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, sending 20 turtles costs more than sending 10 turtles.)</p>
+            <p>However, each turtle that you show a student <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, walking around the island to show a student 20 turtles costs more than walking around the island to show 10 turtles.)</p>
             <p>(Don't worry, <b>you can't lose money for each student</b>. And for each student, \
                 turtles only cost money if you earned a bonus for that student.)</p>
             <p>After you finish teaching a student, we will tell you how much you have earned for that student.</p>
+            <p><b>Make sure to click "Send" to submit a set of turtles during every lesson.</b> You have 90 seconds to send your turtles for each lesson. If you don't submit a response within the 90 seconds, or if you don't send any turtles to your student, \
+                you will still see your student's guess but <b>cannot earn a bonus for that student</b>.</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
         ],
@@ -251,20 +254,20 @@
         type: jsPsychSurveyMultiChoice,
         questions: [
             {
-                prompt: `What are the differences between different students' past experience?`,
+                prompt: `What are the differences between different students' past island experience?`,
                 options: [
-                    'Students will have seen a different number of orange and purple turtles before seeing the example turtles you select for them.',
-                    'Students will have seen a bunch of different types of islands before seeing the examples you select for them.',
-                    `All students' experience is the same and isn't helpful for deciding how to teach.`
+                    'Students will have seen a different number of orange and purple turtles from the island before seeing the new turtles you show them.',
+                    'Students will have seen a bunch of different types of islands before seeing the new turtles you show them.',
+                    `All students' experience is the same, so I will treat all students the same.`
                 ],
                 required: true
             },
             {
                 prompt: 'How can you earn a high performance bonus?',
                 options: [
-                    'By sending as few turtles as possible.',
-                    `By sending ${params.maxExamples} turtles (the maximum) on each lesson so I can make sure that the students' guesses are as accurate as possible.`,
-                    `By <b>considering the student's past experience</b> so that I can teach efficiently and accurately/helpfully at the same time (because each turtle I send to the student costs money!).`
+                    'By showing my students as few turtles as possible.',
+                    `By not considering what my students have already seen on the island, and instead showing my students ${params.maxExamples} turtles (the maximum) on each lesson so I can make sure that the students' guesses are as accurate as possible.`,
+                    `By considering what my students have already seen on the island so that I can correct their assumptions about the island and teach efficiently and accurately/helpfully at the same time.`
                 ],
                 required: true
             },
@@ -277,11 +280,20 @@
                 required: true
             },
             {
-                prompt: `For the students to whom I'll give two sets of turtles (over two lessons), how will my bonus be calculated?`,
+                prompt: `For the students to whom I'll show two sets of turtles (over two lessons), how will my bonus be calculated?`,
                 options: [
                     `Based on the student's first guess.`,
                     `Based on the student's second (and final) guess.`,
                     'Based on both guesses.'
+                ],
+                required: true
+            },
+            {
+                prompt: `How will new turtles be shown to my students?`,
+                options: [
+                    'Because I know where all the turtles live on the island, I will walk around the island with the student to show them a certain number of new orange and purple turtles.',
+                    'The new turtles will be shown to the student as a random sample from the island.',
+                    'The new turtles will appear out of thin air.'
                 ],
                 required: true
             }
@@ -289,7 +301,7 @@
         randomize_question_order: true,
 
         on_finish: function (data) {
-            data.pass = [data.response.Q0.includes('orange'), data.response.Q1.includes('time'), data.response.Q2.includes('new'), data.response.Q3.includes('final')].every(Boolean)
+            data.pass = [data.response.Q0.includes('orange'), data.response.Q1.includes('time'), data.response.Q2.includes('new'), data.response.Q3.includes('final'), data.response.Q4.includes('walk')].every(Boolean)
         }
     }
 
@@ -313,7 +325,7 @@
 
     }
 
-    // timeline.push(comprehensionLoop);
+    timeline.push(comprehensionLoop);
 
 
     /* Main logic of trials */
@@ -339,6 +351,8 @@
     // Loop through individual trials in design to create timeline
     // i < design.length
     for (let i = 0; i < design.length; i++) {
+
+
 
         var currTrial = design[i];
         // console.log(currTrial);
@@ -394,6 +408,7 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Orange;">orange</b> turtles </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Purple;">purple</b> turtles </p>`,
+            button_label: 'Send turtles to student',
             data: {
                 type: 'response',
                 condition: currTrial.condition,
@@ -402,17 +417,24 @@
                 studentTrueClassroom: studentTrueClassroom,
                 exampleSet: 'first'
             },
-            on_load: function() {
+            on_load: function () {
                 var start_time = performance.now();
-                var end_test_timer = setTimeout(function() {
-                    jsPsych.finishTrial();
-                }, 3000)
+                console.log(start_time)
+                end_test_timer = jsPsych.pluginAPI.setTimeout(function () {
+                    var end_time = performance.now();
+                    var elapsed_time = end_time - start_time;
+                    console.log("elapsed time: ", elapsed_time);
+                    jsPsych.finishTrial({status: 'timeout'});
+                }, 90000)
             }
             ,
             on_finish: function (data) {
 
+                jsPsych.pluginAPI.clearAllTimeouts()
+                // jsPsych.pluginAPI.clearTimeout(end_test_timer);
+                var end_test_timer = null;
 
-                if (typeof data.response !== 'undefined') { // if timeout
+                if (data.response != null) { // if timeout
                     var nHeads = parseInt(data.response.heads);
                     var nTails = parseInt(data.response.tails);
                 } else {
@@ -420,8 +442,8 @@
                     var nTails = 0;
                 }
 
-                console.log(nHeads)
-                console.log(nTails)
+                // console.log(nHeads)
+                // console.log(nTails)
 
 
                 var studentTrueHypers = classroomParams[data.studentTrueClassroom];
@@ -439,7 +461,7 @@
                 data.totalExamples = nHeads + nTails;
 
                 if (data.condition === 'nonSeqFull' || data.condition === 'nonSeqPartial') {
-                    data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0)
+                    data.bonus = Number((((reward - cost) > 0) && (data.totalExamples > 0)) ? (reward - cost).toFixed(2) : 0)
                 }
 
                 data.bonusSoFar = Number(jsPsych.data.get().select('bonus').sum().toFixed(2))
@@ -451,9 +473,8 @@
             loop_function: function (data) {
 
                 var totalFlips = parseInt(data.values()[0].heads) + parseInt(data.values()[0].tails)
-                console.log(totalFlips)
+                // console.log(totalFlips)
                 if (totalFlips <= params.maxExamples) {
-                    clearTimeout(end_test_timer)
                     return false; // proceed
                 } else {
                     return true; // prompt again for answer
@@ -483,13 +504,13 @@
                 <p>The student guessed that <b style="color:Orange;">${Math.round(firstResponse.studentGuess * 100)}</b> out of every 100 turtles are \
                     orange and <b style="color:Purple;">${Math.round((1 - firstResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
                 <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}</b>. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
+                ${(firstResponse.totalExamples == 0) && (firstResponse.condition != 'seqFeedback') ? `<p style="color:Red;">You could not receive a bonus for this student because you did not send any turtles to your student. Make sure to send at least one turtle next time!</p>` :''}
                 <p>${firstResponse.condition === 'seqFeedback' ? `You will now send another set of turtles to your student.` : ''}</p>
-                <p>Press any key to continue.</p>
-                `
+                <p>Press any key to continue.</p>`
+
             },
-            trial_duration: 30000
+            trial_duration: 20000
         }
-        // add function that samples from student class, saves info, and calculates hypers based on teacher's data
 
         var secondExample = {
             type: jsPsychSurveyHtmlForm,
@@ -530,7 +551,7 @@
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Orange;">orange</b> turtles  </p>
                 <p> <input name="tails" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Purple;">purple</b> turtles  </p>`,
-            trial_duration: 30000,
+            button_label: 'Send turtles to student',
             data: {
                 type: 'response',
                 condition: currTrial.condition,
@@ -539,7 +560,22 @@
                 studentTrueClassroom: studentTrueClassroom,
                 exampleSet: 'second'
             },
+            on_load: function () {
+                var start_time = performance.now();
+                console.log(start_time)
+                end_test_timer = jsPsych.pluginAPI.setTimeout(function () {
+                    var end_time = performance.now();
+                    var elapsed_time = end_time - start_time;
+                    console.log("elapsed time: ", elapsed_time);
+
+                    jsPsych.finishTrial({status: 'timeout'});
+                }, 90000)
+            },
             on_finish: function (data) {
+
+                jsPsych.pluginAPI.clearAllTimeouts();
+                // clearTimeout(end_test_timer);
+                // end_test_timer = null;
 
                 var dataSoFar = jsPsych.data.get()
                 var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
@@ -548,8 +584,14 @@
                 var firstResponseHeads = firstResponse.heads;
                 var firstResponseTails = firstResponse.tails;
 
-                var nHeads = parseInt(data.response.heads);
-                var nTails = parseInt(data.response.tails);
+                if (data.response != null) { // if timeout... (technically you can put this in the place where you call the timeout too)
+                    var nHeads = parseInt(data.response.heads);
+                    var nTails = parseInt(data.response.tails);
+                } else {
+                    var nHeads = 0;
+                    var nTails = 0;
+                }
+
                 var totalHeads = firstResponseHeads + nHeads;
                 var totalTails = firstResponseTails + nTails;
                 var studentTrueHypers = classroomParams[data.studentTrueClassroom];
@@ -568,7 +610,7 @@
                 data.studentTrueHypers = studentTrueHypers;
                 data.studentGuess = studentGuess;
                 data.delta = delta;
-                data.bonus = Number((reward - cost) > 0 ? (reward - cost).toFixed(2) : 0);
+                data.bonus = Number((((reward - cost) > 0) && (firstResponseHeads + firstResponseTails > 0) && (nHeads + nTails > 0)) ? (reward - cost).toFixed(2) : 0);
                 data.bonusSoFar = Number(dataSoFar.select('bonus').sum().toFixed(2))
                 data.totalExamples = totalHeads + totalTails;
             }
@@ -578,9 +620,11 @@
             timeline: [secondExample],
             loop_function: function (data) {
 
-                var totalFlips = parseInt(data.values()[0].response.heads) + parseInt(data.values()[0].response.tails)
-                if ((totalFlips <= params.maxExamples) && (totalFlips > 0)) {
-                    return false;
+                var totalFlips = parseInt(data.values()[0].secondResponseHeads) + parseInt(data.values()[0].secondResponseTails)
+
+                if (totalFlips <= params.maxExamples) {
+
+                    return false; // proceed
                 } else {
                     return true;
                 }
@@ -616,11 +660,12 @@
                 <p>The student's second guess was that <b style="color:Orange;">${Math.round(secondResponse.studentGuess * 100)}</b> out of every 100 turtles are \
                     orange and <b style="color:Purple;">${Math.round((1 - secondResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
                 <p>You received a bonus of <b>$${secondResponse.bonus.toFixed(2)}</b> based on the student's second guess.</p>
+                ${(firstResponse.totalExamples == 0) || (secondResponse.secondResponseHeads + secondResponse.secondResponseTails == 0) ? `<p style="color:Red;">You could not receive a bonus for this student because you failed to send turtles for both lessons. Make sure to send at least one turtle for both lessons next time!</p>` :''}
                 <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
                 <p>Press any key to continue.</p>
                 `
             },
-            trial_duration: 30000
+            trial_duration: 20000
         }
 
         var fixation = {
