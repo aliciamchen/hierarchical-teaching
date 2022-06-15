@@ -1,50 +1,59 @@
 var params = {
-    alpha: 4,
+    alpha: 10,
     costWeight: 0,
     trueTheta: .7, // true coin flip weight
-    nExamples: 20,
-    classes: [0, 1],
-    trueLearnerClass: 0,
+    nExamples: 10,
+    nHeads: 9, // temporary; provides number of heads given in example
+    trueLearnerClass: 1,
     classHypers: {
-        0: {a: 30, b: 30},
-        1: {a: 1, b: 1}
-    }
+        0: {a: 9, b: 1},
+        1: {a: 9, b: 1}
+    },
+    classes: [0, 1]
 };
+
+// discretizes a beta distribution over hypers (allows dp)
+var Beta_disc = cache(function (hypers) {
+	return Infer({method: 'enumerate'}, function() {
+		var n = uniformDraw(_.range(0, 1, 0.1));
+        var bta = Beta({a : hypers.a, b : hypers.b});
+		factor(bta.score(n));
+		return n;
+	})
+});
 
 // literal learner
-var L0 = function (examples, learnerHypers) {
-    return Beta({ a: _.toNumber(learnerHypers.a + examples.heads), b: _.toNumber(learnerHypers.b + examples.n - examples.heads) });
-};
+var L0 = cache(function (nHeads, learnerHypers) {
+    var a = learnerHypers.a, b = learnerHypers.b;
+	return Beta_disc({ a: a + nHeads, b: b + params.nExamples - nHeads });
+});
 
 // pragmatic speaker
-var S1 = function (theta, learnerHypers) {
-    return Infer({ method: 'enumerate' }, function () {
-        var nExamples = params.nExamples;
+var S1 = cache(function (theta, learnerHypers) {
+    return Infer({ method: 'enumerate'}, function () {
+        var nExamples = params.nExamples, alpha = params.alpha, cw = params.costWeight;
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
-        var examples = { n: nExamples, heads: nHeads };
-        factor(params.alpha * (L0(examples, learnerHypers).score(theta) - params.costWeight * examples.n));
-        return examples;
+        factor(alpha * (L0(nHeads, learnerHypers).score(theta) - cw * nExamples));
+        return nHeads;
     });
-};
+});
 
 // uncertain pragmatic speaker
-var S = function(theta) {
+var S = cache(function(theta) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(params.classes);
         var learnerHypers = params.classHypers[learnerClass];
-        return sample(S1(theta, learnerHypers))
+        return sample(S1(theta, learnerHypers));
     })
-}
+});
 
 // pragmatic learner
-var L1 = function (examples, learnerHypers) {
-    return Infer({ method: 'MCMC', samples: 5000 }, function () {
-        var theta = beta({a : learnerHypers.a, b : learnerHypers.b});
-        observe(S(theta), examples);
+var L1 = cache(function (nHeads, learnerHypers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var theta = sample(Beta_disc(learnerHypers));
+        observe(S(theta), nHeads);
         return theta;
     });
-};
+});
 
-// TEMPORARY, providing arbitrary examples to test if any results arise
-var examples = { n: 5, heads: 2}
-L1(examples, params.classHypers[params.trueLearnerClass])
+L1(params.nHeads, params.classHypers[params.trueLearnerClass]);
