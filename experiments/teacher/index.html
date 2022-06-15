@@ -182,13 +182,13 @@
             If your answers on the comprehension quiz indicate that you have not read the instructions, \
             we will repeat them.</p>`,
 
-
             // Page 2
             `<p>You are a teacher. You will be paired with students and your goal is to teach effectively.</p>`,
 
             // Page 3
-            `You have just landed on a new archipelago, consisting of many different islands. \
-            Each island has a certain composition of <b style="color:Orange;">orange turtles</b> and <b style="color:Purple;">purple turtles</b>.`,
+            `<p>You have just landed on a new archipelago, consisting of many different islands. \
+            Each island has a certain composition of <b style="color:Orange;">orange turtles</b> and <b style="color:Purple;">purple turtles</b>.</p>`,
+            // TODO: add image of sample island
 
             //
             `<p>You will be teaching a total of ${params.nStudents} students.</p>
@@ -196,27 +196,35 @@
                 proportion of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles \
                 that live on the island.</p>
             <p>The student won't know this information. Your goal is to give the student information \
-                to <b>help them guess the turtle composition of the island.</b><p>`,
+                to <b>lead them to the actual turtle composition of the island.</b><p>`,
+            // TODO: add image of sample island with stuff shaded
 
             // Page 4
             `<h3>What kind of information can I give to my students to lead them to the correct answers?</h3>
-            <p>You can only give information to students by <b>showing them turtles</b> from the island. \
-                You can choose the number of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles to show to each student.</p>
-            <p>Each student will see your example turtles and will use this information to guess the island's turtle composition.</p>`,
+            <p>You can only give information to students by <b>walking the students to different parts of the island to show them more turtles</b>.</p>
+            <p>You know where all the turtles live on the island!</p>
+            <p>So you can choose the number of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles to show to each student.</p>`,
 
-            // Page 5
-            `<p>You will teach each student over either one or two lessons (we will tell you how many lessons to expect each time you encounter a new student). \
-                During each lesson, you can send up to <b>${params.maxExamples}</b> turtles to the student.</p>`,
-
-            // Page 6
             `<h2 style="color:Tomato;">Important</h2>
             <p>The turtles you show your students are not the first turtles they have seen from the island!</p>
             <p>Each student already has some island experience: they have <b>already</b> wandered around the island, where they have seen a selection of orange and purple turtles.</p>
-            <p style="color:Tomato ;">However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. <b>Your job is to correct these initial impressions.</b></p>
-            <p>Each student belonged to one of two groups. The two groups wandered around different parts of the island. For some students, you might not know which group they belonged to.</p>
+            <p>However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. <b style="color:Tomato;">Your job is to correct these initial impressions.</b></p>`,
+
+            `
+            <p>So for each student, your goal is to show them <b>more</b> turtles from the island to help them figure out the island's actual turtle composition.</p>
+            `,
+
+            // Page 6
+            `<h2>Two groups of students</h2>
+            <p>Before interacting with you, each student belonged to one of two groups. The two groups have wandered around different parts of the island.</p>
+            <p>For some students, you might not know which group they belonged to.</p>
             <p>Every time you encounter a new student, you will be given information about their past experience. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
             <p><b style="color:Tomato;">To teach effectively, you will want to consider how a student's experience affects \
-                how they interpret the turtles you send to them.</b></p>`,
+                how they interpret the additional turtles you send to them.</b></p>`,
+
+            // Page 5
+            `<p>You will teach each student over either one or two lessons (we will tell you how many lessons to expect each time you encounter a new student). \
+                During each lesson, you can show up to <b>${params.maxExamples}</b> turtles to the student.</p>`,
 
             // Page 7
             `<h3>How can I earn as much money as possible from this experiment?</h3>
@@ -224,10 +232,10 @@
             <p>As the experiment is going on, your students will guess the turtle compositions of each island (by entering the proportion of orange and purple turtles they expect to see out of 100 turtles). \
                 In addition to the base pay of <b>$${params.basePay}</b>, for each student you will earn an extra <b>$${params.perTrialBonus.toFixed(2)}</b> if their guess is within <b>${params.perTrialBonusThreshold * 100}</b> turtles of the actual turtle breakdown.</p>
             <p>(For the students that you'll teach over two lessons, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the turtles you have \
-                given them for <em>both</em> lessons.)</p>`,
+                shown them for <em>both</em> lessons.)</p>`,
 
             `<h3>How can I earn as much money as possible from this experiment?</h3>
-            <p>However, each turtle that you send <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, sending 20 turtles costs more than sending 10 turtles.)</p>
+            <p>However, each turtle that you show a student <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, walking around the island to see 20 turtles costs more than walking around the island to see 10 turtles.)</p>
             <p>(Don't worry, <b>you can't lose money for each student</b>. And for each student, \
                 turtles only cost money if you earned a bonus for that student.)</p>
             <p>After you finish teaching a student, we will tell you how much you have earned for that student.</p>
