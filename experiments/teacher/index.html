@@ -187,7 +187,7 @@
 
             // Page 3
             `<p>You have just landed on a new archipelago, consisting of many different islands. \
-            Each island has a certain composition of <b style="color:Orange;">orange turtles</b> and <b style="color:Purple;">purple turtles</b>.</p>`,
+            Each island has a certain composition of <b style="color:Orange;">orange turtles</b> and <b style="color:Purple;">purple turtles</b>, all hidden around the island.</p>`,
             // TODO: add image of sample island
 
             //
@@ -195,7 +195,7 @@
             <p>For each student, you will be shown a <b>new island</b> and we will tell you the turtle composition of the island: the <b>actual</b> \
                 proportion of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles \
                 that live on the island.</p>
-            <p>The student won't know this information. Your goal is to give the student information \
+            <p>The student won't know this information. Your goal is to give the student new information \
                 to <b>lead them to the actual turtle composition of the island.</b><p>`,
             // TODO: add image of sample island with stuff shaded
 
@@ -207,8 +207,9 @@
 
             `<h2 style="color:Tomato;">Important</h2>
             <p>The turtles you show your students are not the first turtles they have seen from the island!</p>
-            <p>Each student already has some island experience: they have <b>already</b> wandered around the island, where they have seen a selection of orange and purple turtles.</p>
-            <p>However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. <b style="color:Tomato;">Your job is to correct these initial impressions.</b></p>`,
+            <p>Each student already has some island experience: they have <b>already</b> wandered a bit around the island, where they have seen a selection of orange and purple turtles.</p>
+            <p>However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. \
+                <b style="color:Tomato;">By walking the student around the island to show them more turtles, your job is to correct these initial impressions.</b></p>`,
 
             `
             <p>So for each student, your goal is to show them <b>more</b> turtles from the island to help them figure out the island's actual turtle composition.</p>
@@ -218,7 +219,7 @@
             `<h2>Two groups of students</h2>
             <p>Before interacting with you, each student belonged to one of two groups. The two groups have wandered around different parts of the island.</p>
             <p>For some students, you might not know which group they belonged to.</p>
-            <p>Every time you encounter a new student, you will be given information about their past experience. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
+            <p>Every time you encounter a new student, you will be given information about their past experience wandering around the island. We will display this information in <b style="color:DodgerBlue;">blue</b>.</p>
             <p><b style="color:Tomato;">To teach effectively, you will want to consider how a student's experience affects \
                 how they interpret the additional turtles you send to them.</b></p>`,
 
@@ -235,7 +236,7 @@
                 shown them for <em>both</em> lessons.)</p>`,
 
             `<h3>How can I earn as much money as possible from this experiment?</h3>
-            <p>However, each turtle that you show a student <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, walking around the island to see 20 turtles costs more than walking around the island to see 10 turtles.)</p>
+            <p>However, each turtle that you show a student <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, walking around the island to show a student 20 turtles costs more than walking around the island to show 10 turtles.)</p>
             <p>(Don't worry, <b>you can't lose money for each student</b>. And for each student, \
                 turtles only cost money if you earned a bonus for that student.)</p>
             <p>After you finish teaching a student, we will tell you how much you have earned for that student.</p>
@@ -253,20 +254,20 @@
         type: jsPsychSurveyMultiChoice,
         questions: [
             {
-                prompt: `What are the differences between different students' past experience?`,
+                prompt: `What are the differences between different students' past island experience?`,
                 options: [
-                    'Students will have seen a different number of orange and purple turtles before seeing the example turtles you select for them.',
-                    'Students will have seen a bunch of different types of islands before seeing the examples you select for them.',
-                    `All students' experience is the same and isn't helpful for deciding how to teach.`
+                    'Students will have seen a different number of orange and purple turtles from the island before seeing the new turtles you show them.',
+                    'Students will have seen a bunch of different types of islands before seeing the new turtles you show them.',
+                    `All students' experience is the same, so I will treat all students the same.`
                 ],
                 required: true
             },
             {
                 prompt: 'How can you earn a high performance bonus?',
                 options: [
-                    'By sending as few turtles as possible.',
-                    `By sending ${params.maxExamples} turtles (the maximum) on each lesson so I can make sure that the students' guesses are as accurate as possible.`,
-                    `By <b>considering the student's past experience</b> to correct their assumptions, so that I can teach efficiently and accurately/helpfully at the same time.`
+                    'By showing my students as few turtles as possible.',
+                    `By not considering what my students have already seen on the island, and instead showing my students ${params.maxExamples} turtles (the maximum) on each lesson so I can make sure that the students' guesses are as accurate as possible.`,
+                    `By considering what my students have already seen on the island so that I can correct their assumptions about the island and teach efficiently and accurately/helpfully at the same time.`
                 ],
                 required: true
             },
@@ -279,11 +280,20 @@
                 required: true
             },
             {
-                prompt: `For the students to whom I'll give two sets of turtles (over two lessons), how will my bonus be calculated?`,
+                prompt: `For the students to whom I'll show two sets of turtles (over two lessons), how will my bonus be calculated?`,
                 options: [
                     `Based on the student's first guess.`,
                     `Based on the student's second (and final) guess.`,
                     'Based on both guesses.'
+                ],
+                required: true
+            },
+            {
+                prompt: `How will new turtles be shown to my students?`,
+                options: [
+                    'Because I know where all the turtles live on the island, I will walk around the island with the student to show them a certain number of new orange and purple turtles.',
+                    'The new turtles will be shown to the student as a random sample from the island.',
+                    'The new turtles will appear out of thin air.'
                 ],
                 required: true
             }
@@ -291,7 +301,7 @@
         randomize_question_order: true,
 
         on_finish: function (data) {
-            data.pass = [data.response.Q0.includes('orange'), data.response.Q1.includes('time'), data.response.Q2.includes('new'), data.response.Q3.includes('final')].every(Boolean)
+            data.pass = [data.response.Q0.includes('orange'), data.response.Q1.includes('time'), data.response.Q2.includes('new'), data.response.Q3.includes('final'), data.response.Q4.includes('walk')].every(Boolean)
         }
     }
 
