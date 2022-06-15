@@ -1,5 +1,10 @@
 .DS_Store
-data/raw
+data/teacher/raw
 old
-analysis/scratchpad.ipynb
+analysis/teacher/scratchpad.ipynb
+analysis/teacher/output
 .ipynb_checkpoints
+*.json
+*.png
+*.ipynb
+

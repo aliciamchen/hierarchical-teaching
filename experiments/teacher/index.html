@@ -231,7 +231,7 @@
             <p>(Don't worry, <b>you can't lose money for each student</b>. And for each student, \
                 turtles only cost money if you earned a bonus for that student.)</p>
             <p>After you finish teaching a student, we will tell you how much you have earned for that student.</p>
-            <p><b>Make sure to submit a set of turtles during every lesson.</b> You have 30 seconds to send your turtles for each lesson. If you don't submit a response within the 30 seconds, or if you don't send any turtles to your student, \
+            <p><b>Make sure to click "Send" to submit a set of turtles during every lesson.</b> You have 90 seconds to send your turtles for each lesson. If you don't submit a response within the 90 seconds, or if you don't send any turtles to your student, \
                 you will still see your student's guess but <b>cannot earn a bonus for that student</b>.</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
@@ -407,7 +407,7 @@
                     var elapsed_time = end_time - start_time;
                     console.log("elapsed time: ", elapsed_time);
                     jsPsych.finishTrial({status: 'timeout'});
-                }, 30000)
+                }, 90000)
             }
             ,
             on_finish: function (data) {
@@ -551,7 +551,7 @@
                     console.log("elapsed time: ", elapsed_time);
 
                     jsPsych.finishTrial({status: 'timeout'});
-                }, 30000)
+                }, 90000)
             },
             on_finish: function (data) {
 
