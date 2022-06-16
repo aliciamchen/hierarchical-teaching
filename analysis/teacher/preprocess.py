@@ -65,9 +65,9 @@ if __name__ == "__main__":
             'gender': demographics['response']['gender'],
             'age': int(demographics['response']['age']),
             'understood': demographics['response']['understood'],
+            'total_bonus': demographics['totalBonus'],
             'comments': demographics['response']['comments'],
-            'strategy': demographics['response']['strategy'],
-            'total_bonus': demographics['totalBonus']
+            'strategy': demographics['response']['strategy']
         }, index=[0])
 
         # Make data dataframe
@@ -112,12 +112,13 @@ if __name__ == "__main__":
         df_data['total_bonus'] = demographics['totalBonus']
         df_data['understood'] = demographics['response']['understood']
 
-        df_data['total_ex'] = df_data['heads'] + df_data['tails']
-        df_data['mean'] = df_data['heads'] / (df_data['heads'] + df_data['tails'])
-        df_data.rename(columns={"true_theta": "theta"})
-
         # Drop trials with no responses or timeout
         df_data.drop(df_data[(df_data['heads'] == 0) & (df_data['tails'] == 0)].index, inplace = True)
+
+        df_data['total_ex'] = df_data['heads'] + df_data['tails']
+        df_data['mean'] = df_data['heads'] / (df_data['total_ex'])
+        df_data.rename(columns={"true_theta": "theta"}, inplace=True)
+
 
         # Make separate csv of bonuses, to upload to cloudREsearch
         df_bonus = pd.DataFrame(data={
