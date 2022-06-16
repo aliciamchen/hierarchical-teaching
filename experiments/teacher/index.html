@@ -215,16 +215,15 @@
 
             // Page 4
             `<h3>What kind of information can I give to my students to lead them to the correct answers?</h3>
-            <p>You can only give information to students by <b>showing them new turtles selectively drawn from different parts of the island.</b> The students will walk around the island and see the turtles you have selected for them.</p>
+            <p>You can only give information to students by <b>showing them new turtles selectively drawn from different parts of the island.</b> The students will be led around the island to see the turtles you have selected for them.</p>
             <p>You know where all the turtles live on the island!</p>
-            <p>So you can choose the number of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles to show to each student.</p>
-            <p>This proportion does not have to correspond to the island's actual turtle composition.</p>`,
+            <p>So you can choose the number of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles to show to each student. This proportion does not have to correspond to the island's actual turtle composition.</p>`,
 
             `<h2 style="color:Tomato;">Important</h2>
             <p>The turtles you show your students are not the first turtles they have seen on the island!</p>
             <p>Each student already has some island experience: they have <b>already</b> wandered a bit around the island, where they have seen a selection of orange and purple turtles.</p>
             <p>However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. \
-                <b style="color:Tomato;">By walking the student around the island to show them more turtles, your job is to correct these initial impressions.</b></p>
+                <b style="color:Tomato;">By showing the student more turtles from the island, your job is to correct these initial impressions.</b></p>
             <div class="center" style="margin-bottom:1cm;">
             <div><img src='img/turtles_paths.png' width="600"></img>
             </div>
@@ -236,7 +235,7 @@
 
             // Page 6
             `<h2>Two groups of students</h2>
-            <p>Before interacting with you, each student belonged to one of two groups. The two groups have wandered around different parts of the island.</p>
+            <p>Before interacting with you, each student belonged to one of two groups. The two groups have wandered around different parts of the island, where they have already seen a number of orange and purple turtles.</p>
             <br>
             <div style='width: 900px; overflow: hidden;' class="center">
                 <div style='float: left;'><img src='img/9orange1purple.png' width="400"></img></div>
@@ -318,7 +317,7 @@
             {
                 prompt: `How will new turtles be shown to my students?`,
                 options: [
-                    'Because I know where all the turtles live on the island, I will walk around the island with the student to show them a certain number of new orange and purple turtles.',
+                    'The students will be walked around the island until they see the number of new orange and purple turtles I select for them.',
                     'The new turtles will be shown to the student as a random sample from the island.',
                     'The new turtles will appear out of thin air.'
                 ],
@@ -328,7 +327,7 @@
         randomize_question_order: true,
 
         on_finish: function (data) {
-            data.pass = [data.response.Q0.includes('orange'), data.response.Q1.includes('time'), data.response.Q2.includes('new'), data.response.Q3.includes('final'), data.response.Q4.includes('walk')].every(Boolean)
+            data.pass = [data.response.Q0.includes('orange'), data.response.Q1.includes('time'), data.response.Q2.includes('new'), data.response.Q3.includes('final'), data.response.Q4.includes('walked')].every(Boolean)
         }
     }
 
@@ -416,7 +415,7 @@
                         </div>
                         </div>
 
-                        <p>Select a set of additional turtles to show your student while you're walking around the island together.</p>
+                        <p>Select a set of additional turtles to show your student.</p>
                         ` : `
                         <h2>On this island, <b style="color:Orange;">${currTrial.coinWeight * 10}</b> out of every 10 turtles are orange and <b style="color:Purple;">${(1 - currTrial.coinWeight).toFixed(1) * 10}</b> out of every 10 turtles are purple.</h2>
                         <h3 style="color:DodgerBlue;">Student info</h3>
@@ -448,7 +447,7 @@
                         <br>
 
 
-                        <p>Select a set of additional turtles to show your student while you're walking around the island together.</p>
+                        <p>Select a set of additional turtles to show your student.</p>
                         `
                 }`
             ,
