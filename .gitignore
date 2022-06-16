@@ -5,6 +5,5 @@ analysis/teacher/scratchpad.ipynb
 analysis/teacher/output
 .ipynb_checkpoints
 *.json
-*.png
 *.ipynb
 

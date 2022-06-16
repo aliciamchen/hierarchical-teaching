@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Teaching game</title>
+    <title>🐢 Teaching game 🐢</title>
 
     <script src="https://unpkg.com/jspsych@7.2.1"></script>
 
@@ -15,6 +15,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.1"></script>
 
     <link href="https://unpkg.com/jspsych@7.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
 
@@ -24,6 +25,13 @@
             margin: auto;
             margin-bottom: 15px;
             text-align: left
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
         }
     </style>
 </head>
@@ -131,6 +139,13 @@
 
     var timeline = [];
 
+    var preload = {
+        type: jsPsychPreload,
+        images: ['img/1orange9purple.png', 'img/9orange1purple.png']
+    };
+
+    timeline.push(preload);
+
 
     // Welcome and introduction
 
@@ -141,7 +156,6 @@
     }
 
     timeline.push(welcome);
-
 
     var consent = {
         type: jsPsychHtmlButtonResponse,
@@ -206,13 +220,12 @@
             <p>So you can choose the number of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles to show to each student.</p>`,
 
             `<h2 style="color:Tomato;">Important</h2>
-            <p>The turtles you show your students are not the first turtles they have seen from the island!</p>
+            <p>The turtles you show your students are not the first turtles they have seen on the island!</p>
             <p>Each student already has some island experience: they have <b>already</b> wandered a bit around the island, where they have seen a selection of orange and purple turtles.</p>
             <p>However, because they don't know where all the turtles live, the turtles they have seen are <b>not necessarily representative</b> of the island's actual turtle composition. \
                 <b style="color:Tomato;">By walking the student around the island to show them more turtles, your job is to correct these initial impressions.</b></p>`,
 
-            `
-            <p>So for each student, your goal is to show them <b>more</b> turtles from the island to help them figure out the island's actual turtle composition.</p>
+            `<p>So for each student, your goal is to show them <b>more</b> turtles from the island to help them figure out the island's actual turtle composition.</p>
             `,
 
             // Page 6
@@ -375,16 +388,24 @@
             preamble: `
                 <h4 style="color:Blue;">Student ${i + 1}, Lesson 1 of ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '1' : '2'}</h4>
                 ${currTrial.condition === 'nonSeqFull' ? `
-                <h2>On this island, <b style="color:Orange;">${currTrial.coinWeight * 10}</b> out of every 10 turtles are orange and <b style="color:Purple;">${(1 - currTrial.coinWeight).toFixed(1) * 10}</b> out of every 10 turtles are purple.</h2>
+                        <h2>On this island, <b style="color:Orange;">${currTrial.coinWeight * 10}</b> out of every 10 turtles are orange and <b style="color:Purple;">${(1 - currTrial.coinWeight).toFixed(1) * 10}</b> out of every 10 turtles are purple.</h2>
                         <h3 style="color:DodgerBlue;">Student info</h3>
                         <p style="color:DodgerBlue;">
                             Student ${i + 1} has already seen \
                             <b>${classroomParams[studentTrueClassroom].a + classroomParams[studentTrueClassroom].b}</b> turtles, \
                             of which <b style="color:Orange;">${classroomParams[studentTrueClassroom].a}</b> ${classroomParams[studentTrueClassroom].a == 1 ? 'is' : 'are'} orange \
                             and <b style="color:Purple;">${classroomParams[studentTrueClassroom].b}</b> ${classroomParams[studentTrueClassroom].b == 1 ? 'is' : 'are'} purple.
-                            </p>
+                        </p>
 
-                        <h3>Select a set of turtles to send to your student to help them figure out the turtle composition of this island.</h3>
+                        <div class="center">
+                        <div><img src='img/${classroomParams[studentTrueClassroom].a}orange${classroomParams[studentTrueClassroom].b}purple.png' width="400"></img>
+                        </div>
+                        <p class='small'><b>${classroomParams[studentTrueClassroom].a + classroomParams[studentTrueClassroom].b}</b> turtles, \
+                            of which <b style="color:Orange;">${classroomParams[studentTrueClassroom].a}</b> ${classroomParams[studentTrueClassroom].a == 1 ? 'is' : 'are'} orange \
+                            and <b style="color:Purple;">${classroomParams[studentTrueClassroom].b}</b> ${classroomParams[studentTrueClassroom].b == 1 ? 'is' : 'are'} purple</p>
+                        </div>
+
+                        <p>Select a set of additional turtles to show your student while you're walking around the island together.</p>
                         ` : `
                         <h2>On this island, <b style="color:Orange;">${currTrial.coinWeight * 10}</b> out of every 10 turtles are orange and <b style="color:Purple;">${(1 - currTrial.coinWeight).toFixed(1) * 10}</b> out of every 10 turtles are purple.</h2>
                         <h3 style="color:DodgerBlue;">Student info</h3>
@@ -401,7 +422,22 @@
                             and <b style="color:Purple;">${classroomParams[currTrial.classroomPairing[1]].b}</b> ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'is' : 'are'} purple.
                             </li>
                         </ul>
-                        <h3>Select a set of turtles to send to your student to help them figure out the turtle composition of this island.</h3>
+
+                        <br>
+                        <div style='width: 900px;'>
+                        <div style='float: left;'><img src='img/${classroomParams[currTrial.classroomPairing[0]].a}orange${classroomParams[currTrial.classroomPairing[0]].b}purple.png' width="400"></img>
+                        <p class='small'><strong>${classroomParams[currTrial.classroomPairing[0]].a + classroomParams[currTrial.classroomPairing[0]].b}</b> turtles, \
+                            of which <b style="color:Orange;">${classroomParams[currTrial.classroomPairing[0]].a}</b> ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'is' : 'are'} orange \
+                            and <b style="color:Purple;">${classroomParams[currTrial.classroomPairing[0]].b}</b> ${classroomParams[currTrial.classroomPairing[0]].b === 1 ? 'is' : 'are'} purple</strong></p></div>
+                        <div style='float: right;'><img src='img/${classroomParams[currTrial.classroomPairing[1]].a}orange${classroomParams[currTrial.classroomPairing[1]].b}purple.png' width="400"></img>
+                        <p class='small'><strong>${classroomParams[currTrial.classroomPairing[1]].a + classroomParams[currTrial.classroomPairing[1]].b}</b> turtles, \
+                            of which <b style="color:Orange;">${classroomParams[currTrial.classroomPairing[1]].a}</b> ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'is' : 'are'} orange \
+                            and <b style="color:Purple;">${classroomParams[currTrial.classroomPairing[1]].b}</b> ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'is' : 'are'} purple</strong></p></div>
+                        </div>
+                        <br>
+
+
+                        <p>Select a set of additional turtles to show your student while you're walking around the island together.</p>
                         `
                 }`
             ,
@@ -424,7 +460,7 @@
                     var end_time = performance.now();
                     var elapsed_time = end_time - start_time;
                     console.log("elapsed time: ", elapsed_time);
-                    jsPsych.finishTrial({status: 'timeout'});
+                    jsPsych.finishTrial({ status: 'timeout' });
                 }, 90000)
             }
             ,
@@ -504,7 +540,7 @@
                 <p>The student guessed that <b style="color:Orange;">${Math.round(firstResponse.studentGuess * 100)}</b> out of every 100 turtles are \
                     orange and <b style="color:Purple;">${Math.round((1 - firstResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
                 <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}</b>. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
-                ${(firstResponse.totalExamples == 0) && (firstResponse.condition != 'seqFeedback') ? `<p style="color:Red;">You could not receive a bonus for this student because you did not send any turtles to your student. Make sure to send at least one turtle next time!</p>` :''}
+                ${(firstResponse.totalExamples == 0) && (firstResponse.condition != 'seqFeedback') ? `<p style="color:Red;">You could not receive a bonus for this student because you did not send any turtles to your student. Make sure to send at least one turtle next time!</p>` : ''}
                 <p>${firstResponse.condition === 'seqFeedback' ? `You will now send another set of turtles to your student.` : ''}</p>
                 <p>Press any key to continue.</p>`
 
@@ -527,7 +563,6 @@
                             <li>On this island, <b style="color:Orange;">${firstResponse.trueTheta * 10}</b> out of every 10 turtles are orange and <b style="color:Purple;">${(1 - firstResponse.trueTheta).toFixed(2) * 10}</b> out of every 10 turtles are purple.</li>
 
 
-
                             <li>Your student has seen <b>either</b>
                                 <ul>
                                     <li><b>${classroomParams[firstResponse.classrooms[0]].a + classroomParams[firstResponse.classrooms[0]].b}</b> turtles in total, \
@@ -546,7 +581,17 @@
                             orange and <b style="color:Purple;">${Math.round((1 - firstResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</li>` : ''}
 
                         </ul>
-                        <h3>Select another set of turtles to send to your student.</h3>
+                        <div style='width: 900px;'>
+                        <div style='float: left;'><img src='img/${classroomParams[currTrial.classroomPairing[0]].a}orange${classroomParams[currTrial.classroomPairing[0]].b}purple.png' width="400"></img>
+                        <p class='small'><strong>${classroomParams[currTrial.classroomPairing[0]].a + classroomParams[currTrial.classroomPairing[0]].b}</b> turtles, \
+                            of which <b style="color:Orange;">${classroomParams[currTrial.classroomPairing[0]].a}</b> ${classroomParams[currTrial.classroomPairing[0]].a === 1 ? 'is' : 'are'} orange \
+                            and <b style="color:Purple;">${classroomParams[currTrial.classroomPairing[0]].b}</b> ${classroomParams[currTrial.classroomPairing[0]].b === 1 ? 'is' : 'are'} purple</strong></p></div>
+                        <div style='float: right;'><img src='img/${classroomParams[currTrial.classroomPairing[1]].a}orange${classroomParams[currTrial.classroomPairing[1]].b}purple.png' width="400"></img>
+                        <p class='small'><strong>${classroomParams[currTrial.classroomPairing[1]].a + classroomParams[currTrial.classroomPairing[1]].b}</b> turtles, \
+                            of which <b style="color:Orange;">${classroomParams[currTrial.classroomPairing[1]].a}</b> ${classroomParams[currTrial.classroomPairing[1]].a === 1 ? 'is' : 'are'} orange \
+                            and <b style="color:Purple;">${classroomParams[currTrial.classroomPairing[1]].b}</b> ${classroomParams[currTrial.classroomPairing[1]].b === 1 ? 'is' : 'are'} purple</strong></p></div>
+                        </div>
+                        <p>Select another set of turtles to show your student.</p>
                 `},
             html: `
                 <p> <input name="heads" type="number" required="true" min="0" max="${params.maxExamples}" value="0"/> <b style="color:Orange;">orange</b> turtles  </p>
@@ -568,7 +613,7 @@
                     var elapsed_time = end_time - start_time;
                     console.log("elapsed time: ", elapsed_time);
 
-                    jsPsych.finishTrial({status: 'timeout'});
+                    jsPsych.finishTrial({ status: 'timeout' });
                 }, 90000)
             },
             on_finish: function (data) {
@@ -660,7 +705,7 @@
                 <p>The student's second guess was that <b style="color:Orange;">${Math.round(secondResponse.studentGuess * 100)}</b> out of every 100 turtles are \
                     orange and <b style="color:Purple;">${Math.round((1 - secondResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
                 <p>You received a bonus of <b>$${secondResponse.bonus.toFixed(2)}</b> based on the student's second guess.</p>
-                ${(firstResponse.totalExamples == 0) || (secondResponse.secondResponseHeads + secondResponse.secondResponseTails == 0) ? `<p style="color:Red;">You could not receive a bonus for this student because you failed to send turtles for both lessons. Make sure to send at least one turtle for both lessons next time!</p>` :''}
+                ${(firstResponse.totalExamples == 0) || (secondResponse.secondResponseHeads + secondResponse.secondResponseTails == 0) ? `<p style="color:Red;">You could not receive a bonus for this student because you failed to send turtles for both lessons. Make sure to send at least one turtle for both lessons next time!</p>` : ''}
                 <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
                 <p>Press any key to continue.</p>
                 `
