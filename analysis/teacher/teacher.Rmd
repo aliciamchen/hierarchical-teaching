@@ -10,26 +10,26 @@ date: '2022-06-17'
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r include=FALSE}
 library("tidyverse")
 library("lme4")
 library("lmerTest")
 library("here")
 ```
 
-```{r}
+```{r include=FALSE}
 d <- read_csv(here('../../data/teacher/2022-06-16_pilot/data_pilot6.csv'))
 ```
 
 
-## Aggregated stuff
+# Collapsed data
 
-### Non sequential
+## Non sequential
 
 Full vs. partial
 
 ```{r}
-nonseq.mod <- d %>%
+nonseq.agg.mod <- d %>%
   filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes") %>%
   rename(full = block_type) %>%
   mutate(full = ifelse(full == "nonSeqFull", "full", "partial")) %>%
@@ -38,14 +38,14 @@ nonseq.mod <- d %>%
     data = .
   )
 
-summary(nonseq.mod)
+summary(nonseq.agg.mod)
 ```
-### Sequential
+## Sequential
 
 Feedback vs. no feedback
 
 ```{r}
-seq.mod <- d %>%
+seq.agg.mod <- d %>%
   filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes") %>%
   rename(feedback = block_type) %>%
   mutate(feedback = ifelse(feedback == "seqFeedback", "feedback", "noFeedback")) %>%
@@ -60,17 +60,17 @@ seq.mod <- d %>%
     data = .
   )
 
-summary(seq.mod)
+summary(seq.agg.mod)
 ```
 
-## Non aggregated stuff
+# Non collapsed data
 
-### Non sequential
+## Non sequential
 
-#### $a=1$ $b=9$
+### Classroom A: $a=1$ $b=9$
 
 ```{r}
-nonseq.mod <- d %>%
+nonseq.classA.mod <- d %>%
   filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes") %>%
   filter(student_class == "A") %>%
   rename(full = block_type) %>%
@@ -80,13 +80,13 @@ nonseq.mod <- d %>%
     data = .
   )
 
-summary(nonseq.mod)
+summary(nonseq.classA.mod)
 ```
 
-#### $a=9$ $b=1$
+### Classroom B: $a=9$ $b=1$
 
 ```{r}
-nonseq.mod <- d %>%
+nonseq.classB.mod <- d %>%
   filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes") %>%
   filter(student_class == "B") %>%
   rename(full = block_type) %>%
@@ -96,15 +96,15 @@ nonseq.mod <- d %>%
     data = .
   )
 
-summary(nonseq.mod)
+summary(nonseq.classB.mod)
 ```
 
-### Sequential
+## Sequential
 
-#### $a=1$ $b=9$
+### Classroom A: $a=1$ $b=9$
 
 ```{r}
-seq.mod <- d %>%
+seq.classA.mod <- d %>%
   filter(student_class == "A") %>%
   filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes") %>%
   rename(feedback = block_type) %>%
@@ -120,13 +120,13 @@ seq.mod <- d %>%
     data = .
   )
 
-summary(seq.mod)
+summary(seq.classA.mod)
 ```
 
-#### $a=9$ $b=1$
+### Classroom B: $a=9$ $b=1$
 
 ```{r}
-seq.mod <- d %>%
+seq.classB.mod <- d %>%
   filter(student_class == "B") %>%
   filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes") %>%
   rename(feedback = block_type) %>%
@@ -142,5 +142,5 @@ seq.mod <- d %>%
     data = .
   )
 
-summary(seq.mod)
+summary(seq.classB.mod)
 ```
