@@ -1,0 +1,146 @@
+---
+title: "teacher_pilot6"
+output:
+  pdf_document: default
+  html_document: default
+date: '2022-06-17'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("tidyverse")
+library("lme4")
+library("lmerTest")
+library("here")
+```
+
+```{r}
+d <- read_csv(here('../../data/teacher/2022-06-16_pilot/data_pilot6.csv'))
+```
+
+
+## Aggregated stuff
+
+### Non sequential
+
+Full vs. partial
+
+```{r}
+nonseq.mod <- d %>%
+  filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes") %>%
+  rename(full = block_type) %>%
+  mutate(full = ifelse(full == "nonSeqFull", "full", "partial")) %>%
+  lmer(
+    normalized_mean ~ 1 + normalized_theta + full + (1 + normalized_theta + full | subject_id), 
+    data = .
+  )
+
+summary(nonseq.mod)
+```
+### Sequential
+
+Feedback vs. no feedback
+
+```{r}
+seq.mod <- d %>%
+  filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes") %>%
+  rename(feedback = block_type) %>%
+  mutate(feedback = ifelse(feedback == "seqFeedback", "feedback", "noFeedback")) %>%
+  mutate(trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')) %>%
+  pivot_wider(names_from = trial_num,
+              values_from = normalized_mean,
+              id_cols = c("subject_id", "student_idx", "feedback", "normalized_theta")) %>%
+  mutate(norm_mean_diff = lesson2 - lesson1) %>%
+  ungroup() %>%
+  lmer(
+    norm_mean_diff ~ 1 + normalized_theta + feedback + (1 + normalized_theta + feedback | subject_id),
+    data = .
+  )
+
+summary(seq.mod)
+```
+
+## Non aggregated stuff
+
+### Non sequential
+
+#### $a=1$ $b=9$
+
+```{r}
+nonseq.mod <- d %>%
+  filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes") %>%
+  filter(student_class == "A") %>%
+  rename(full = block_type) %>%
+  mutate(full = ifelse(full == "nonSeqFull", "full", "partial")) %>%
+  lmer(
+    mean ~ 1 + theta + full + (1 + theta + full | subject_id), 
+    data = .
+  )
+
+summary(nonseq.mod)
+```
+
+#### $a=9$ $b=1$
+
+```{r}
+nonseq.mod <- d %>%
+  filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes") %>%
+  filter(student_class == "B") %>%
+  rename(full = block_type) %>%
+  mutate(full = ifelse(full == "nonSeqFull", "full", "partial")) %>%
+  lmer(
+    mean ~ 1 + theta + full + (1 + theta + full | subject_id), 
+    data = .
+  )
+
+summary(nonseq.mod)
+```
+
+### Sequential
+
+#### $a=1$ $b=9$
+
+```{r}
+seq.mod <- d %>%
+  filter(student_class == "A") %>%
+  filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes") %>%
+  rename(feedback = block_type) %>%
+  mutate(feedback = ifelse(feedback == "seqFeedback", "feedback", "noFeedback")) %>%
+  mutate(trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')) %>%
+  pivot_wider(names_from = trial_num,
+              values_from = mean,
+              id_cols = c("subject_id", "student_idx", "feedback", "theta")) %>%
+  mutate(mean_diff = lesson2 - lesson1) %>%
+  ungroup() %>%
+  lmer(
+    mean_diff ~ 1 + theta + feedback + (1 + theta + feedback | subject_id),
+    data = .
+  )
+
+summary(seq.mod)
+```
+
+#### $a=9$ $b=1$
+
+```{r}
+seq.mod <- d %>%
+  filter(student_class == "B") %>%
+  filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes") %>%
+  rename(feedback = block_type) %>%
+  mutate(feedback = ifelse(feedback == "seqFeedback", "feedback", "noFeedback")) %>%
+  mutate(trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')) %>%
+  pivot_wider(names_from = trial_num,
+              values_from = mean,
+              id_cols = c("subject_id", "student_idx", "feedback", "theta")) %>%
+  mutate(mean_diff = lesson2 - lesson1) %>%
+  ungroup() %>%
+  lmer(
+    mean_diff ~ 1 + theta + feedback + (1 + theta + feedback | subject_id),
+    data = .
+  )
+
+summary(seq.mod)
+```

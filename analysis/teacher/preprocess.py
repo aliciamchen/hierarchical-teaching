@@ -1,3 +1,4 @@
+# python preprocess.py --in_dir 2022-06-16_pilot_responsesOnly --out_dir 2022-06-16_pilot --expt_label pilot6
 import glob
 import json
 import os
@@ -112,8 +113,11 @@ if __name__ == "__main__":
         df_data['total_bonus'] = demographics['totalBonus']
         df_data['understood'] = demographics['response']['understood']
 
-        # Drop trials with no responses or timeout
+        # Drop trials with no responses, timeout, more than max
         df_data.drop(df_data[(df_data['heads'] == 0) & (df_data['tails'] == 0)].index, inplace = True)
+        df_data.drop(df_data[df_data['heads'] + df_data['tails'] > 70].index, inplace = True)
+
+        # TODO: check that it is dropping the right stuff — there shouldn't be more than 2 observations per thing
 
         df_data['total_ex'] = df_data['heads'] + df_data['tails']
         df_data['mean'] = df_data['heads'] / (df_data['total_ex'])
@@ -134,6 +138,13 @@ if __name__ == "__main__":
         df_data_all = pd.concat(dfs_data, ignore_index=True)
         df_bonuses_all = pd.concat(dfs_bonuses, ignore_index=True)
 
+        # Calculate normalized stuff for df data
+        df_data_all.loc[df_data_all['student_class'] == 'B', 'normalized_mean'] = 1 - df_data_all['mean']
+        df_data_all.loc[df_data_all['student_class'] == 'B', 'normalized_theta'] = round(1 - df_data_all['theta'].astype(float), 1)
+        df_data_all.loc[df_data_all['student_class'] == 'A', 'normalized_mean'] = df_data_all['mean']
+        df_data_all.loc[df_data_all['student_class'] == 'A', 'normalized_theta'] = df_data_all['theta']
+
+        ##
         df_demographics_all.to_csv(os.path.join(out_dir, f"demographics_{expt_label}.csv"))
         df_data_all.to_csv(os.path.join(out_dir, f"data_{expt_label}.csv"))
         df_bonuses_all.to_csv(os.path.join(

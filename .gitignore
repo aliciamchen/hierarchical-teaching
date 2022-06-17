@@ -7,3 +7,4 @@ analysis/teacher/output
 *.json
 *.ipynb
 
+.Rproj.user
