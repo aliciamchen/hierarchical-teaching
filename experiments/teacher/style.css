@@ -1,0 +1,12 @@
+p {
+    width: 70%;
+    margin: auto;
+    margin-bottom: 15px;
+    text-align: left
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
