@@ -8,3 +8,5 @@ analysis/teacher/output
 *.ipynb
 
 .Rproj.user
+.RData
+.Rhistory

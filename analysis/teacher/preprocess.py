@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 
 
-
 if __name__ == "__main__":
 
     in_base_dir = "../../data/teacher/raw"
@@ -42,8 +41,7 @@ if __name__ == "__main__":
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
 
-
-    ## Clean data, make csv files
+    # Clean data, make csv files
 
     filenames = sorted(glob.glob(in_dir + "/*.json"))
 
@@ -114,15 +112,16 @@ if __name__ == "__main__":
         df_data['understood'] = demographics['response']['understood']
 
         # Drop trials with no responses, timeout, more than max
-        df_data.drop(df_data[(df_data['heads'] == 0) & (df_data['tails'] == 0)].index, inplace = True)
-        df_data.drop(df_data[df_data['heads'] + df_data['tails'] > 70].index, inplace = True)
+        df_data.drop(df_data[(df_data['heads'] == 0) & (
+            df_data['tails'] == 0)].index, inplace=True)
+        df_data.drop(df_data[df_data['heads'] +
+                     df_data['tails'] > 70].index, inplace=True)
 
         # TODO: check that it is dropping the right stuff — there shouldn't be more than 2 observations per thing
 
         df_data['total_ex'] = df_data['heads'] + df_data['tails']
         df_data['mean'] = df_data['heads'] / (df_data['total_ex'])
         df_data.rename(columns={"true_theta": "theta"}, inplace=True)
-
 
         # Make separate csv of bonuses, to upload to cloudREsearch
         df_bonus = pd.DataFrame(data={
@@ -139,13 +138,18 @@ if __name__ == "__main__":
         df_bonuses_all = pd.concat(dfs_bonuses, ignore_index=True)
 
         # Calculate normalized stuff for df data
-        df_data_all.loc[df_data_all['student_class'] == 'B', 'normalized_mean'] = 1 - df_data_all['mean']
-        df_data_all.loc[df_data_all['student_class'] == 'B', 'normalized_theta'] = round(1 - df_data_all['theta'].astype(float), 1)
-        df_data_all.loc[df_data_all['student_class'] == 'A', 'normalized_mean'] = df_data_all['mean']
-        df_data_all.loc[df_data_all['student_class'] == 'A', 'normalized_theta'] = df_data_all['theta']
+        df_data_all.loc[df_data_all['student_class'] == 'B',
+                        'normalized_mean'] = 1 - df_data_all['mean']
+        df_data_all.loc[df_data_all['student_class'] == 'B', 'normalized_theta'] = round(
+            1 - df_data_all['theta'].astype(float), 1)
+        df_data_all.loc[df_data_all['student_class'] ==
+                        'A', 'normalized_mean'] = df_data_all['mean']
+        df_data_all.loc[df_data_all['student_class'] ==
+                        'A', 'normalized_theta'] = df_data_all['theta']
 
         ##
-        df_demographics_all.to_csv(os.path.join(out_dir, f"demographics_{expt_label}.csv"))
+        df_demographics_all.to_csv(os.path.join(
+            out_dir, f"demographics_{expt_label}.csv"))
         df_data_all.to_csv(os.path.join(out_dir, f"data_{expt_label}.csv"))
         df_bonuses_all.to_csv(os.path.join(
             out_dir, f"bonuses_{expt_label}.csv"), header=None, index=False)

@@ -25,7 +25,7 @@ const factors = {
     classroomPairing: classroomPairings,
     coinWeight: coinWeights,
     trueClassroom: trueClassrooms
-}
+};
 
 var start_time;
 var end_test_timer;
@@ -51,7 +51,7 @@ jsPsych.data.addProperties({
     conditions: conditions,
     classroomPairings: classroomPairings,
     coinWeights: coinWeights
-})
+});
 
 
 /* Save stuff */
@@ -61,7 +61,7 @@ function save_data_json(name, data) {
     xhr.open("POST", "./save_data.php");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({ filename: name, filedata: data }));
-}
+};
 
 
 const turkInfo = jsPsych.turk.turkInfo();
@@ -99,7 +99,7 @@ var preload = {
     images: ['img/1orange9purple.png', 'img/9orange1purple.png']
 };
 
-// timeline.push(preload);
+timeline.push(preload);
 
 
 // Welcome and introduction
@@ -146,29 +146,22 @@ timeline.push(consent);
 var instructions = {
     type: jsPsychInstructions,
     pages: [
-        // Page 1
         `<p>Please read the following instructions carefully as there will be a comprehension quiz. \
             If your answers on the comprehension quiz indicate that you have not read the instructions, \
             we will repeat them.</p>`,
 
-        // Page 2
         `<p>You are a teacher. You will be paired with students and your goal is to teach effectively.</p>`,
 
-        // Page 3
         `<p>You have just landed on a new archipelago, consisting of many different islands. \
             Each island has a certain composition of <b style="color:Orange;">orange turtles</b> and <b style="color:Purple;">purple turtles</b>, all hidden around the island.</p>`,
-        // TODO: add image of sample island
 
-        //
         `<p>You will be teaching a total of ${params.nStudents} students.</p>
             <p>For each student, you will be shown a <b>new island</b> and we will tell you the turtle composition of the island: the <b>actual</b> \
                 proportion of <b style="color:Orange;">orange</b> and <b style="color:Purple;">purple</b> turtles \
                 that live on the island.</p>
             <p>The student won't know this information. Your goal is to give the student new information \
                 to <b>lead them to the actual turtle composition of the island.</b><p>`,
-        // TODO: add image of sample island with stuff shaded
 
-        // Page 4
         `<h3>What kind of information can I give to my students to lead them to the correct answers?</h3>
             <p>You can only give information to students by <b>showing them new turtles selectively drawn from different parts of the island.</b> The students will be led around the island to see the turtles you have selected for them.</p>
             <p>You know where all the turtles live on the island!</p>
@@ -188,7 +181,6 @@ var instructions = {
         `<p>So for each student, your goal is to show them <b>more</b> turtles from the island to help them figure out the island's actual turtle composition.</p>
             `,
 
-        // Page 6
         `<h2>Two groups of students</h2>
             <p>Before interacting with you, each student belonged to one of two groups. The two groups have wandered around different parts of the island, where they have already seen a number of orange and purple turtles.</p>
             <br>
@@ -204,11 +196,9 @@ var instructions = {
             <p><b style="color:Tomato;">To teach effectively, you will want to consider how a student's experience affects \
                 how they interpret the additional turtles you send to them.</b></p>`,
 
-        // Page 5
         `<p>You will teach each student over either one or two lessons (we will tell you how many lessons to expect each time you encounter a new student). \
                 During each lesson, you can show up to <b>${params.maxExamples}</b> turtles to the student.</p>`,
 
-        // Page 7
         `<h3>How can I earn as much money as possible from this experiment?</h3>
             <p>You will want to teach <b>helpfully</b> and <b>efficiently</b>.</p>
             <p>As the experiment is going on, your students will guess the turtle compositions of each island (by entering the proportion of orange and purple turtles they expect to see out of 100 turtles). \
@@ -228,7 +218,7 @@ var instructions = {
     ],
     show_clickable_nav: true,
     show_page_number: true
-}
+};
 
 
 var comprehensionCheck = {
@@ -286,6 +276,7 @@ var comprehensionCheck = {
     }
 }
 
+
 var fail = {
     timeline: [{
         type: jsPsychHtmlButtonResponse,
@@ -296,47 +287,42 @@ var fail = {
         const responses = jsPsych.data.getLastTrialData();
         return !responses.select("pass").values[0];
     }
-}
+};
 
 var comprehensionLoop = {
     timeline: [instructions, comprehensionCheck, fail],
     loop_function: function (data) {
         return !data.select("pass").values[0];
     }
-
-}
+};
 
 timeline.push(comprehensionLoop);
 
 
-/* Main l ogic of trials */
+/* Main logic of trials */
 
-var design = jsPsych.randomization.factorial(factors, 1)
+var design = jsPsych.randomization.factorial(factors, 1);
 
 var beginning = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<div style="font-size:30px;">Congrats on passing the comprehension quiz! The experiment will begin in a few seconds.</div>',
     choices: "NO_KEYS",
     trial_duration: 3000,
-}
+};
 
 var firstStudentWarning = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<div style="font-size:50px;">First student</div>',
     choices: "NO_KEYS",
     trial_duration: 3000,
-}
+};
 
 timeline.push(beginning, firstStudentWarning);
 
 // Loop through individual trials in design to create timeline
-// i < design.length
 for (let i = 0; i < design.length; i++) {
 
-
-
     var currTrial = design[i];
-    // console.log(currTrial);
     var studentTrueClassroom = currTrial.trueClassroom // could pass this in directly but this is quick change from before when it was randomized
 
     var classroomInfo = {
@@ -432,7 +418,6 @@ for (let i = 0; i < design.length; i++) {
         on_finish: function (data) {
 
             jsPsych.pluginAPI.clearAllTimeouts()
-            // jsPsych.pluginAPI.clearTimeout(end_test_timer);
             var end_test_timer = null;
 
             if (data.response != null) { // if timeout
@@ -442,9 +427,6 @@ for (let i = 0; i < design.length; i++) {
                 var nHeads = 0;
                 var nTails = 0;
             }
-
-            // console.log(nHeads)
-            // console.log(nTails)
 
 
             var studentTrueHypers = classroomParams[data.studentTrueClassroom];
@@ -588,12 +570,9 @@ for (let i = 0; i < design.length; i++) {
         on_finish: function (data) {
 
             jsPsych.pluginAPI.clearAllTimeouts();
-            // clearTimeout(end_test_timer);
-            // end_test_timer = null;
 
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
-            // console.log(firstResponse);
 
             var firstResponseHeads = firstResponse.heads;
             var firstResponseTails = firstResponse.tails;
@@ -662,9 +641,6 @@ for (let i = 0; i < design.length; i++) {
 
             var firstResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'first' }).values()[0]
             var secondResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'second' }).values()[0]
-
-            // console.log(firstResponse)
-            // console.log(secondResponse)
 
             return `
                 <h3>Student ${i + 1}'s first guess</h3>
