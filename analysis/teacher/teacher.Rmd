@@ -11,148 +11,180 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r include=FALSE}
-library("tidyverse")
-library("lme4")
-library("lmerTest")
-library("here")
+library(tidyverse)
+library(lme4)
+library(lmerTest)
+library(here)
+library(ggthemes)
+library(tidyboot)
+
+theme_set(theme_few(base_size = 20))
 ```
 
 ```{r include=FALSE}
-d <- read_csv(here('../../data/teacher/2022-06-16_pilot/data_pilot6.csv')) 
-```
+d <- read_csv(here('../../data/teacher/2022-06-16_pilot/data_pilot6.csv')) %>% 
+  filter(understood == "yes", total_bonus > 0) %>% 
+  rename(n_turtles = total_ex) %>% 
+  mutate(sequential = ifelse(block_type == "nonSeqFull" | block_type == "nonSeqPartial", "non_sequential", "sequential"),
+        feedback = ifelse(block_type == "seqFeedback", "feedback", "no_feedback"),
+        teacher_knowledge = ifelse(block_type == "nonSeqFull", "full", "partial"),
+        student_prior = ifelse((theta == 0.3 & student_a == 1) | (theta == 0.7 & student_a == 9), "too_high", "too_low"),
+        n_majority = ifelse(theta == 0.7, heads, tails),
+        n_minority = n_turtles - n_majority,
+        trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')) 
+  
 
-
-# Collapsed data
-
-## Non sequential
-
-Full vs. partial
-
-```{r}
-nonseq.agg.mod <- d %>%
-  filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes", total_bonus > 0) %>%
-  rename(full = block_type) %>%
-  mutate(full = ifelse(full == "nonSeqFull", "full", "partial")) %>%
-  lmer(
-    normalized_mean ~ 1 + factor(normalized_theta) + full + (1 + factor(normalized_theta) + full | subject_id), 
-    data = .
-  )
-
-summary(nonseq.agg.mod)
-```
-## Sequential
-
-Feedback vs. no feedback
-
-```{r}
-seq.agg.mod <- d %>%
-  filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes", total_bonus > 0) %>%
-  rename(feedback = block_type) %>%
-  mutate(feedback = ifelse(feedback == "seqFeedback", "feedback", "noFeedback")) %>%
-  mutate(trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')) %>%
+d.seq <- d %>%
+  filter(sequential == 'sequential', total_bonus > 0, understood == "yes") %>% 
   pivot_wider(names_from = trial_num,
-              values_from = normalized_mean,
-              id_cols = c("subject_id", "student_idx", "feedback", "normalized_theta")) %>%
-  mutate(norm_mean_diff = lesson2 - lesson1) %>%
-  ungroup() %>%
-  lmer(
-    norm_mean_diff ~ 1 + factor(normalized_theta) + feedback + (1 + factor(normalized_theta) + feedback | subject_id),
-    data = .
-  )
-
-summary(seq.agg.mod)
+              values_from = n_majority / n_turtles,
+              id_cols = c("subject_id", 
+                          "student_idx",
+                          "student_prior", 
+                          "feedback")) %>%
+  mutate(mean_diff = lesson2 - lesson1) 
 ```
 
-View means and SD for feedback case, for power analysis 
+# Non-sequential conditions
+
+Are participants sensitive to the student's prior? 
+
+```{r}
+d.nonseq <- d %>% filter(sequential == "non_sequential", understood == "yes", total_bonus > 0)
+
+d.nonseq.means <- d.nonseq %>% 
+  group_by(student_prior, teacher_knowledge) %>% 
+  tidyboot_mean(
+    n_majority / n_turtles, na.rm = T
+  )
+
+d.nonseq.means
+```
+
+```{r}
+ggplot(d.nonseq.means, aes(x = teacher_knowledge, y = empirical_stat, color = student_prior)) + 
+    geom_point(size = 3, position = position_dodge(width = 0.1)) + 
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.1)) + 
+    geom_hline(yintercept = 0.7, linetype = "dashed") +
+    theme(aspect.ratio = 1) + 
+    labs(x = "student prior", y = "proportion majority color", col = "teacher knowledge", title = "one-shot teaching")
+```
+
+
+
+```{r}
+library(optimx)
+library(dfoptim)
+
+nonseq.mod <- d.nonseq %>% 
+      glmer(
+       n_majority / n_turtles ~ 1 + student_prior * teacher_knowledge + (1 + student_prior * teacher_knowledge | subject_id), 
+        data = .,
+        weights = n_turtles,
+        family = "binomial"
+      )
+
+summary(nonseq.mod)
+```
+
+Look at convergence issues 
+
+```{r}
+nonseq.mod.all <- allFit(nonseq.mod)
+ss <- summary(nonseq.mod.all)
+```
+
+Check modeling assumptions
+
+```{r}
+plot(nonseq.mod)
+qqnorm(residuals(nonseq.mod))
+```
+
+
+# Sequential conditions
+
+Are participants sensitive to student feedback? 
+
+Start by looking at distribution of `mean_diff`
+
+```{r}
+d.seq.means <- d.seq %>% 
+  group_by(student_prior, feedback) %>% 
+  tidyboot_mean(
+    mean_diff, na.rm = T
+  )
+
+d.seq.means
+```
+
+```{r}
+ggplot(d.seq.means, aes(x = feedback, y = empirical_stat, color = student_prior)) + 
+    geom_point(size = 3, position = position_dodge(width = 0.1)) + 
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.1)) + 
+    geom_hline(yintercept = 0, linetype = "dashed") +
+    theme(aspect.ratio = 1) + 
+    labs(x = "feedback", y = "change from lesson 1", col = "student prior", title = "sequential conditions")
+```
+
+
+Linear model with `mean_diff`
+```{r}
+seq.mod <- d.seq %>% 
+  lmer(
+    mean_diff ~ 1 + feedback * student_prior + (1 + feedback * student_prior | subject_id), 
+    data = .
+)
+
+summary(seq.mod)
+```
+
+Check modeling assumptions
+```{r}
+plot(seq.mod)
+qqnorm(residuals(seq.mod))
+ggplot(d.seq, aes(x = mean_diff)) + 
+  geom_histogram()
+```
+
+## Two separate logistic regressions
+
+Too high
+```{r}
+seq.mod.toohigh <- d %>% 
+      filter(student_prior == "too_high", understood == "yes", total_bonus > 0) %>% 
+      glmer(
+       n_majority / n_turtles ~ 1 + trial_num * feedback + (1 + trial_num * feedback | subject_id), 
+        data = .,
+        weights = n_turtles,
+        family = "binomial"
+      )
+
+summary(seq.mod.toohigh)
+```      
+
+Too low
+```{r}      
+seq.mod.toolow <- d %>% 
+      filter(student_prior == "too_low", understood == "yes", total_bonus > 0) %>% 
+      glmer(
+       n_majority / n_turtles ~ 1 + trial_num * feedback + (1 + trial_num * feedback | subject_id), 
+        data = .,
+        weights = n_turtles,
+        family = "binomial"
+      )
+
+summary(seq.mod.toolow)
+```
+
+# For power analysis: View means and SD for feedback case
 
 ```{r}
 d %>%
   filter(block_type == "seqFeedback", understood == "yes", total_bonus > 0) %>%
   group_by(trial_num) %>%
-  summarise(
+  summarize(
     mean = mean(normalized_mean, na.rm = T),
     sd = sd(normalized_mean, na.rm = T)
   )
-```
-
-# Non collapsed data
-
-## Non sequential
-
-### Classroom A: $a=1$ $b=9$
-
-```{r}
-nonseq.classA.mod <- d %>%
-  filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes") %>%
-  filter(student_class == "A") %>%
-  rename(full = block_type) %>%
-  mutate(full = ifelse(full == "nonSeqFull", "full", "partial")) %>%
-  lmer(
-    mean ~ 1 + theta + full + (1 + theta + full | subject_id), 
-    data = .
-  )
-
-summary(nonseq.classA.mod)
-```
-
-### Classroom B: $a=9$ $b=1$
-
-```{r}
-nonseq.classB.mod <- d %>%
-  filter(block_type == "nonSeqFull" | block_type == "nonSeqPartial", understood == "yes") %>%
-  filter(student_class == "B") %>%
-  rename(full = block_type) %>%
-  mutate(full = ifelse(full == "nonSeqFull", "full", "partial")) %>%
-  lmer(
-    mean ~ 1 + theta + full + (1 + theta + full | subject_id), 
-    data = .
-  )
-
-summary(nonseq.classB.mod)
-```
-
-## Sequential
-
-### Classroom A: $a=1$ $b=9$
-
-```{r}
-seq.classA.mod <- d %>%
-  filter(student_class == "A") %>%
-  filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes") %>%
-  rename(feedback = block_type) %>%
-  mutate(feedback = ifelse(feedback == "seqFeedback", "feedback", "noFeedback")) %>%
-  mutate(trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')) %>%
-  pivot_wider(names_from = trial_num,
-              values_from = mean,
-              id_cols = c("subject_id", "student_idx", "feedback", "theta")) %>%
-  mutate(mean_diff = lesson2 - lesson1) %>%
-  ungroup() %>%
-  lmer(
-    mean_diff ~ 1 + theta + feedback + (1 + theta + feedback | subject_id),
-    data = .
-  )
-
-summary(seq.classA.mod)
-```
-
-### Classroom B: $a=9$ $b=1$
-
-```{r}
-seq.classB.mod <- d %>%
-  filter(student_class == "B") %>%
-  filter(block_type == "seqFeedback" | block_type == "seqNoFeedback", understood =="yes") %>%
-  rename(feedback = block_type) %>%
-  mutate(feedback = ifelse(feedback == "seqFeedback", "feedback", "noFeedback")) %>%
-  mutate(trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')) %>%
-  pivot_wider(names_from = trial_num,
-              values_from = mean,
-              id_cols = c("subject_id", "student_idx", "feedback", "theta")) %>%
-  mutate(mean_diff = lesson2 - lesson1) %>%
-  ungroup() %>%
-  lmer(
-    mean_diff ~ 1 + theta + feedback + (1 + theta + feedback | subject_id),
-    data = .
-  ) 
-
-summary(seq.classB.mod)
 ```

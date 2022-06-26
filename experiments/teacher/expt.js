@@ -296,7 +296,7 @@ var comprehensionLoop = {
     }
 };
 
-// timeline.push(comprehensionLoop);
+timeline.push(comprehensionLoop);
 
 
 /* Main logic of trials */
@@ -436,7 +436,7 @@ for (let i = 0; i < attention_locations.length; i++) {
             data.heads = nHeads;
             data.tails = nTails;
             data.totalExamples = nHeads + nTails;
-            data.passAttentionCheck = (data.params[0] === nHeads) && (data.params[1] === nTails);
+            data.passAttentionCheck = (data.params[0] == nHeads) && (data.params[1] == nTails);
         }
     };
 
