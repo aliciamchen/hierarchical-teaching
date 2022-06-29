@@ -1,0 +1,32 @@
+var params = {
+    alpha: 3,
+    costWeight: 0.1,
+    trueTheta: .6, // true coin flip weight
+    nTeachers: 2,
+    teachers: {
+        1: {nExamples: 7, nHeads: 4},
+        2: {nExamples: 14, nHeads: 8}
+    }
+};
+
+// literal learner
+var L0 = cache(function ({nExamples, nHeads}) {
+	return Beta({a: nHeads, b: nExamples - nHeads});
+});
+
+
+
+// pragmatic learner
+var L1 = function (theta, teachers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var nTeachers = params.nTeachers, cw = params.costWeight;
+        var nTeacher = uniformDraw(_.range(1, nTeachers + 1));
+        var teacher = teachers[nTeacher];
+        teacher.nHeads / teacher.nExamples == theta ?
+          factor(params.alpha * (L0(teacher).score(theta))) : 
+          factor(params.alpha * (L0(teacher).score(theta) - cw * teacher.nExamples));
+        return {teacher: nTeacher};
+    });
+};
+
+L1(params.trueTheta, params.teachers);
