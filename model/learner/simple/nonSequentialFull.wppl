@@ -47,3 +47,4 @@ var L1 = cache(function (nHeads, learnerHypers) {
 });
 
 L1(params.nHeads, params.classHypers[params.trueLearnerClass]);
+// viz.table(L1(params.nHeads, params.classHypers[params.trueLearnerClass]));
