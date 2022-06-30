@@ -1,13 +1,19 @@
 var params = {
-    alpha: 10,
-    costWeight: 0,
+    alpha: 5,
+    costWeight: 0.1,
     trueTheta: .6, // true coin flip weight
+    nTeachers: 2,
     teachers: 
 	{
-		1: {nHeads: 3, nExamples: 5},
-		2: {nHeads: 2, nExamples: 5}
+		1: {nHeads: 6, nExamples: 10},
+		2: {nHeads: 3, nExamples: 5}
 	}
 };
+
+var round = function (num, precision) {
+  Number.parseFloat(num.toFixed(precision));
+} ;
+
 
 // discretizes a beta distribution over hypers (allows dp)
 var Beta_disc = cache(function (examples) {
@@ -15,7 +21,7 @@ var Beta_disc = cache(function (examples) {
 		var n = uniformDraw(_.range(0, 1, 0.01));
         var bta = Beta({ a: examples.nHeads, b: examples.nExamples - examples.nHeads });
 		factor(bta.score(n));
-		return n;
+        return round(n, 2);
 	})
 });
 
@@ -43,5 +49,17 @@ var L1 = cache(function (examples) {
     });
 });
 
-L1(params.teachers[1]);
-// viz.table(L1(params.nHeads, params.classHypers[params.trueLearnerClass]));
+// pragmatic learner compares teacher trustworthiness
+var L = function (theta, teachers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var nTeachers = params.nTeachers, cw = params.costWeight;
+        var nTeacher = uniformDraw(_.range(1, nTeachers + 1));
+        var teacher = teachers[nTeacher];
+        teacher.nHeads / teacher.nExamples == theta ?
+          factor(params.alpha * (L1(teacher).score(theta))) : 
+          factor(params.alpha * (L1(teacher).score(theta) - cw * teacher.nExamples));
+        return {teacher: nTeacher};
+    });
+};
+
+L(params.trueTheta, params.teachers);
