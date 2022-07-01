@@ -1,0 +1,65 @@
+var params = {
+    alpha: 5,
+    costWeight: 0.1,
+    trueTheta: .6, // true coin flip weight
+    nTeachers: 2,
+    teachers: 
+	{
+		1: {nHeads: 6, nExamples: 10},
+		2: {nHeads: 3, nExamples: 5}
+	}
+};
+
+var round = function (num, precision) {
+  Number.parseFloat(num.toFixed(precision));
+} ;
+
+
+// discretizes a beta distribution over hypers (allows dp)
+var Beta_disc = cache(function (examples) {
+	return Infer({method: 'enumerate'}, function() {
+		var n = uniformDraw(_.range(0, 1, 0.01));
+        var bta = Beta({ a: examples.nHeads, b: examples.nExamples - examples.nHeads });
+		factor(bta.score(n));
+        return round(n, 2);
+	})
+});
+
+// literal learner
+var L0 = cache(function (examples) {
+	return Beta_disc(examples);
+});
+
+// pragmatic speaker
+var S1 = cache(function (theta, examples) {
+    return Infer({ method: 'enumerate' }, function () {
+        var nExamples = examples.nExamples, alpha = params.alpha, cw = params.costWeight;
+        var nHeads = uniformDraw(_.range(0, nExamples + 1));
+        factor(alpha * (L0(examples).score(theta) - cw * nExamples));
+        return nHeads;
+    });
+});
+
+// pragmatic learner
+var L1 = cache(function (examples) {
+    return Infer({ method: 'enumerate' }, function () {
+        var theta = sample(Beta_disc(examples));
+        observe(S1(theta, examples), examples.nHeads);
+        return theta;
+    });
+});
+
+// pragmatic learner compares teacher trustworthiness
+var L = function (theta, teachers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var nTeachers = params.nTeachers, cw = params.costWeight;
+        var nTeacher = uniformDraw(_.range(1, nTeachers + 1));
+        var teacher = teachers[nTeacher];
+        teacher.nHeads / teacher.nExamples == theta ?
+          factor(params.alpha * (L1(teacher).score(theta))) : 
+          factor(params.alpha * (L1(teacher).score(theta) - cw * teacher.nExamples));
+        return {teacher: nTeacher};
+    });
+};
+
+L(params.trueTheta, params.teachers);
