@@ -22,6 +22,7 @@ var round = function (num, precision) {
 var Beta_disc = cache(function (hypers) {
 	return Infer({method: 'enumerate'}, function() {
 		var n = uniformDraw(_.range(0, 1, 0.01));
+		// if no prior: chooses uniform prior {1,1}
         var bta = Beta({ a: hypers.a == 0 ? 1 : hypers.a, 
                         b: hypers.b == 0 ? 1 : hypers.b});
 		factor(bta.score(n));
