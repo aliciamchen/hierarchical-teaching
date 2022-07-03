@@ -1,11 +1,11 @@
 var params = {
     alpha: 3,
     costWeight: 0.1,
-    trueTheta: .5, // true coin flip weight
+    trueTheta: .6, // true coin flip weight
     nTeachers: 2,
     teachers: 
 	{
-		1: {nHeads: 1, nExamples: 2},
+		1: {nHeads: 6, nExamples: 10},
 		2: {nHeads: 3, nExamples: 5}
 	}
 };
@@ -33,7 +33,7 @@ var L0 = cache(function (examples) {
 // pragmatic speaker
 var S1 = cache(function (theta) {
     return Infer({ method: 'enumerate' }, function () {
-      var nExamples = uniformDraw(_.range(11));
+      var nExamples = uniformDraw(_.range(21));
       var alpha = params.alpha, cw = params.costWeight;  
       var nHeads = uniformDraw(_.range(0, nExamples + 1));
       var sampledExamples = {nHeads: nHeads, nExamples: nExamples};
