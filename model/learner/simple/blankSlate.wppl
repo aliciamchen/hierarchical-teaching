@@ -1,11 +1,11 @@
 var params = {
-    alpha: 5,
+    alpha: 3,
     costWeight: 0.1,
-    trueTheta: .6, // true coin flip weight
+    trueTheta: .5, // true coin flip weight
     nTeachers: 2,
     teachers: 
 	{
-		1: {nHeads: 6, nExamples: 10},
+		1: {nHeads: 1, nExamples: 2},
 		2: {nHeads: 3, nExamples: 5}
 	}
 };
@@ -36,11 +36,7 @@ var S1 = cache(function (theta) {
       var nExamples = uniformDraw(_.range(11));
       var alpha = params.alpha, cw = params.costWeight;  
       var nHeads = uniformDraw(_.range(0, nExamples + 1));
-//       console.log(nHeads)
-//       console.log(nExamples - nHeads)
-      var sampledExamples = {nHeads: nHeads, nExamples: nExamples}
-//       console.log(sampledExamples.nHeads)
-//       console.log(sampledExamples.nExamples - sampledExamples.nHeads)
+      var sampledExamples = {nHeads: nHeads, nExamples: nExamples};
       factor(alpha * (L0(sampledExamples).score(theta) - cw * nExamples));
       return {nHeads: nHeads, nExamples: nExamples};
     });
@@ -68,7 +64,4 @@ var L = function (theta, teachers) {
     });
 };
 
-// S1(params.trueTheta)
-viz.auto(L0(params.teachers[1]))
-viz.auto(L1(params.teachers[1]))
-// L(params.trueTheta, params.teachers);
+L(params.trueTheta, params.teachers);
