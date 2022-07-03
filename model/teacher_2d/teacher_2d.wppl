@@ -1,0 +1,94 @@
+var params = {
+    alpha: 4,
+    trueH: { x1: 5, x2: 10, y1: 5, y2: 10},
+    nBins: 10,
+    classes: [0, 1],
+    trueLearnerClass: 1,
+    classHypers: {
+        0: { xmin: 0, xmax: 10, ymin: 4, ymax: 10 },
+        1: { xmin: 5, xmax: 10, ymin: 0, ymax: 10 }
+    }, // can add ps
+    inferOptions: { method: 'MCMC', samples: 5000 }
+};
+
+// if a participant doesn't know about one of the dimensions, then their min value is the actual min value etc.
+var xs = _.range(0, params.nBins + 1), ys = _.range(0, params.nBins + 1);
+
+var L0 = function (example, learnerHypers) {
+
+    return Infer(params.inferOptions, function () {
+        // priors (can change/add ps if needed)
+        var x1 = categorical({ vs: _.range(learnerHypers.xmin, learnerHypers.xmax + 1) }), x2 = categorical({ vs: _.range(learnerHypers.xmin, learnerHypers.xmax + 1) });
+        var y1 = categorical({ vs: _.range(learnerHypers.ymin, learnerHypers.ymax + 1) }), y2 = categorical({ vs: _.range(learnerHypers.ymin, learnerHypers.ymax + 1) });
+
+        // Start with positive examples only
+        // (add negative examples later)
+        observe(Categorical({ vs: _.range(Math.min(x1, x2), Math.max(x1, x2) + 1) }), example.x);
+        observe(Categorical({ vs: _.range(Math.min(y1, y2), Math.max(y1, y2) + 1) }), example.y);
+
+        return {
+            x1: x1,
+            x2: x2,
+            y1: y1,
+            y2: y2
+        }
+    })
+};
+
+
+// pragmatic speaker
+var S1 = function (trueH, learnerHypers) {
+    return Infer({method: 'enumerate'}, function () {
+        var x = uniformDraw(xs), y = uniformDraw(ys);
+        var example = {x: x, y: y};
+
+        factor(params.alpha * (L0(example, learnerHypers).score(trueH)));
+
+        return example;
+    });
+};
+
+
+// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
+var updateSpeakerPosterior = function (data) {
+    return Infer({ method: 'MCMC', samples: 5000 }, function () {
+        var learnerClass = uniformDraw(params.classes);
+        var learnerHypers = params.classHypers[learnerClass];
+
+        mapData({data: data}, function(example) {
+            var learnerDist = L0(example, learnerHypers);
+            var trueLearnerDist = L0(example, params.classHypers[params.trueLearnerClass])
+            var learnerEstimate = sample(trueLearnerDist)
+
+            observe(learnerDist, learnerEstimate)
+        })
+
+        return learnerClass;
+    })
+}
+
+var model = function () {
+    return Infer(params.inferOptions, function () {
+        var learnerHypers = uniformDraw(params.classes);
+        var step1example = sample(S1(params.trueH, params.classHypers[learnerHypers]))
+        var speakerPosterior = updateSpeakerPosterior(step1example);
+        var step2example = sample(S1(params.trueH, params.classHypers[sample(speakerPosterior)]));
+
+        return {
+            step1example: step1example,
+            step2example: step2example
+        }
+    })
+}
+
+// var posterior = model()
+
+// viz.auto(posterior)
+// viz.marginals(posterior)
+// viz.table(posterior)
+
+// viz.table(L0({x: 5, y: 5}, params.classHypers[0]))
+viz.table(S1(params.trueH, params.classHypers[0]))
+// write `updatePosterior` function that takes in one turlte
+// no cost weight here
+// can return step 1 and step 2 number of heads
