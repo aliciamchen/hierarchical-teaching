@@ -1,5 +1,5 @@
 var params = {
-    alpha: 5,
+    alpha: 3,
     costWeight: 0.1,
     trueTheta: .6, // true coin flip weight
     nTeachers: 2,
@@ -19,7 +19,7 @@ var round = function (num, precision) {
 var Beta_disc = cache(function (examples) {
 	return Infer({method: 'enumerate'}, function() {
 		var n = uniformDraw(_.range(0, 1, 0.01));
-        var bta = Beta({ a: examples.nHeads, b: examples.nExamples - examples.nHeads });
+        var bta = Beta({ a: 1 + examples.nHeads, b: 1 + examples.nExamples - examples.nHeads });
 		factor(bta.score(n));
         return round(n, 2);
 	})
@@ -31,12 +31,14 @@ var L0 = cache(function (examples) {
 });
 
 // pragmatic speaker
-var S1 = cache(function (theta, examples) {
+var S1 = cache(function (theta) {
     return Infer({ method: 'enumerate' }, function () {
-        var nExamples = examples.nExamples, alpha = params.alpha, cw = params.costWeight;
-        var nHeads = uniformDraw(_.range(0, nExamples + 1));
-        factor(alpha * (L0(examples).score(theta) - cw * nExamples));
-        return nHeads;
+      var nExamples = uniformDraw(_.range(21));
+      var alpha = params.alpha, cw = params.costWeight;  
+      var nHeads = uniformDraw(_.range(0, nExamples + 1));
+      var sampledExamples = {nHeads: nHeads, nExamples: nExamples};
+      factor(alpha * (L0(sampledExamples).score(theta) - cw * nExamples));
+      return {nHeads: nHeads, nExamples: nExamples};
     });
 });
 
@@ -44,7 +46,7 @@ var S1 = cache(function (theta, examples) {
 var L1 = cache(function (examples) {
     return Infer({ method: 'enumerate' }, function () {
         var theta = sample(Beta_disc(examples));
-        observe(S1(theta, examples), examples.nHeads);
+        observe(S1(theta), {nHeads: examples.nHeads, nExamples: examples.nExamples});
         return theta;
     });
 });

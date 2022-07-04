@@ -1,0 +1,77 @@
+var params = {
+    alpha: 3,
+    costWeight: 0.1,
+    trueTheta: .5, // true coin flip weight
+    nTeachers: 2,
+    teachers: {
+		1: {a: 3, b: 2},
+		2: {a: 0, b: 0}
+	},
+    studentHypers: {
+        1: {a: 0, b: 0},
+        2: {a: 3, b: 3}
+    }
+};
+
+var round = function (num, precision) {
+	Number.parseFloat(num.toFixed(precision));
+  } ;
+
+
+// discretizes a beta distribution over hypers (allows dp)
+var Beta_disc = cache(function (hypers) {
+	return Infer({method: 'enumerate'}, function() {
+		var n = uniformDraw(_.range(0, 1, 0.01));
+		// if no prior: chooses uniform prior {1,1}
+        var bta = Beta({ a: hypers.a == 0 ? 1 : hypers.a, 
+                        b: hypers.b == 0 ? 1 : hypers.b});
+		factor(bta.score(n));
+        return round(n, 2);
+	})
+});
+
+// literal learner
+var L0 = cache(function (examples, hypers) {
+	return Beta_disc({ a: hypers.a + examples.a, 
+		b: hypers.b + examples.b });
+});
+
+// pragmatic speaker
+var S1 = cache(function (theta, hypers) {
+    return Infer({ method: 'enumerate' }, function () {
+      var nExamples = uniformDraw(_.range(21));
+      var alpha = params.alpha, cw = params.costWeight;  
+      var nHeads = uniformDraw(_.range(0, nExamples + 1));
+      var sampledExamples = {a: nHeads, b: nExamples - nHeads};
+      factor(alpha * (L0(sampledExamples, hypers).score(theta) - cw * nExamples));
+      return {a: sampledExamples.a, b: sampledExamples.b};
+    });
+});
+
+// pragmatic learner
+var L1 = cache(function (examples, hypers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var theta = sample(Beta_disc(hypers));
+        observe(S1(theta, hypers), examples);
+        return theta;
+    });
+});
+
+// pragmatic learner compares teacher trustworthiness
+var L = function (theta, teachers, hypers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var nTeachers = params.nTeachers, cw = params.costWeight;
+        var nTeacher = uniformDraw(_.range(1, nTeachers + 1));
+        var teacher = teachers[nTeacher];
+        var nExamples = teacher.a + teacher.b + hypers.a + hypers.b;
+//      TODO: is it okay to sum prior and examples and remove cost weight in this case? 
+        (teacher.a + hypers.a) / nExamples == theta ?
+        factor(params.alpha * (L1(teacher, hypers).score(theta))) :
+        factor(params.alpha * (L1(teacher, hypers).score(theta) - cw * nExamples));
+        return {teacher: nTeacher};
+    });
+};
+
+viz.auto(L1(params.teachers[1], params.studentHypers[2]));
+viz.auto(L1(params.teachers[2], params.studentHypers[2]));
+L(params.trueTheta, params.teachers, params.studentHypers[2]);
