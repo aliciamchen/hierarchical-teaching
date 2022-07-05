@@ -48,3 +48,7 @@
 - add turtle images
 - change instructions to wandering around island
 - 60 participants
+
+## Pilot 7
+
+- get rid of showing bonus at the end of each student
