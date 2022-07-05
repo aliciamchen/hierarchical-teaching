@@ -6,15 +6,16 @@ var params = {
 	maxExamples: 20,
 	teachers: ['A', 'B'],
     teacherExamples: {
-		'A': {a: 7, b: 7},
+		'A': {a: 3, b: 2},
 		'B': {a: 3, b: 2}
 	},
-	learners: ['A', 'B'],
+	learners: [1, 2],
     learnerHypers: {
-        1: {a: 0, b: 0},
-        2: {a: 2, b: 3}
+        1: {a: 2, b: 8},
+        2: {a: 8, b: 2}
     },
-	inferOptions: { method: 'MCMC', samples: 4000 }
+	inferOptions: { method: 'MCMC', samples: 4000 },
+	adaptiveTeacher: 'B'
 };
 
 var round = function (num, precision) {
@@ -33,6 +34,11 @@ var Beta_disc = cache(function (hypers) {
 	})
 });
 
+var L0Mean = cache(function (examples, hypers) {
+	var nExamples = examples.a + examples.b + hypers.a + hypers.b;
+	return (examples.a + hypers.a) / nExamples;
+});
+
 // literal learner
 var L0 = cache(function (examples, hypers) {
 	return Beta_disc({ a: hypers.a + examples.a, 
@@ -42,7 +48,7 @@ var L0 = cache(function (examples, hypers) {
 // pragmatic speaker
 var S1 = cache(function (theta, hypers) {
     return Infer({ method: 'enumerate' }, function () {
-      var nExamples = uniformDraw(_.range(params.maxExamples + 1));
+      var nExamples = uniformDraw(_.range(1, params.maxExamples + 1));
       var alpha = params.alpha, cw = params.costWeight;  
       var nHeads = uniformDraw(_.range(0, nExamples + 1));
       var sampledExamples = {a: nHeads, b: nExamples - nHeads};
@@ -61,19 +67,52 @@ var L1 = cache(function (examples, hypers) {
 });
 
 // pragmatic learner compares teacher trustworthiness
-var L = cache(function (theta, hypers) {
+var L = cache(function (theta, hypers, teacherExamples) {
     return Infer({ method: 'enumerate' }, function () {
         var cw = params.costWeight;
         var teacherClass = uniformDraw(params.teachers);
-        var teacher = params.teacherExamples[teacherClass];
+        var teacher = teacherExamples[teacherClass];
         var nExamples = teacher.a + teacher.b + hypers.a + hypers.b;
-//         TODO: is it okay to sum prior and examples and remove cost weight in this case?
 //       Q: is this value of cw good enough? how to examine results to check
         factor(params.alpha * (L1(teacher, hypers).score(theta) - cw * nExamples));
         return {teacher: teacherClass};
     });
 });
 
-// viz.auto(L1(params.teachers[1], params.learnerHypers[2]));
-// viz.auto(L1(params.teachers[2], params.learnerHypers[2]));
-L(params.trueTheta, params.learnerHypers[2]);
+
+// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
+var updateSpeakerPosterior = cache(function (examples, trueLearnerHypers) {
+    return Infer(params.inferOptions, function () {
+        var learnerClass = uniformDraw(params.learners);
+        var learnerHypers = params.learnerHypers[learnerClass];
+      
+        var learnerDist = L0(examples, learnerHypers);
+        var trueLearnerDist = L0(examples, trueLearnerHypers);
+        var learnerEstimate = sample(trueLearnerDist);
+
+        observe(learnerDist, learnerEstimate);
+      
+        return learnerClass;
+    })
+});
+
+
+var sequentialModel = cache(function (trueTheta, trueLearnerHypers, teacherExamples) {
+    return Infer({ method: 'enumerate' }, function () {
+		var step1examples = teacherExamples[params.adaptiveTeacher];
+		var step1dist = sample(L(trueTheta, trueLearnerHypers, teacherExamples));
+		var speakerPosterior = updateSpeakerPosterior(step1examples, trueLearnerHypers);
+		var step2examples = sample(S1(trueTheta, params.learnerHypers[sample(speakerPosterior)]));
+		var newTeacherExamples = extend(teacherExamples, {'B': step2examples});
+        var step2dist = sample(L(trueTheta, trueLearnerHypers, newTeacherExamples));
+        return {
+            step1dist: step1dist,
+            step2dist: step2dist
+        }
+    })
+});
+
+var posterior = sequentialModel(params.trueTheta, params.learnerHypers[1], params.teacherExamples);
+
+
+viz.marginals(posterior);
