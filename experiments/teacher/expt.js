@@ -204,15 +204,15 @@ var instructions = {
             <p>As the experiment is going on, your students will guess the turtle compositions of each island (by entering the proportion of orange and purple turtles they expect to see out of 100 turtles). \
                 In addition to the base pay of <b>$${params.basePay}</b>, for each student you will earn an extra <b>$${params.perTrialBonus.toFixed(2)}</b> if their guess is within <b>${params.perTrialBonusThreshold * 100}</b> turtles of the actual turtle breakdown.</p>
             <p>(For the students that you'll teach over two lessons, you will a receive a bonus based on the student's <b>final</b> guess, which takes into consideration the turtles you have \
-                shown them for <em>both</em> lessons.)</p>`,
+                shown them for <em>both</em> lessons.)</p>.`,
 
         `<h3>How can I earn as much money as possible from this experiment?</h3>
             <p>However, each turtle that you show a student <em>costs</em> <b>$${params.exampleCost}</b>. (For example, all else being equal, walking around the island to show a student 20 turtles costs more than walking around the island to show 10 turtles.)</p>
             <p>(Don't worry, <b>you can't lose money for each student</b>. And for each student, \
                 turtles only cost money if you earned a bonus for that student.)</p>
-            <p>After you finish teaching a student, we will tell you how much you have earned for that student.</p>
             <p><b>Make sure to click "Send" to submit a set of turtles during every lesson.</b> You have 90 seconds to send your turtles for each lesson. If you don't submit a response within the 90 seconds, or if you don't send any turtles to your student, \
-                you will still see your student's guess but <b>cannot earn a bonus for that student</b>.</p>
+                you <b>cannot earn a bonus for that student</b>.</p>
+            <p>We will tell you how much bonus you have earned at the end of the study!</p>
             <p style="color:Tomato;">On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing "Next" to proceed to the quiz.</p>
             `
     ],
@@ -393,7 +393,7 @@ for (let i = 0; i < attention_locations.length; i++) {
                         </br>
 
                         <p><b>Select <b style="color:Orange;">${attention_params[i][0]}</b> orange and <b style="color:Purple;">${attention_params[i][1]}</b> purple turtles to send to your student.</b></p>
-                        <p>You must pass all attention checks to have your HIT accepted.</p>
+                        <p>You must pass all attention checks to have your HIT accepted and collect the base pay.</p>
                         `
             }`
         ,
@@ -458,7 +458,6 @@ for (let i = 0; i < design.length; i++) {
             <h2>On this island, <b style="color:Orange;">${currTrial.coinWeight * 10}</b> out of every 10 turtles are orange and <b style="color:Purple;">${(1 - currTrial.coinWeight).toFixed(1) * 10}</b> out of every 10 turtles are purple.</h2>
             <p>In this block, you will be teaching ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> lesson' : '<b>two</b> lessons'} to Student ${i + 1}.</p>
             <p>${currTrial.condition === 'seqFeedback' ? `<b>You will see the student's guess after the first lesson.</b>` : ''} ${currTrial.condition === 'seqNoFeedback' ? `You will <b>not</b> see the student's guess after the first lesson.` : ''}</p>
-            <p>You will receive feedback when you are finished with teaching the student.</p>
             <p>${currTrial.condition == 'seqFeedback' ? `To earn the highest bonus, you will have to <b>take into consideration the student's guess</b> when you choose your second set of turtles.` : ''}</p>`,
         choices: ['Continue']
     }
@@ -609,10 +608,9 @@ for (let i = 0; i < design.length; i++) {
 
             // console.log(firstResponse);
 
-            return `<h2>Student guess</h2>
-                <p>The student guessed that <b style="color:Orange;">${Math.round(firstResponse.studentGuess * 100)}</b> out of every 100 turtles are \
-                    orange and <b style="color:Purple;">${Math.round((1 - firstResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
-                <p>${firstResponse.condition != 'seqFeedback' ? `You received a bonus of <b>$${firstResponse.bonus}</b>. Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b>` : ''}</b></p>
+            return `
+                ${firstResponse.condition === 'seqFeedback' ? `<h2>Student guess</h2><p>The student guessed that <b style="color:Orange;">${Math.round(firstResponse.studentGuess * 100)}</b> out of every 100 turtles are \
+                orange and <b style="color:Purple;">${Math.round((1 - firstResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>` : ''}
                 ${(firstResponse.totalExamples == 0) && (firstResponse.condition != 'seqFeedback') ? `<p style="color:Red;">You could not receive a bonus for this student because you did not send any turtles to your student. Make sure to send at least one turtle next time!</p>` : ''}
                 <p>${firstResponse.condition === 'seqFeedback' ? `You will now send another set of turtles to your student.` : ''}</p>
                 <p>Press any key to continue.</p>`
@@ -768,16 +766,8 @@ for (let i = 0; i < design.length; i++) {
             var secondResponse = dataSoFar.filter({ studentIndex: i, exampleSet: 'second' }).values()[0]
 
             return `
-                <h3>Student ${i + 1}'s first guess</h3>
-                <p>The student's first guess was that <b style="color:Orange;">${Math.round(firstResponse.studentGuess * 100)}</b> out of every 100 turtles are \
-                    orange and <b style="color:Purple;">${Math.round((1 - firstResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
-                <h3>Student ${i + 1}'s second guess</h3>
-                <p>The student's second guess was that <b style="color:Orange;">${Math.round(secondResponse.studentGuess * 100)}</b> out of every 100 turtles are \
-                    orange and <b style="color:Purple;">${Math.round((1 - secondResponse.studentGuess).toFixed(2) * 100)}</b> out of every 100 turtles are purple.</p>
-                <p>You received a bonus of <b>$${secondResponse.bonus.toFixed(2)}</b> based on the student's second guess.</p>
                 ${(firstResponse.totalExamples == 0) || (secondResponse.secondResponseHeads + secondResponse.secondResponseTails == 0) ? `<p style="color:Red;">You could not receive a bonus for this student because you failed to send turtles for both lessons. Make sure to send at least one turtle for both lessons next time!</p>` : ''}
-                <p>Total bonus so far: <b>$${Number(jsPsych.data.get().select('bonus').sum()).toFixed(2)}</b></p>
-                <p>Press any key to continue.</p>
+                <p>Time to move on to the next student! Press any key to continue.</p>
                 `
         },
         trial_duration: 20000
