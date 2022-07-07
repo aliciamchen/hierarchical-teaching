@@ -6,6 +6,7 @@ analysis/teacher/output
 .ipynb_checkpoints
 *.json
 *.ipynb
+model/teacher_2d/rectangleGame.wppl
 
 .Rproj.user
 .RData

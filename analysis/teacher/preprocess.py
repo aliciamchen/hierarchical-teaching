@@ -66,7 +66,8 @@ if __name__ == "__main__":
             'understood': demographics['response']['understood'],
             'total_bonus': demographics['totalBonus'],
             'comments': demographics['response']['comments'],
-            'strategy': demographics['response']['strategy']
+            'strategy': demographics['response']['strategy'],
+            'pass_attention': demographics['passAttentionChecks']
         }, index=[0])
 
         # Make data dataframe
@@ -110,6 +111,7 @@ if __name__ == "__main__":
         # Add bonus info and understood instructions (for exclusion criteria)
         df_data['total_bonus'] = demographics['totalBonus']
         df_data['understood'] = demographics['response']['understood']
+        df_data['pass_attention'] = demographics['passAttentionChecks']
 
         # Drop trials with no responses, timeout, more than max
         df_data.drop(df_data[(df_data['heads'] == 0) & (
