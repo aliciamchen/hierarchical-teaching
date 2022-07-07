@@ -28,7 +28,7 @@ theme_set(theme_few(base_size = 20))
 ```
 
 ```{r include=FALSE}
-d <- read_csv(here('../../data/teacher/2022-06-16_pilot/data_pilot6.csv')) %>% 
+d <- read_csv(here('../../data/teacher/2022-07-05_pilot/data_pilot7.csv')) %>% 
   filter(understood == "yes", total_bonus > 0) %>% 
   rename(n_turtles = total_ex) %>% 
   mutate(sequential = ifelse(block_type == "nonSeqFull" | block_type == "nonSeqPartial", "non_sequential", "sequential"),
