@@ -6,12 +6,12 @@ var params = {
 	maxExamples: 20,
 	teachers: ['A', 'B'],
     teacherExamples: {
-		'A': {a: 7, b: 7},
+		'A': {a: 4, b: 3},
 		'B': {a: 3, b: 2}
 	},
-	learners: ['A', 'B'],
+	learners: [1, 2],
     learnerHypers: {
-        1: {a: 0, b: 0},
+        1: {a: 2, b: 8},
         2: {a: 2, b: 3}
     },
 	inferOptions: { method: 'MCMC', samples: 4000 }
@@ -76,4 +76,4 @@ var L = cache(function (theta, hypers) {
 
 // viz.auto(L1(params.teachers[1], params.learnerHypers[2]));
 // viz.auto(L1(params.teachers[2], params.learnerHypers[2]));
-L(params.trueTheta, params.learnerHypers[2]);
+L(params.trueTheta, params.learnerHypers[1]);
