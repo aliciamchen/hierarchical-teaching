@@ -1,4 +1,4 @@
-// webppl teacher_1d.wppl --require webppl-csv --random-seed 114
+// webppl teacher_1d.wppl --require ../../tools/ --require webppl-csv --random-seed 110
 
 var params = {
     type: 'point',
@@ -17,7 +17,7 @@ var params = {
 };
 
 
-var f = csv.open('./output/' + 'v4' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
+var f = csv.open('./output/' + 'final' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
 csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_class,heads,tails', f)
 
 var makeTrials = function () {
@@ -48,9 +48,11 @@ var L0Mean = function (examples, learnerHypers) {
 }
 
 // literal learner
-var L0 = function (examples, learnerHypers) {
-    return Beta({ a: _.toNumber(learnerHypers.a + examples.heads), b: _.toNumber(learnerHypers.b + examples.n - examples.heads) });
-};
+var L0 = cache(function (examples, learnerHypers) {
+    // console.log(learnerHypers)
+    // console.log(_.toNumber(learnerHypers.b + examples.n - examples.heads))
+    return Beta_disc({ a: _.toNumber(learnerHypers.a + examples.heads), b: _.toNumber(learnerHypers.b + examples.n - examples.heads) });
+});
 
 // pragmatic speaker
 var S1 = cache(function (theta, learnerHypers) {
@@ -73,9 +75,11 @@ var S = cache(function (theta, classroomOptions) {
     })
 });
 
+
+
 // after speaker sees learner's feedback after step 1, update speaker posterior over class membership
 var updateSpeakerPosterior = cache(function (data, classroomOptions, condition, classroom) {
-    return Infer(params.inferOptions, function () {
+    return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(classroomOptions);
         var learnerHypers = params.classHypers[learnerClass];
 
@@ -90,12 +94,21 @@ var updateSpeakerPosterior = cache(function (data, classroomOptions, condition, 
     })
 })
 
+var sumExamples = function (ex1, ex2) {
+    return { a: _.toNumber(ex1.a + ex2.heads), b: _.toNumber(ex1.b + ex2.n - ex2.heads) }
+}
+
 var sequentialModel = cache(function (classroomOptions, condition, coinWeight, classroom) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(classroomOptions);
         var step1examples = sample(S1(coinWeight, params.classHypers[learnerClass]))
+
         var speakerPosterior = updateSpeakerPosterior(step1examples, classroomOptions, condition, classroom);
-        var step2examples = sample(S1(coinWeight, params.classHypers[sample(speakerPosterior)]));
+        var updatedHypers = sumExamples(params.classHypers[sample(speakerPosterior)], step1examples);
+        // console.log(step1examples)
+
+        var step2examples = sample(S1(coinWeight, updatedHypers));
+
         return {
             step1examples: step1examples,
             step2examples: step2examples

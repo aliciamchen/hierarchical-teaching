@@ -6,6 +6,22 @@ var sampleWithReplacement = function (objects) {
     return mapN(function (x) { return categorical({ vs: objects }) }, nSamples)
 }
 
-var sampleWithoutReplacement = function(objects) {
+var sampleWithoutReplacement = function (objects) {
     return sort(_.union(sampleWithReplacement(objects)))
 }
+
+var round = function (num, precision) {
+    Number.parseFloat(num.toFixed(precision));
+};
+
+var Beta_disc = cache(function (hypers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var n = uniformDraw(_.range(0, 1, 0.01));
+        var bta = Beta({
+            a: hypers.a == 0 ? 1 : hypers.a,
+            b: hypers.b == 0 ? 1 : hypers.b
+        });
+        factor(bta.score(n));
+        return round(n, 2);
+    })
+});

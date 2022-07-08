@@ -83,6 +83,7 @@ const save_data = {
     func: function () {
         save_data_json(subjectId + "_output_all", jsPsych.data.get().json());
         save_data_json(subjectId + "_output_responsesOnly", jsPsych.data.get().filter({ type: 'response' }).json())
+        save_data_json(subjectId + "_output_attention", jsPsych.data.get().filter({ type: 'attention' }).json())
     },
     timing_post_trial: 0
 };
@@ -406,7 +407,7 @@ for (let i = 0; i < attention_locations.length; i++) {
             condition: currTrial.condition,
             trueTheta: currTrial.coinWeight,
             classrooms: currTrial.classroomPairing,
-            params: attention_params[i]
+            attention_params: attention_params[i]
         },
         on_load: function () {
             var start_time = performance.now();
@@ -436,7 +437,11 @@ for (let i = 0; i < attention_locations.length; i++) {
             data.heads = nHeads;
             data.tails = nTails;
             data.totalExamples = nHeads + nTails;
-            data.passAttentionCheck = (data.params[0] == nHeads) && (data.params[1] == nTails);
+            // console.log(data.attention_params)
+            // console.log((data.params[0] == nHeads) && (data.params[1] == nTails)) // attention check debugging
+
+            data.passAttentionCheck = (data.attention_params[0] == nHeads) && (data.attention_params[1] == nTails);
+            console.log((data.attention_params[0] == nHeads) && (data.attention_params[1] == nTails))
         }
     };
 
@@ -456,9 +461,8 @@ for (let i = 0; i < design.length; i++) {
         stimulus: `
             <h4 style="color:Blue;">Student ${i + 1}</h4>
             <h2>On this island, <b style="color:Orange;">${currTrial.coinWeight * 10}</b> out of every 10 turtles are orange and <b style="color:Purple;">${(1 - currTrial.coinWeight).toFixed(1) * 10}</b> out of every 10 turtles are purple.</h2>
-            <p>In this block, you will be teaching ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> lesson' : '<b>two</b> lessons'} to Student ${i + 1}.</p>
-            <p>${currTrial.condition === 'seqFeedback' ? `<b>You will see the student's guess after the first lesson.</b>` : ''} ${currTrial.condition === 'seqNoFeedback' ? `You will <b>not</b> see the student's guess after the first lesson.` : ''}</p>
-            <p>${currTrial.condition == 'seqFeedback' ? `To earn the highest bonus, you will have to <b>take into consideration the student's guess</b> when you choose your second set of turtles.` : ''}</p>`,
+            <p>In this block, you will be teaching ${currTrial.condition === 'nonSeqPartial' || currTrial.condition === 'nonSeqFull' ? '<b>one</b> lesson' : '<b>two</b> lessons'} to Student ${i + 1}.</p>`
+            ,
         choices: ['Continue']
     }
 
@@ -842,6 +846,7 @@ var survey = {
             var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
             data.totalBonus = Number(totalBonus);
             data.passAttentionChecks = jsPsych.data.get().select('passAttentionCheck').sum() == 3 ? true : false
+            // console.log(data.passAttentionChecks)
         },
 }
 
