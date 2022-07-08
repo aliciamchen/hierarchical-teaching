@@ -845,7 +845,8 @@ var survey = {
         function (data) {
             var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
             data.totalBonus = Number(totalBonus);
-            data.passAttentionChecks = jsPsych.data.get().select('passAttentionCheck').sum() == 3 ? true : false
+            data.nAttentionChecksPassed = jsPsych.data.get().select('passAttentionCheck').sum()
+            data.passAllAttentionChecks = jsPsych.data.get().select('passAttentionCheck').sum() == 2 ? true : false
             // console.log(data.passAttentionChecks)
         },
 }
