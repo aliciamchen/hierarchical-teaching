@@ -1,18 +1,26 @@
 var params = {
     directions: ['less', 'more'],
+    alpha: 5,
     nBins: 10,
     inferOptions: { method: 'MCMC', samples: 5000 },
-    classrooms: {
-        1: {}
-    }
+    classrooms: [0, 1],
+    classroomPriors: {
+        0: {theta_1: 5, direction_1: 'less'},
+        1: {theta_2: 7, direction_2: 'less'}
+    },
+    trueLearnerClass: 0,
+    trueH: {theta_1: 5, direction_1: 'less', theta_2: 7, direction_2: 'less'}
 };
 
 var xs = _.range(0, params.nBins + 1), ys = _.range(0, params.nBins + 1);
 
-var prior = function (classroom) {
+var prior = function (hypers) {
 
-    var theta_1 = uniformDraw(_.range(1, params.nBins)), theta_2 = uniformDraw(_.range(1, params.nBins));
-    var direction_1 = uniformDraw(params.directions), direction_2 = uniformDraw(params.directions);
+    var theta_1 = typeof hypers.theta_1 == "undefined" ? uniformDraw(_.range(1, params.nBins)) : hypers.theta_1;
+    var theta_2 = typeof hypers.theta_2 == "undefined" ? uniformDraw(_.range(1, params.nBins)) : hypers.theta_2;
+
+    var direction_1 = typeof hypers.direction_1 == "undefined" ? uniformDraw(params.directions) : hypers.direction_1;
+    var direction_2 = typeof hypers.direction_2 == "undefined" ? uniformDraw(params.directions) : hypers.direction_2;
 
     return {
         theta_1: theta_1,
@@ -22,17 +30,17 @@ var prior = function (classroom) {
     }
 }
 
-var L0 = cache(function (example) {
+var L0 = cache(function (example, hypers) {
 
     return Infer({ method: 'enumerate' }, function () {
 
-        var prior = prior();
+        var prior = prior(hypers);
 
         var theta_1 = prior.theta_1, theta_2 = prior.theta_2
         var direction_1 = prior.direction_1, direction_2 = prior.direction_2
 
-        var ps_x = direction_1 == 'less' ? map(function (i) { return i < theta_1 ? 1 : 0 }, xs) : map(function (i) { return i > theta_1 ? 1 : 0 }, xs)
-        var ps_y = direction_2 == 'less' ? map(function (i) { return i < theta_2 ? 1 : 0 }, ys) : map(function (i) { return i > theta_2 ? 1 : 0 }, ys)
+        var ps_x = direction_1 == 'less' ? map(function (i) { return i <= theta_1 ? 1 : 0 }, xs) : map(function (i) { return i >= theta_1 ? 1 : 0 }, xs)
+        var ps_y = direction_2 == 'less' ? map(function (i) { return i <= theta_2 ? 1 : 0 }, ys) : map(function (i) { return i >= theta_2 ? 1 : 0 }, ys)
 
         observe(Categorical({ vs: xs, ps: ps_x }), example.x);
         observe(Categorical({ vs: ys, ps: ps_y }), example.y);
@@ -46,44 +54,80 @@ var L0 = cache(function (example) {
     })
 });
 
-var S1 = function (trueH) {
+var S1 = cache(function (trueH, hypers) {
     return Infer(params.inferOptions,
         function () {
-            var x = uniformDraw(xs), y = uniformDraw(ys)
+
+            var ps_x = trueH.direction_1 == 'less' ? map(function (i) { return i <= trueH.theta_1 ? 1 : 0 }, xs) : map(function (i) { return i >= trueH.theta_1 ? 1 : 0 }, xs)
+            var ps_y = trueH.direction_2 == 'less' ? map(function (i) { return i <= trueH.theta_2 ? 1 : 0 }, ys) : map(function (i) { return i >= trueH.theta_2 ? 1 : 0 }, ys)
+
+            var x = categorical({vs: xs, ps: ps_x})
+            var y = categorical({vs: ys, ps: ps_y})
+
             var example = { x: x, y: y }
-            factor(L0(example).score(trueH))
+
+            factor(params.alpha * L0(example, hypers).score(trueH))
+
             return example;
         }
     )
-}
+})
 
+// one-shot partial-knowledge
+var S = cache(function(trueH, classrooms) {
+    return Infer({method: 'enumerate'}, function() {
+        var classroom = uniformDraw(classrooms);
+        var learnerHypers = params.classroomPriors[classroom];
 
+        return sample(S1(trueH, learnerHypers))
+    })
+});
 
+// second example in sequential case
+var S_second_ex = function(first_ex, trueH, posterior) {
+    return Infer(params.inferOptions, function() {
+        var classroom = sample(posterior);
+        var learnerHypers = params.classroomPriors[classroom];
 
-// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
-var updateSpeakerPosterior = function (data) {
-    return Infer({ method: 'MCMC', samples: 5000 }, function () {
-        var learnerClass = uniformDraw(params.classes);
-        var learnerHypers = params.classHypers[learnerClass];
+        var ps_x = trueH.direction_1 == 'less' ? map(function (i) { return i <= trueH.theta_1 ? 1 : 0 }, xs) : map(function (i) { return i >= trueH.theta_1 ? 1 : 0 }, xs)
+        var ps_y = trueH.direction_2 == 'less' ? map(function (i) { return i <= trueH.theta_2 ? 1 : 0 }, ys) : map(function (i) { return i >= trueH.theta_2 ? 1 : 0 }, ys)
 
-        mapData({ data: data }, function (example) {
-            var learnerDist = L0(example, learnerHypers);
-            var trueLearnerDist = L0(example, params.classHypers[params.trueLearnerClass])
-            var learnerEstimate = sample(trueLearnerDist)
+        var second_x = categorical({vs: xs, ps: ps_x})
+        var second_y = categorical({vs: ys, ps: ps_y})
 
-            observe(learnerDist, learnerEstimate)
-        })
+        var second_ex = {x: second_x, y: second_y};
 
-        return learnerClass;
+        factor(params.alpha * L0(first_ex, learnerHypers).score(trueH))
+        factor(params.alpha * L0(second_ex, learnerHypers).score(trueH))
+
+        return second_ex;
     })
 }
 
-var model = function () {
-    return Infer(params.inferOptions, function () {
-        var learnerHypers = uniformDraw(params.classes);
-        var step1example = sample(S1(params.trueH, params.classHypers[learnerHypers]))
+// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
+var updateSpeakerPosterior = function (example) {
+    return Infer({ method: 'enumerate' }, function () {
+        var learnerClass = uniformDraw(params.classrooms);
+        var learnerHypers = params.classroomPriors[learnerClass];
+
+        var learnerDist = L0(example, learnerHypers);
+        var trueLearnerDist = L0(example, params.classroomPriors[params.trueLearnerClass])
+        var learnerEstimate = sample(trueLearnerDist)
+
+        observe(learnerDist, learnerEstimate)
+            // change to MAP later?
+        return learnerClass;
+        })
+
+    }
+
+
+var sequentialFeedback = function () {
+    return Infer({method: 'enumerate'}, function () {
+        var learnerHypers = uniformDraw(params.classrooms);
+        var step1example = sample(S1(params.trueH, params.classroomPriors[learnerHypers]))
         var speakerPosterior = updateSpeakerPosterior(step1example);
-        var step2example = sample(S1(params.trueH, params.classHypers[sample(speakerPosterior)]));
+        var step2example = sample(S_second_ex(step1example, params.trueH, speakerPosterior));
 
         return {
             step1example: step1example,
@@ -99,7 +143,7 @@ var model = function () {
 // viz.table(posterior)
 
 // viz.table(L0({x: 5, y: 5}, params.classHypers[0]))
-viz.table(S1(params.trueH, params.classHypers[0]))
+viz.table(S1(params.trueH, params.classroomPriors[0]))
 // write `updatePosterior` function that takes in one turlte
 // no cost weight here
 // can return step 1 and step 2 number of heads
