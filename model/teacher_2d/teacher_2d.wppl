@@ -39,8 +39,8 @@ var L0 = cache(function (example, hypers) {
         var theta_1 = prior.theta_1, theta_2 = prior.theta_2
         var direction_1 = prior.direction_1, direction_2 = prior.direction_2
 
-        var ps_x = direction_1 == 'less' ? map(function (i) { return i <= theta_1 ? 1 : 0 }, xs) : map(function (i) { return i >= theta_1 ? 1 : 0 }, xs)
-        var ps_y = direction_2 == 'less' ? map(function (i) { return i <= theta_2 ? 1 : 0 }, ys) : map(function (i) { return i >= theta_2 ? 1 : 0 }, ys)
+        var ps_x = direction_1 == 'less' ? map(function (i) { return i < theta_1 ? 1 : 0 }, xs) : map(function (i) { return i > theta_1 ? 1 : 0 }, xs)
+        var ps_y = direction_2 == 'less' ? map(function (i) { return i < theta_2 ? 1 : 0 }, ys) : map(function (i) { return i > theta_2 ? 1 : 0 }, ys)
 
         observe(Categorical({ vs: xs, ps: ps_x }), example.x);
         observe(Categorical({ vs: ys, ps: ps_y }), example.y);
@@ -58,8 +58,8 @@ var S1 = cache(function (trueH, hypers) {
     return Infer(params.inferOptions,
         function () {
 
-            var ps_x = trueH.direction_1 == 'less' ? map(function (i) { return i <= trueH.theta_1 ? 1 : 0 }, xs) : map(function (i) { return i >= trueH.theta_1 ? 1 : 0 }, xs)
-            var ps_y = trueH.direction_2 == 'less' ? map(function (i) { return i <= trueH.theta_2 ? 1 : 0 }, ys) : map(function (i) { return i >= trueH.theta_2 ? 1 : 0 }, ys)
+            var ps_x = trueH.direction_1 == 'less' ? map(function (i) { return i < trueH.theta_1 ? 1 : 0 }, xs) : map(function (i) { return i > trueH.theta_1 ? 1 : 0 }, xs)
+            var ps_y = trueH.direction_2 == 'less' ? map(function (i) { return i < trueH.theta_2 ? 1 : 0 }, ys) : map(function (i) { return i > trueH.theta_2 ? 1 : 0 }, ys)
 
             var x = categorical({vs: xs, ps: ps_x})
             var y = categorical({vs: ys, ps: ps_y})
@@ -89,8 +89,8 @@ var S_second_ex = function(first_ex, trueH, posterior) {
         var classroom = sample(posterior);
         var learnerHypers = params.classroomPriors[classroom];
 
-        var ps_x = trueH.direction_1 == 'less' ? map(function (i) { return i <= trueH.theta_1 ? 1 : 0 }, xs) : map(function (i) { return i >= trueH.theta_1 ? 1 : 0 }, xs)
-        var ps_y = trueH.direction_2 == 'less' ? map(function (i) { return i <= trueH.theta_2 ? 1 : 0 }, ys) : map(function (i) { return i >= trueH.theta_2 ? 1 : 0 }, ys)
+        var ps_x = trueH.direction_1 == 'less' ? map(function (i) { return i < trueH.theta_1 ? 1 : 0 }, xs) : map(function (i) { return i > trueH.theta_1 ? 1 : 0 }, xs)
+        var ps_y = trueH.direction_2 == 'less' ? map(function (i) { return i < trueH.theta_2 ? 1 : 0 }, ys) : map(function (i) { return i > trueH.theta_2 ? 1 : 0 }, ys)
 
         var second_x = categorical({vs: xs, ps: ps_x})
         var second_y = categorical({vs: ys, ps: ps_y})
@@ -113,9 +113,9 @@ var updateSpeakerPosterior = function (example) {
         var learnerDist = L0(example, learnerHypers);
         var trueLearnerDist = L0(example, params.classroomPriors[params.trueLearnerClass])
         var learnerEstimate = sample(trueLearnerDist)
+        // change to MAP later?
 
-        observe(learnerDist, learnerEstimate)
-            // change to MAP later?
+        observe(learnerDist, learnerEstimate) // comment out for no-feedback case
         return learnerClass;
         })
 
