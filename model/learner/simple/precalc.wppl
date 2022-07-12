@@ -1,0 +1,61 @@
+var params = {
+    alpha: 4,
+    costWeight: 0.05,
+    trueTheta: .5, // true coin flip weight
+    nTeachers: 2,
+	maxExamples: 20,
+	teachers: ['A', 'B'],
+    teacherExamples: {
+		'A': {a: 2, b: 0},
+		'B': {a: 3, b: 2}
+	},
+	learners: [1, 2],
+    learnerHypers: {
+        1: {a: 2, b: 8},
+        2: {a: 8, b: 2}
+    },
+	inferOptions: { method: 'MCMC', samples: 4000 },
+	adaptiveTeacher: 'B',
+	nonAdaptiveTeacher: 'A'
+};
+
+var round = function (num, precision) {
+	Number.parseFloat(num.toFixed(precision));
+  } ;
+
+
+// discretizes a beta distribution over hypers (allows dp)
+var Beta_disc = cache(function (hypers) {
+	return Infer({method: 'enumerate'}, function() {
+		var n = uniformDraw(_.range(0, 1, 0.01));
+        var bta = Beta({ a: hypers.a == 0 ? 1 : hypers.a, 
+                        b: hypers.b == 0 ? 1 : hypers.b});
+		factor(bta.score(n));
+        return round(n, 2);
+	})
+});
+
+var L0Mean = cache(function (examples, hypers) {
+	var nExamples = examples.a + examples.b + hypers.a + hypers.b;
+	return (examples.a + hypers.a) / nExamples;
+});
+
+// literal learner
+var L0 = cache(function (examples, hypers) {
+	return Beta_disc({ a: hypers.a + examples.a, 
+		b: hypers.b + examples.b });
+});
+
+// pragmatic speaker
+var S1 = cache(function (theta, hypers, nExamples) {
+    return Infer({ method: 'enumerate' }, function () {
+      var alpha = params.alpha, cw = params.costWeight;  
+      var nHeads = uniformDraw(_.range(0, nExamples + 1));
+      var sampledExamples = {a: nHeads, b: nExamples - nHeads};
+      factor(alpha * (L0(sampledExamples, hypers).score(theta) - cw * nExamples));
+      return {a: sampledExamples.a, b: sampledExamples.b};
+    });
+});
+
+
+expectation(marginalize(S1(params.trueTheta, params.learnerHypers[1], 10), 'a'))
