@@ -3,7 +3,6 @@
 var params = {
     type: 'point',
     participants: 120,
-    inferOptions: { method: 'MCMC', samples: 4000 },
     alpha: 1,
     costWeight: 0.01,
     coinWeights: [0.3, 0.7], // true coin flip weight
@@ -43,13 +42,17 @@ var makeTrials = function () {
 
 //// Model
 
-var L0Mean = function (examples, learnerHypers) {
-    return (learnerHypers.a + examples.heads) / (learnerHypers.a + learnerHypers.b + examples.n)
-}
+var classroomPrior = Categorical({vs: params.classrooms})
+
 
 // literal learner
-var L0 = cache(function (examples, learnerHypers) {
-    return Beta_disc({ a: _.toNumber(learnerHypers.a + examples.heads), b: _.toNumber(learnerHypers.b + examples.n - examples.heads) });
+var L0 = cache(function (examplesArray, learnerHypers) {
+    var headsInExamples = reduce(function(example, acc) {return example.heads + acc}, 0, examplesArray)
+    var totalExamples = reduce(function(example, acc) {return example.n + acc}, 0, examplesArray)
+    return Beta_disc({
+        a: _.toNumber(learnerHypers.a + headsInExamples),
+        b: _.toNumber(learnerHypers.b + totalExamples - headsInExamples)
+    });
 });
 
 // pragmatic speaker
@@ -58,20 +61,21 @@ var S1 = cache(function (theta, learnerHypers) {
         var nExamples = uniformDraw(_.range(1, params.maxFlips + 1));
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var examples = { n: nExamples, heads: nHeads };
-        factor(params.alpha * (L0(examples, learnerHypers).score(theta) - params.costWeight * examples.n));
+        factor(params.alpha * (L0([examples], learnerHypers).score(theta)
+                                - params.costWeight * examples.n));
         return examples;
     });
 });
 
 // speaker reasoning about uncertainty w/ classroom ID
 var S = cache(function (theta, classroomOptions) {
-    return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = uniformDraw(classroomOptions);
-        var learnerHypers = params.classHypers[learnerClass];
-
-        return sample(S1(theta, learnerHypers))
+    return Mixture({
+        dists: [S1(theta, params.classHypers[classroomOptions[0]]),
+                S1(theta, params.classHypers[classroomOptions[1]])],
+        ps: [0.5, 0.5]
     })
 });
+
 
 var S_second_ex = cache(function(first_ex, theta, posterior) {
     return Infer({method: 'enumerate'}, function() {
@@ -82,26 +86,22 @@ var S_second_ex = cache(function(first_ex, theta, posterior) {
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var second_ex = { n: nExamples, heads: nHeads };
 
-        factor(params.alpha * (L0(first_ex, learnerHypers).score(theta) - params.costWeight * first_ex.n));
-        factor(params.alpha * (L0(second_ex, learnerHypers).score(theta) - params.costWeight * second_ex.n));
+        factor(params.alpha * (L0([first_ex, second_ex], learnerHypers).score(theta) - params.costWeight * (first_ex.n + second_ex.n)));
 
         return second_ex;
     })
 })
 
 // after speaker sees learner's feedback after step 1, update speaker posterior over class membership
-var updateSpeakerPosterior = cache(function (data, classroomOptions, condition, classroom) {
+var updateSpeakerPosterior = cache(function (data, classroomOptions, classroom) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(classroomOptions);
         var learnerHypers = params.classHypers[learnerClass];
 
-        // Point estimate
-        var learnerEstimate = L0Mean(data, learnerHypers);
-        var trueLearnerEstimate = L0Mean(data, params.classHypers[classroom]);
-        if (condition === 'seqFeedback') {
-            factor(learnerEstimate === trueLearnerEstimate ? 100 : 0);
-        }
+        // var learnerEstimate = expectation(L0(data, learnerHypers))
+        var reportedMean = expectation(L0(data, params.classHypers[classroom]));
 
+        observe(L0(data, learnerHypers), reportedMean)
         return learnerClass;
     })
 })

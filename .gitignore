@@ -1,12 +1,15 @@
 .DS_Store
-data/teacher/raw
 old
+raw
+pilots
+scratch
 analysis/teacher/scratchpad.ipynb
 analysis/teacher/output
 .ipynb_checkpoints
 *.json
 *.ipynb
 model/teacher_2d/rectangleGame.wppl
+
 
 .Rproj.user
 .RData

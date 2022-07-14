@@ -1,4 +1,4 @@
-# python preprocess.py --in_dir 2022-06-16_pilot_responsesOnly --out_dir 2022-06-16_pilot --expt_label pilot6
+# python preprocess.py --in_dir full_sample --out_dir teacher_1d --expt_label expt1
 import glob
 import json
 import os
@@ -56,8 +56,9 @@ if __name__ == "__main__":
 
         demographics = raw_json_data[-1]
         data = raw_json_data[:-1]
-
+        # print(demographics)
         # Make survey/demographics dataframe
+        # print(demographics)
         df_demographics = pd.DataFrame(data={
             'subject_id': demographics['subjectId'],
             'time_elapsed': demographics['time_elapsed'],
@@ -67,7 +68,7 @@ if __name__ == "__main__":
             'total_bonus': demographics['totalBonus'],
             'comments': demographics['response']['comments'],
             'strategy': demographics['response']['strategy'],
-            'pass_attention': demographics['passAttentionChecks']
+            'n_attention_passed': demographics['nAttentionChecksPassed']
         }, index=[0])
 
         # Make data dataframe
@@ -111,7 +112,8 @@ if __name__ == "__main__":
         # Add bonus info and understood instructions (for exclusion criteria)
         df_data['total_bonus'] = demographics['totalBonus']
         df_data['understood'] = demographics['response']['understood']
-        df_data['pass_attention'] = demographics['passAttentionChecks']
+        # df_data['pass_attention'] = demographics['passAllAttentionChecks']
+        df_data['n_attention_passed'] = demographics['nAttentionChecksPassed']
 
         # Drop trials with no responses, timeout, more than max
         df_data.drop(df_data[(df_data['heads'] == 0) & (

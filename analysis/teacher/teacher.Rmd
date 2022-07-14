@@ -1,9 +1,8 @@
 ---
-title: "teacher_pilot6"
+title: "experiment 1"
 output:
   pdf_document: default
   html_document: default
-date: '2022-06-17'
 ---
 
 ```{r setup, include=FALSE}
@@ -28,8 +27,8 @@ theme_set(theme_few(base_size = 20))
 ```
 
 ```{r include=FALSE}
-d <- read_csv(here('../../data/teacher/2022-07-05_pilot/data_pilot7.csv')) %>% 
-  filter(understood == "yes", total_bonus > 0) %>% 
+d <- read_csv(here('../../data/teacher_1d/data_expt1.csv')) %>% 
+  filter(understood == "yes", n_attention_passed >= 2) %>% 
   rename(n_turtles = total_ex) %>% 
   mutate(sequential = ifelse(block_type == "nonSeqFull" | block_type == "nonSeqPartial", "non_sequential", "sequential"),
         feedback = ifelse(block_type == "seqFeedback", "feedback", "no_feedback"),
@@ -53,8 +52,15 @@ d.seq <- d %>%
   mutate(mean_diff = lesson2 - lesson1) 
 ```
 
+How many participants? 
+TODO: looka t percentage passed certain number of attention checks 
+
+```{r}
+length(unique(d$subject_id))
+```
+
 ```{r include=FALSE}
-d.model <- read.csv(here('../../model/teacher/experiment/output/v4_point_alpha1_cost0.01_120.csv')) %>% 
+d.model <- read.csv(here('../../model/teacher/experiment/output/v6_point_alpha1_cost0.01_120.csv')) %>% 
   mutate(
     n_turtles = heads + tails,
     sequential = ifelse(block_type == "nonSeqFull" | block_type == "nonSeqPartial", "non_sequential", "sequential"),
@@ -248,10 +254,10 @@ summary(seq.mod.toohigh)
 ```{r}      
 
 d.toolow <- d %>% filter(sequential == "sequential", student_prior == "too_low")
-  
+
 seq.mod.toolow <- brm(
        n_majority | trials(n_turtles) ~ 1 + trial_num * feedback + (1 + trial_num * feedback | subject_id),
-        data = d.toolow, 
+        data = d.toolow,
         family = "binomial"
       )
 

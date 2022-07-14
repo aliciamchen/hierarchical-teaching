@@ -111,11 +111,11 @@ var updateSpeakerPosterior = function (example) {
         var learnerHypers = params.classroomPriors[learnerClass];
 
         var learnerDist = L0(example, learnerHypers);
-        var trueLearnerDist = L0(example, params.classroomPriors[params.trueLearnerClass])
-        var learnerEstimate = sample(trueLearnerDist)
+        var trueLearnerDist = L0(example, params.classroomPriors[params.trueLearnerClass]);
+        var learnerEstimate = MAP(trueLearnerDist)
         // change to MAP later?
 
-        observe(learnerDist, learnerEstimate) // comment out for no-feedback case
+        factor(MAP(learnerDist) === learnerEstimate ? 100 : 0) // comment out for no-feedback case
         return learnerClass;
         })
 
@@ -136,14 +136,5 @@ var sequentialFeedback = function () {
     })
 }
 
-// var posterior = model()
 
-// viz.auto(posterior)
-// viz.marginals(posterior)
-// viz.table(posterior)
-
-// viz.table(L0({x: 5, y: 5}, params.classHypers[0]))
 viz.table(S1(params.trueH, params.classroomPriors[0]))
-// write `updatePosterior` function that takes in one turlte
-// no cost weight here
-// can return step 1 and step 2 number of heads
