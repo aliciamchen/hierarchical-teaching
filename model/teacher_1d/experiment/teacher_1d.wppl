@@ -7,7 +7,7 @@ var params = {
     costWeight: 0.01,
     coinWeights: [0.3, 0.7], // true coin flip weight
     maxFlips: 70,
-    conditions: ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'],
+    scenarios: ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'],
     classrooms: ['A', 'B'],
     classHypers: {
         'A': { a: 1, b: 9 },
@@ -16,25 +16,25 @@ var params = {
 };
 
 
-var f = csv.open('./output/' + 'v6' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
+var f = csv.open('./output/' + 'v7' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
 csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_class,heads,tails', f)
 
 var makeTrials = function () {
     return _.flattenDeep(
         mapN(function (participant) {
-            return map(function (condition) {
+            return map(function (scenario) {
                 return map(function (coinWeight) {
                     return map(function (classroom) {
                         return {
                             participantID: participant,
-                            condition: condition,
+                            scenario: scenario,
                             coinWeight: coinWeight,
                             classroomOptions: params.classrooms,
                             classroom: classroom
                         }
                     }, params.classrooms)
                 }, params.coinWeights)
-            }, params.conditions)
+            }, params.scenarios)
         }, params.participants)
     )
 }
@@ -42,13 +42,12 @@ var makeTrials = function () {
 
 //// Model
 
-var classroomPrior = Categorical({vs: params.classrooms})
-
+var classroomPrior = Categorical({ vs: params.classrooms })
 
 // literal learner
 var L0 = cache(function (examplesArray, learnerHypers) {
-    var headsInExamples = reduce(function(example, acc) {return example.heads + acc}, 0, examplesArray)
-    var totalExamples = reduce(function(example, acc) {return example.n + acc}, 0, examplesArray)
+    var headsInExamples = reduce(function (example, acc) { return example.heads + acc }, 0, examplesArray)
+    var totalExamples = reduce(function (example, acc) { return example.n + acc }, 0, examplesArray)
     return Beta_disc({
         a: _.toNumber(learnerHypers.a + headsInExamples),
         b: _.toNumber(learnerHypers.b + totalExamples - headsInExamples)
@@ -62,23 +61,23 @@ var S1 = cache(function (theta, learnerHypers) {
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var examples = { n: nExamples, heads: nHeads };
         factor(params.alpha * (L0([examples], learnerHypers).score(theta)
-                                - params.costWeight * examples.n));
+            - params.costWeight * examples.n));
         return examples;
     });
 });
 
-// speaker reasoning about uncertainty w/ classroom ID
+// uncertain pragmatic speaker
 var S = cache(function (theta, classroomOptions) {
     return Mixture({
         dists: [S1(theta, params.classHypers[classroomOptions[0]]),
-                S1(theta, params.classHypers[classroomOptions[1]])],
+        S1(theta, params.classHypers[classroomOptions[1]])],
         ps: [0.5, 0.5]
     })
 });
 
-
-var S_second_ex = cache(function(first_ex, theta, posterior) {
-    return Infer({method: 'enumerate'}, function() {
+// second example in sequential case
+var S_second_ex = cache(function (first_ex, theta, posterior) {
+    return Infer({ method: 'enumerate' }, function () {
         var learnerClass = sample(posterior);
         var learnerHypers = params.classHypers[learnerClass]
 
@@ -92,10 +91,11 @@ var S_second_ex = cache(function(first_ex, theta, posterior) {
     })
 })
 
+
 // after speaker sees learner's feedback after step 1, update speaker posterior over class membership
 var updateSpeakerPosterior = cache(function (data, classroomOptions, classroom) {
     return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = uniformDraw(classroomOptions);
+        var learnerClass = sample(classroomPrior);
         var learnerHypers = params.classHypers[learnerClass];
 
         // var learnerEstimate = expectation(L0(data, learnerHypers))
@@ -106,16 +106,14 @@ var updateSpeakerPosterior = cache(function (data, classroomOptions, classroom) 
     })
 })
 
-
-var sequentialModel = cache(function (classroomOptions, condition, coinWeight, classroom) {
+var sequential = cache(function (classroomOptions, scenario, coinWeight, classroom) {
     return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = uniformDraw(classroomOptions);
+        var learnerClass = sample(classroomPrior);
         var step1examples = sample(S1(coinWeight, params.classHypers[learnerClass]))
-
-        var speakerPosterior = updateSpeakerPosterior(step1examples, classroomOptions, condition, classroom);
-
+        var speakerPosterior = (scenario === 'seqFeedback' ?
+            updateSpeakerPosterior(step1examples, classroomOptions, scenario, classroom) :
+            classroomPrior)
         var step2examples = sample(S_second_ex(step1examples, coinWeight, speakerPosterior));
-
         return {
             step1examples: step1examples,
             step2examples: step2examples
@@ -124,53 +122,51 @@ var sequentialModel = cache(function (classroomOptions, condition, coinWeight, c
 })
 
 
-///
+var simulate = cache(function (classroomOptions, scenario, coinWeight, classroom) {
+    if (scenario === 'nonSeqFull') {
+        return S1(coinWeight, params.classHypers[classroom])
+    } else if (scenario === 'nonSeqPartial') {
+        return S(coinWeight, classroomOptions)
+    } else {
+        return sequential(classroomOptions, scenario, coinWeight, classroom)
+    }
+})
+
+
+
+
+//// Simulate
 
 var trials = makeTrials();
 // console.log(trials);
 
+
 map(function (trial) {
     console.log('participant ' + trial.participantID)
-    if (trial.condition === 'nonSeqFull') {
-        var response = sample(S1(trial.coinWeight, params.classHypers[trial.classroom]));
+
+    var response = sample(simulate(trial.classroomOptions, trial.scenario, trial.coinWeight, trial.classroom))
+
+    if (trial.scenario === 'nonSeqFull' || trial.scenario === 'nonSeqPartial') {
 
         csv.writeLine([
             trial.participantID,
             params.alpha,
             params.costWeight,
-            trial.condition,
+            trial.scenario,
             0,
             trial.coinWeight,
             trial.classroom,
             response.heads,
             response.n - response.heads
         ].join(','), f)
-    }
 
-    else if (trial.condition === 'nonSeqPartial') {
-        var response = sample(S(trial.coinWeight, trial.classroomOptions));
+    } else {
 
         csv.writeLine([
             trial.participantID,
             params.alpha,
             params.costWeight,
-            trial.condition,
-            0,
-            trial.coinWeight,
-            trial.classroom,
-            response.heads,
-            response.n - response.heads
-        ].join(','), f)
-    }
-
-    else { // sequential conditions
-        var response = sample(sequentialModel(trial.classroomOptions, trial.condition, trial.coinWeight, trial.classroom));
-
-        csv.writeLine([
-            trial.participantID,
-            params.alpha,
-            params.costWeight,
-            trial.condition,
+            trial.scenario,
             0,
             trial.coinWeight,
             trial.classroom,
@@ -182,14 +178,13 @@ map(function (trial) {
             trial.participantID,
             params.alpha,
             params.costWeight,
-            trial.condition,
+            trial.scenario,
             1,
             trial.coinWeight,
             trial.classroom,
             response.step2examples.heads,
             response.step2examples.n - response.step2examples.heads
         ].join(','), f)
-
     }
 }, trials)
 
