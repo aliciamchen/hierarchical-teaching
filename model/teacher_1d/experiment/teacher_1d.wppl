@@ -1,4 +1,4 @@
-// webppl teacher_1d.wppl --require ../../tools/ --require webppl-csv --random-seed 110
+// webppl teacher_1d.wppl --require ../../tools/ --require webppl-csv --random-seed 10
 
 var params = {
     type: 'point',
@@ -7,7 +7,7 @@ var params = {
     costWeight: 0.01,
     coinWeights: [0.3, 0.7], // true coin flip weight
     maxFlips: 70,
-    scenarios: ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'],
+    scenarios: ['seqFeedback', 'nonSeqFull', 'nonSeqPartial', 'seqNoFeedback'],
     classrooms: ['A', 'B'],
     classHypers: {
         'A': { a: 1, b: 9 },
@@ -16,7 +16,7 @@ var params = {
 };
 
 
-var f = csv.open('./output/' + 'v7' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
+var f = csv.open('./output/' + 'v8' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
 csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_class,heads,tails', f)
 
 var makeTrials = function () {
@@ -80,7 +80,6 @@ var S_second_ex = cache(function (first_ex, theta, posterior) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = sample(posterior);
         var learnerHypers = params.classHypers[learnerClass]
-
         var nExamples = uniformDraw(_.range(1, params.maxFlips + 1));
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var second_ex = { n: nExamples, heads: nHeads };
@@ -91,27 +90,41 @@ var S_second_ex = cache(function (first_ex, theta, posterior) {
     })
 })
 
+var L0Mean = function (examples, learnerHypers) {
+    return (learnerHypers.a + examples.heads) / (learnerHypers.a + learnerHypers.b + examples.n)
+}
 
 // after speaker sees learner's feedback after step 1, update speaker posterior over class membership
-var updateSpeakerPosterior = cache(function (data, classroomOptions, classroom) {
-    return Infer({ method: 'enumerate' }, function () {
+var updateSpeakerPosterior = cache(function (data, classroom) {
+    return Infer({ method: 'enumerate'}, function () {
         var learnerClass = sample(classroomPrior);
         var learnerHypers = params.classHypers[learnerClass];
 
         // var learnerEstimate = expectation(L0(data, learnerHypers))
-        var reportedMean = expectation(L0(data, params.classHypers[classroom]));
+        // var reportedMean = expectation(L0([data], params.classHypers[classroom]))
 
-        observe(L0(data, learnerHypers), reportedMean)
+        // TODO: check L0Mean is same as expectation?
+        // console.log(L0Mean(data, params.classHypers[classroom]))
+        // console.log(expectation(L0([data], params.classHypers[classroom])))
+
+        var learnerEstimate = L0Mean(data, learnerHypers)
+        var reportedMean = L0Mean(data, params.classHypers[classroom])
+
+        // observe(Gaussian({mu: learnerEstimate, sigma: 1}), reportedMean)
+
+        // observe(L0([data], learnerHypers), reportedMean) // (enumerate doesn't work for this)
+        condition(learnerEstimate === reportedMean)
+
         return learnerClass;
     })
 })
 
-var sequential = cache(function (classroomOptions, scenario, coinWeight, classroom) {
+var sequential = cache(function (scenario, coinWeight, classroom) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = sample(classroomPrior);
         var step1examples = sample(S1(coinWeight, params.classHypers[learnerClass]))
         var speakerPosterior = (scenario === 'seqFeedback' ?
-            updateSpeakerPosterior(step1examples, classroomOptions, scenario, classroom) :
+            updateSpeakerPosterior(step1examples, classroom) :
             classroomPrior)
         var step2examples = sample(S_second_ex(step1examples, coinWeight, speakerPosterior));
         return {
@@ -128,11 +141,9 @@ var simulate = cache(function (classroomOptions, scenario, coinWeight, classroom
     } else if (scenario === 'nonSeqPartial') {
         return S(coinWeight, classroomOptions)
     } else {
-        return sequential(classroomOptions, scenario, coinWeight, classroom)
+        return sequential(scenario, coinWeight, classroom)
     }
 })
-
-
 
 
 //// Simulate
