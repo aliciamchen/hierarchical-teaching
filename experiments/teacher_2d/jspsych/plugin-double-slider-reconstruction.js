@@ -10,6 +10,12 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                 pretty_name: "Stimulus function",
                 default: undefined,
             },
+            /* Non reconstruction HTML stim (the stuff that doesn't change) */
+            stim: {
+                type: jspsych.ParameterType.HTML_STRING,
+                pretty_name: "Stimulus",
+                default: undefined
+            },
             /** The starting value of the stimulus parameter. */
             starting_value_1: {
                 type: jspsych.ParameterType.FLOAT,
@@ -116,7 +122,9 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
             // half of the thumb width value from jspsych.css, used to adjust the label positions
             var half_thumb_width = 7.5;
 
-            var html = '<div id="jspsych-reconstruction-stim-container">' + "</div>";
+            var html = '<div id="jspsych-html-slider-response-stimulus">' + trial.stim + "</div>"
+            // start with default values
+            html += '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(trial.starting_value_1, trial.starting_value_2) +  "</div>";
             // slider 1
             html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
             html +=
