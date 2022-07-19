@@ -1,37 +1,29 @@
-const params = {
-    nStudents: 16,
-    maxExamples: 70,
+const instructionsParams = {
     completionMinutes: 30,
     basePay: 5,
-    maxBonus: 12,
+    maxBonus: 10,
     perTrialBonus: 0.7,
-    perTrialBonusThreshold: 0.08,
-    exampleCost: 0.01,
-    feedbackCondition: 'studentPassive'
+    feedbackCondition: 'studentPassive',
+    timeout: 30 // seconds
 };
 
-const classroomParams = {
-    A: { a: 1, b: 9 },
-    B: { a: 9, b: 1 }
-};
-
-const conditions = ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'];
-const classroomPairings = [['A', 'B']];
-const coinWeights = [0.3, 0.7];
-
-const trueClassrooms = classroomPairings.flat();
+const scenarios = ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'];
+const classroomPriors = ['stem', 'cap']
+const trueConceptOptions = {
+    stemThresholds: [4, 6],
+    capThresholds: [4, 6],
+    stemDirections: ['less', 'greater'],
+    capDirections: ['less', 'greater']
+}
 
 const factors = {
-    condition: conditions,
-    classroomPairing: classroomPairings,
-    coinWeight: coinWeights,
-    trueClassroom: trueClassrooms
+    scenario: scenarios,
+    prior: classroomPriors,
+    stemThreshold: trueConceptOptions.stemThresholds,
+    capThreshold: trueConceptOptions.capThresholds,
+    stemDirection: trueConceptOptions.stemDirections,
+    capDirection: trueConceptOptions.capDirections
 };
-
-var start_time;
-var end_test_timer;
-
-
 
 /* Start experiment */
 
@@ -40,18 +32,15 @@ const local_testing = false;
 var jsPsych = initJsPsych({
     on_finish: function () {
         if (local_testing) {
-            jsPsych.data.get().localSave("json", "testdata.json"); // add datetime later
+            jsPsych.data.get().localSave("json", "testdata.json");
         }
     },
     show_progress_bar: true
 });
 
 jsPsych.data.addProperties({
-    params: params,
-    classroomParams: classroomParams,
-    conditions: conditions,
-    classroomPairings: classroomPairings,
-    coinWeights: coinWeights
+    instructionsParams: instructionsParams,
+    factors: factors
 });
 
 
@@ -63,7 +52,6 @@ function save_data_json(name, data) {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify({ filename: name, filedata: data }));
 };
-
 
 const turkInfo = jsPsych.turk.turkInfo();
 
@@ -93,24 +81,31 @@ const save_data = {
 
 /* Experiment */
 
+var design = jsPsych.randomization.factorial(factors, 1);
 
 var timeline = [];
 
-var slidertest = {
-    type: jsPsychDoubleSliderReconstruction,
-    require_movement: true,
-    stim_function: function(param1, param2) {
-        return `${param1} and ${param2}`
-    },
-    labels: [1, 8],
-    min: 1,
-    max: 8,
-    prompt1: 'prompt1',
-    prompt2: 'prompt2',
-    slider_width: 400
-};
+// var testFirstEx = firstExample(instructionsParams, design[0], jsPsych)
+// timeline.push(testFirstEx)
 
-timeline.push(slidertest)
+var allTrials = makeAllTrials(design, jsPsych)
+console.log(allTrials)
+timeline.push(allTrials)
+// var slidertest = {
+//     type: jsPsychDoubleSliderReconstruction,
+//     require_movement: true,
+//     stim_function: function(param1, param2) {
+//         return `${param1} and ${param2}`
+//     },
+//     labels: [1, 8],
+//     min: 1,
+//     max: 8,
+//     prompt1: 'prompt1',
+//     prompt2: 'prompt2',
+//     slider_width: 400
+// };
+
+// timeline.push(slidertest)
 console.log(jsPsych.data.getLastTrialData())
 // timeline.push(preload);
 
@@ -119,7 +114,7 @@ console.log(jsPsych.data.getLastTrialData())
 // timeline.push(intro())
 
 var comprehensionLoop = {
-    timeline: [instructions(params.feedbackCondition), comprehensionCheck(), failComprehensionCheck(jsPsych)],
+    timeline: [instructions(instructionsParams), comprehensionCheck(instructionsParams), failComprehensionCheck(jsPsych)],
     loop_function: function (data) {
         return !data.select("pass").values[0];
     }
@@ -128,7 +123,7 @@ var comprehensionLoop = {
 // timeline.push(comprehensionLoop);
 
 
-var design = jsPsych.randomization.factorial(factors, 1);
+
 
 // design (pass in `design` )
 
