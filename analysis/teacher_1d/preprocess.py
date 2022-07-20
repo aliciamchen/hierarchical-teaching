@@ -1,4 +1,9 @@
+
+"""Preprocess raw `.json` data from experiment
+"""
+
 # python preprocess.py --in_dir full_sample --out_dir teacher_1d --expt_label expt1
+
 import glob
 import json
 import os
@@ -10,8 +15,8 @@ import pandas as pd
 
 if __name__ == "__main__":
 
-    in_base_dir = "../../data/teacher/raw"
-    out_base_dir = "../../data/teacher"
+    in_base_dir = "../../data/teacher_1d/raw"
+    out_base_dir = "../../data"
 
     parser = argparse.ArgumentParser()
 
@@ -153,7 +158,7 @@ if __name__ == "__main__":
 
         ##
         df_demographics_all.to_csv(os.path.join(
-            out_dir, f"demographics_{expt_label}.csv"))
-        df_data_all.to_csv(os.path.join(out_dir, f"data_{expt_label}.csv"))
+            out_dir, f"{expt_label}_demographics.csv"))
+        df_data_all.to_csv(os.path.join(out_dir, f"{expt_label}_data.csv"))
         df_bonuses_all.to_csv(os.path.join(
-            out_dir, f"bonuses_{expt_label}.csv"), header=None, index=False)
+            out_dir, f"{expt_label}_bonuses.csv"), header=None, index=False)
