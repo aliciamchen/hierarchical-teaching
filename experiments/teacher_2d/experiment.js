@@ -10,8 +10,8 @@ const instructionsParams = {
 const scenarios = ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'];
 const classroomPriors = ['stem', 'cap']
 const trueConceptOptions = {
-    stemThresholds: [4, 6],
-    capThresholds: [4, 6],
+    stemThresholds: [4],
+    capThresholds: [6],
     stemDirections: ['less', 'greater'],
     capDirections: ['less', 'greater']
 }

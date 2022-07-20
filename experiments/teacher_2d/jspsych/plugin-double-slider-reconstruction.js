@@ -167,14 +167,14 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                 html += "</div>";
             }
             html += "</div>";
+            html += "</div>";
             if (trial.prompt1 !== null) {
                 html += trial.prompt1;
             }
             html += "</div>";
-            // html += "</div>";
 
             // slider 2
-            // html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
+            html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
             html +=
                 '<div class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
             if (trial.slider_width !== null) {
@@ -215,10 +215,10 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                 html += "</div>";
             }
             html += "</div>";
+            html += "</div>";
             if (trial.prompt2 !== null) {
                 html += trial.prompt2
             }
-            html += "</div>";
             html += "</div>";
 
             // add submit button

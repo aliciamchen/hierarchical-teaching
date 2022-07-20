@@ -1,4 +1,4 @@
-function instructions(feedbackCondition) {
+function instructions(instructionsParams) {
     return {
         type: jsPsychInstructions,
         pages: [
@@ -7,9 +7,9 @@ function instructions(feedbackCondition) {
             instructionsStemCapIntro(),
             instructionsStemCapExamples(),
             instructionsDirections(),
-            instructionsFeedbackDetails(feedbackCondition),
+            instructionsFeedbackDetails(instructionsParams),
             instructionsPriors(),
-            instructionsMoney()
+            instructionsMoney(instructionsParams)
         ],
         show_clickable_nav: true,
         show_page_number: true
@@ -59,7 +59,7 @@ function instructionsDirections() {
     `
 }
 
-function instructionsFeedbackDetails(feedbackCondition) {
+function instructionsFeedbackDetails(instructionsParams) {
 
     // possible feedback conditions:
     // teacherActive: teacher selects an example
@@ -67,7 +67,7 @@ function instructionsFeedbackDetails(feedbackCondition) {
     // studentPassive: student reports estimate of true concept
     // studentActive: student reports example turtles they think is helpful for teacher
 
-    if (feedbackCondition === 'teacherActive') {
+    if (instructionsParams.feedbackCondition === 'teacherActive') {
         return `
         <p>
         You will teach each student over either one or two lessons. During each lesson, you will send the student one example of a tasty mushroom.
@@ -79,7 +79,7 @@ function instructionsFeedbackDetails(feedbackCondition) {
         After testing the student, you will proceed to the second lesson where you will send them a second example mushroom.
         </p>
         `
-    } else if (feedbackCondition === 'teacherPassive') {
+    } else if (instructionsParams.feedbackCondition === 'teacherPassive') {
         return `
         <p>
         You will teach each student over either one or two lessons. During each lesson, you will send the student one example of a tasty mushroom.
@@ -91,7 +91,7 @@ function instructionsFeedbackDetails(feedbackCondition) {
         After testing the student, you will proceed to the second lesson where you will send them a second example mushroom.
         </p>
         `
-    } else if (feedbackCondition === 'studentPassive') {
+    } else if (instructionsParams.feedbackCondition === 'studentPassive') {
         return `
         <p>
         You will teach each student over either one or two lessons. During each lesson, you will send the student one example of a tasty mushroom.
@@ -103,7 +103,7 @@ function instructionsFeedbackDetails(feedbackCondition) {
         Then you will proceed to the second lesson, where you will send them a second example mushroom.
         </p>
         `
-    } else if (feedbackCondition === 'studentActive') {
+    } else if (instructionsParams.feedbackCondition === 'studentActive') {
         return `
         <p>
         You will teach each student over either one or two lessons. During each lesson, you will send the student one example of a tasty mushroom.
@@ -124,7 +124,7 @@ function instructionsPriors() {
     Each student comes from a classroom, where they have already been taught some information about the island.
     </p>
     <p>
-    However, their teachers in these classrooms don’t know the full mushroom rule on the island! Each student will only have learned something about either the stem size rule or the cap size rule.
+    However, their teachers in these classrooms don't know the full mushroom rule on the island! Each student will only have learned something about either the stem size rule or the cap size rule.
     </p>
     <p>
     Every time you encounter a new student, you will be given information about their classroom. For some students you might not know exactly which classroom they belonged to.
@@ -135,19 +135,19 @@ function instructionsPriors() {
     `
 }
 
-function instructionsMoney() {
+function instructionsMoney(instructionsParams) {
     return `
     <h3>
     How can I earn as much money as possible from this experiment?
     </h3>
     <p>
-    After you teach the students, we will test them. We will give them a bunch more example mushrooms from the island and they will have to classify them into tasty and safe mushrooms. We will award you a bonus for each student based on how well they did!
+    After you teach the students, we will test them. We will give them a bunch more example mushrooms from the island and they will have to classify them into tasty and safe mushrooms. We will award you a bonus for each student based on how well they did! In addition to your base pay of $${instructionsParams.basePay}, you can receive a total bonus of up to $${instructionsParams.maxBonus}.
     </p>
     <p>
     So to teach effectively, you should select mushroom(s) that lead your students as close as possible to the correct rules.
     </p>
     <p>
-    Make sure to send each student a mushroom on every lesson. You have 30 seconds to send a mushroom for every lesson. If you miss a mushroom, you can't earn a bonus for that student.
+    Make sure to send each student a mushroom on every lesson. You have ${instructionsParams.timeout} seconds to send a mushroom for every lesson. If you miss a mushroom, you can't earn a bonus for that student.
     </p>
     <p>
     We will tell you how much bonus you have earned at the end of the study.

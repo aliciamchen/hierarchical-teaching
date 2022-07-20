@@ -1,4 +1,4 @@
-function comprehensionCheck() {
+function comprehensionCheck(instructionsParams) {
     return {
         type: jsPsychSurveyMultiChoice,
         questions: [
@@ -15,7 +15,7 @@ function comprehensionCheck() {
                 prompt: 'How can you earn a high performance bonus?',
                 options: [
                     'By showing my students as few turtles as possible.',
-                    `By not considering what my students have already seen on the island, and instead showing my students ${params.maxExamples} turtles (the maximum) on each lesson so I can make sure that the students' guesses are as accurate as possible.`,
+                    `By not considering what my students have already seen on the island, and instead showing my students ${instructionsParams.maxExamples} turtles (the maximum) on each lesson so I can make sure that the students' guesses are as accurate as possible.`,
                     `By considering what my students have already seen on the island so that I can correct their assumptions about the island and teach efficiently and accurately/helpfully at the same time.`
                 ],
                 required: true
