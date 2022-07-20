@@ -1,12 +1,33 @@
+body {
+    margin: auto
+}
+
 p {
-    width: 70%;
+    width: 100%;
     margin: auto;
-    margin-bottom: 15px;
-    text-align: left
 }
 
 .center {
     display: block;
     margin-left: auto;
     margin-right: auto
+}
+
+div {
+    text-align: center
+}
+
+ul {
+    width: 75%;
+    margin: auto;
+    text-align: left
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.jspsych-survey-multi-choice-option {
+    text-align: left;
 }

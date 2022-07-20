@@ -4,7 +4,6 @@ var params = {
     trueTheta: .5, // true coin flip weight
     nTeachers: 2,
 	maxExamples: 20,
-	nExamples: 10,
 	teachers: ['A', 'B'],
     teacherExamples: {
 		'A': {a: 2, b: 0},
@@ -55,7 +54,7 @@ var L0 = cache(function (examplesArray, learnerHypers) {
 // second example in sequential case
 var S_second_ex = cache(function (first_ex, theta, posterior, nExamples) {
     return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = sample(posterior);
+        var learnerClass = posterior;
         var learnerHypers = params.learnerHypers[learnerClass];
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var second_ex = { a: nHeads, b: nExamples - nHeads };
@@ -91,42 +90,11 @@ var updateSpeakerPosterior = cache(function (examples, classroomOptions, guess) 
 
 var simulate = cache(function (guess, firstExamples, classroomOptions, theta, nExamples) 
 {
-	var posterior = updateSpeakerPosterior(firstExamples, classroomOptions, guess);
-//     print(posterior)
+	var posterior = round(expectation(updateSpeakerPosterior(firstExamples,classroomOptions,guess)));
+    print(posterior)
 	var SMean = round(expectation(marginalize
 						(S_second_ex(firstExamples, theta, posterior, nExamples), 'a')), 0);
 	return {a: SMean, b: nExamples - SMean}
 })
 
 simulate({a: 55, b: 45}, {a: 5, b: 5}, params.learners, 0.4, 10);
-
-var thetasUR = _.range(0.1, 1, 0.1);
-var thetas = map(function (thetaUR) 
-			{ return round(thetaUR, 1) }, 
-			thetasUR);
-var guessesA = _.range(0, 101);
-var guesses = map(function (guessA) 
-				{ return {a: guessA, b: 100 - guessA} }, 
-				guessesA);
-var firstExamplesA = _.range(0, 10);
-var firstExamples = map(function (firstExampleA) 
-				{ return {a: firstExampleA, b: 10 - firstExampleA} }, 
-				firstExamplesA);
-// print(firstExamples)
-var output = _.flattenDeep( 
-  map ( function (theta) {
-  return map ( function (firstExample) {
-	return map ( function (guess) {
-		return { 
-			theta: theta,
-			firstExample: firstExample,
-			guess: guess,
-			secondExample: simulate(guess, firstExample, params.learners, theta, params.nExamples)
-		}
-	}, guesses)
-  }, firstExamples)
-}, thetas)
-);
-
-json.write('../../../experiments/learner/precalc.json', output);
-console.log('success! :)');
