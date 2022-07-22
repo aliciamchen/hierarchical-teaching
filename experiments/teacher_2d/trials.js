@@ -64,9 +64,17 @@ function makeLabels(threshold, direction, nLabels) {
     return labels;
 }
 // TODO: stim function that takes in trial type
+function checkResponseInConcept(data, trial) {
+    var stemResponse = data.values()[0].response1
+    var capResponse = data.values()[0].response2
+
+    var stemOK = trial.stemDirection === 'less' ? stemResponse < trial.stemThreshold : stemResponse > trial.stemThreshold
+    var capOK = trial.capDirection === 'less' ? capResponse < trial.capThreshold : capResponse > trial.capThreshold
+    return !(stemOK && capOK)
+}
 
 function firstExample(instructionsParams, trial, jsPsych) {
-    return {
+    var firstExampleTrial = {
         type: jsPsychDoubleSliderReconstruction,
         require_movement: true,
         stim: `
@@ -136,6 +144,11 @@ function firstExample(instructionsParams, trial, jsPsych) {
             // TODO: add feedback stuff here
             data.feedback = 'placeholder feedback'
         }
+    }
+
+    return {
+        timeline: [firstExampleTrial],
+        loop_function: function (data) { return checkResponseInConcept(data, trial) }
     }
 }
 
@@ -218,15 +231,18 @@ function secondExample(instructionsParams, trial, jsPsych) {
         },
         stim_function: function (stemVal, capVal) {
             return `
-            Cap width ${capVal} stem height ${stemVal}
+            <div>
+            <img src='img/mushroom_s${stemVal}c${capVal}.png' width="200"></img>
+            </div>
             `
         },
-        labels: [1, 8],
+        labels_1: makeLabels(trial.stemThreshold, trial.stemDirection, 8),
+        labels_2: makeLabels(trial.capThreshold, trial.capDirection, 8),
         min: 1,
         max: 8,
         prompt1: 'Stem height',
         prompt2: 'Cap width',
-        slider_width: 400,
+        slider_width: 500,
         button_label: 'Send mushroom to student',
         trial_duration: instructionsParams.timeout * 10000,
         data: {
