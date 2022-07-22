@@ -1,8 +1,8 @@
-// webppl teacher_1d.wppl --require ../../tools/ --require webppl-csv --random-seed 10
+// webppl teacher_1d.wppl --require ../../tools/ --require webppl-csv --random-seed 20
 
 var params = {
     type: 'point',
-    participants: 120,
+    participants: 193,
     alpha: 1,
     costWeight: 0.01,
     coinWeights: [0.3, 0.7], // true coin flip weight
@@ -121,8 +121,7 @@ var updateSpeakerPosterior = cache(function (data, classroom) {
 
 var sequential = cache(function (scenario, coinWeight, classroom) {
     return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = sample(classroomPrior);
-        var step1examples = sample(S1(coinWeight, params.classHypers[learnerClass]))
+        var step1examples = sample(S(coinWeight, params.classrooms))
         var speakerPosterior = (scenario === 'seqFeedback' ?
             updateSpeakerPosterior(step1examples, classroom) :
             classroomPrior)
