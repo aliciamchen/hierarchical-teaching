@@ -14,7 +14,6 @@ function makeAllTrials(design, jsPsych) {
 }
 
 
-
 function makeTrialsForScenario(instructionsParams, trial, jsPsych) {
     // TODO: if statements that return a specific timeline based on the trial type
     const trialsInScenario = {
@@ -43,6 +42,27 @@ function classroomInfo(trial) {
     }
 }
 
+function makeLabels(threshold, direction, nLabels) {
+    var labels = []
+    for (let label = 1; label <= nLabels; label++) {
+        if (label < threshold) {
+            if (direction === 'less') {
+                labels.push(`<span style="color:ForestGreen">${label}</span>`)
+            } else {
+                labels.push(`<span style="color:Red">${label}</span>`)
+            }
+        } else if (label > threshold) {
+            if (direction === 'less') {
+                labels.push(`<span style="color:Red">${label}</span>`)
+            } else {
+                labels.push(`<span style="color:ForestGreen">${label}</span>`)
+            }
+        } else {
+            labels.push(label)
+        }
+    }
+    return labels;
+}
 // TODO: stim function that takes in trial type
 
 function firstExample(instructionsParams, trial, jsPsych) {
@@ -91,7 +111,8 @@ function firstExample(instructionsParams, trial, jsPsych) {
             </div>
             `
         },
-        labels: [1, 2, 3, 4, 5, 6, 7, 8],
+        labels_1: makeLabels(trial.stemThreshold, trial.stemDirection, 8),
+        labels_2: makeLabels(trial.capThreshold, trial.capDirection, 8),
         min: 1,
         max: 8,
         prompt1: 'Stem height',

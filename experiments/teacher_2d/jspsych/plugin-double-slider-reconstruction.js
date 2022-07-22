@@ -54,7 +54,13 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                 default: 1,
             },
             /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
-            labels: {
+            labels_1: {
+                type: jspsych.ParameterType.HTML_STRING,
+                pretty_name: "Labels",
+                default: [],
+                array: true,
+            },
+            labels_2: {
                 type: jspsych.ParameterType.HTML_STRING,
                 pretty_name: "Labels",
                 default: [],
@@ -126,9 +132,9 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
             // start with default values
             html += '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(trial.starting_value_1, trial.starting_value_2) +  "</div>";
             // slider 1
-            html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
+            html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 30px 0px;">';
             html +=
-                '<div class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
+                '<div class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 2em auto; ';
             if (trial.slider_width !== null) {
                 html += "width:" + trial.slider_width + "px;";
             }
@@ -147,9 +153,9 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                 trial.step +
                 '" id="jspsych-html-slider-response-response1"></input>';
             html += "<div>";
-            for (var j = 0; j < trial.labels.length; j++) {
-                var label_width_perc = 100 / (trial.labels.length - 1);
-                var percent_of_range = j * (100 / (trial.labels.length - 1));
+            for (var j = 0; j < trial.labels_1.length; j++) {
+                var label_width_perc = 100 / (trial.labels_1.length - 1);
+                var percent_of_range = j * (100 / (trial.labels_1.length - 1));
                 var percent_dist_from_center = ((percent_of_range - 50) / 50) * 100;
                 var offset = (percent_dist_from_center * half_thumb_width) / 100;
                 html +=
@@ -163,7 +169,7 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                     "px); text-align: center; width: " +
                     label_width_perc +
                     '%;">';
-                html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + "</span>";
+                html += '<span style="text-align: center; font-size: 80%;">' + trial.labels_1[j] + "</span>";
                 html += "</div>";
             }
             html += "</div>";
@@ -174,9 +180,9 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
             html += "</div>";
 
             // slider 2
-            html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
+            html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 0px 0px;">';
             html +=
-                '<div class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
+                '<div class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 2em auto; ';
             if (trial.slider_width !== null) {
                 html += "width:" + trial.slider_width + "px;";
             }
@@ -195,9 +201,9 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                 trial.step +
                 '" id="jspsych-html-slider-response-response2"></input>';
             html += "<div>";
-            for (var j = 0; j < trial.labels.length; j++) {
-                var label_width_perc = 100 / (trial.labels.length - 1);
-                var percent_of_range = j * (100 / (trial.labels.length - 1));
+            for (var j = 0; j < trial.labels_2.length; j++) {
+                var label_width_perc = 100 / (trial.labels_2.length - 1);
+                var percent_of_range = j * (100 / (trial.labels_2.length - 1));
                 var percent_dist_from_center = ((percent_of_range - 50) / 50) * 100;
                 var offset = (percent_dist_from_center * half_thumb_width) / 100;
                 html +=
@@ -211,7 +217,7 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                     "px); text-align: center; width: " +
                     label_width_perc +
                     '%;">';
-                html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + "</span>";
+                html += '<span style="text-align: center; font-size: 80%;">' + trial.labels_2[j] + "</span>";
                 html += "</div>";
             }
             html += "</div>";

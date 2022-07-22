@@ -10,8 +10,8 @@ const instructionsParams = {
 const scenarios = ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'];
 const classroomPriors = ['stem', 'cap']
 const trueConceptOptions = {
-    stemThresholds: [4],
-    capThresholds: [6],
+    stemThresholds: [2.5],
+    capThresholds: [4.5],
     stemDirections: ['less', 'greater'],
     capDirections: ['less', 'greater']
 }
@@ -85,31 +85,12 @@ var design = jsPsych.randomization.factorial(factors, 1);
 
 var timeline = [];
 
-var preload = preload()
-timeline.push(preload)
-
-// var testFirstEx = firstExample(instructionsParams, design[0], jsPsych)
-// timeline.push(testFirstEx)
+timeline.push(preload())
 
 var allTrials = makeAllTrials(design, jsPsych)
 timeline.push(allTrials)
-// var slidertest = {
-//     type: jsPsychDoubleSliderReconstruction,
-//     require_movement: true,
-//     stim_function: function(param1, param2) {
-//         return `${param1} and ${param2}`
-//     },
-//     labels: [1, 8],
-//     min: 1,
-//     max: 8,
-//     prompt1: 'prompt1',
-//     prompt2: 'prompt2',
-//     slider_width: 400
-// };
 
-// timeline.push(slidertest)
 console.log(jsPsych.data.getLastTrialData())
-// timeline.push(preload);
 
 
 // Welcome and introduction
