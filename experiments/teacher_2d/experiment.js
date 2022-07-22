@@ -85,11 +85,13 @@ var design = jsPsych.randomization.factorial(factors, 1);
 
 var timeline = [];
 
+var preload = preload()
+timeline.push(preload)
+
 // var testFirstEx = firstExample(instructionsParams, design[0], jsPsych)
 // timeline.push(testFirstEx)
 
 var allTrials = makeAllTrials(design, jsPsych)
-console.log(allTrials)
 timeline.push(allTrials)
 // var slidertest = {
 //     type: jsPsychDoubleSliderReconstruction,

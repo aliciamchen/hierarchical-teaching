@@ -9,7 +9,7 @@ analysis/teacher/output
 *.json
 *.ipynb
 model/teacher_2d/rectangleGame.wppl
-
+*.ai
 .Rproj.user
 .RData
 .Rhistory

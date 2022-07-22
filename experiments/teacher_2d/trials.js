@@ -86,7 +86,9 @@ function firstExample(instructionsParams, trial, jsPsych) {
         `,
         stim_function: function (stemVal, capVal) {
             return `
-            Cap width ${capVal} stem height ${stemVal}
+            <div>
+            <img src='img/mushroom_s${stemVal}c${capVal}.png' width="200"></img>
+            </div>
             `
         },
         labels: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -94,7 +96,7 @@ function firstExample(instructionsParams, trial, jsPsych) {
         max: 8,
         prompt1: 'Stem height',
         prompt2: 'Cap width',
-        slider_width: 400,
+        slider_width: 500,
         button_label: 'Send mushroom to student',
         trial_duration: instructionsParams.timeout * 10000,
         data: {

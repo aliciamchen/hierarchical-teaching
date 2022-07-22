@@ -13,7 +13,3 @@ var firstStudentWarning = {
     trial_duration: 3000,
 };
 
-var preload = {
-    type: jsPsychPreload,
-    images: ['img/1orange9purple.png', 'img/9orange1purple.png']
-};

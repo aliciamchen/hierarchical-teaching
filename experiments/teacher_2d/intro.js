@@ -8,12 +8,7 @@ function intro(instructionsParams) {
     }
 }
 
-function preload() {
-    return {
-        type: jsPsychPreload,
-        images: []
-    }
-}
+
 function welcome() {
     return {
         type: jsPsychHtmlKeyboardResponse,
@@ -34,7 +29,7 @@ function consent(instructionsParams) {
             The effects of participating should be comparable to those you would experience from viewing a computer monitor \
             and using a mouse and keyboard for the duration of the experiment.</p>
         <p><b>Benefits:</b> The study provides important information about the nature of teaching.</p>
-        <p><b>Compensation:</b> You will receive <b>$${instructionsParams.basePay}</b> for completing the experiment and a performance bonus of up to <b>$${params.maxBonus}</b>.</p>
+        <p><b>Compensation:</b> You will receive <b>$${instructionsParams.basePay}</b> for completing the experiment and a performance bonus of up to <b>$${instructionsParams.maxBonus}</b>.</p>
         <p><b>Confidentiality:</b> Your participation in this study will remain confidential. \
             No personally identifiable information will be associated with your data. \
             Your de-identified data may be shared with other researchers and used in future projects.</p>
