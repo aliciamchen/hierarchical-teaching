@@ -14,37 +14,7 @@ function calc_teacher (hypers, trueTheta, teachers) {
 	var bTheta = (teachers['B'].a + hypers.a) / 
 				(teachers['B'].a + hypers.a + teachers['B'].b + hypers.b)
 	return Math.abs(aTheta - trueTheta) < Math.abs(bTheta - trueTheta) ? 'A' : 'B'
-}
-
-// allows numbers to sum to 100 when student makes their guess
-function createResponsiveInputs () 
-{
-		function changeInput2(){
-			var val_1 = document.getElementById('1').value;
-			var val_2 = 100 - parseInt(val_1);
-			document.getElementById('2').value = val_2;
-		};
-		var input_1 = document.getElementById('1');
-		input_1.onchange = function(){
-			changeInput2();
-		};
-		input_1.onkeyup = function(){
-			changeInput2();
-		};
-			
-		var input_2 = document.getElementById('2');
-		function changeInput1(){
-			var val_2 = document.getElementById('2').value;
-			var val_1 = 100 - parseInt(val_2);
-			document.getElementById('1').value = val_1;
-		}
-		input_2.onchange = function(){
-			changeInput1();
-		}
-		input_2.onkeyup = function(){
-			changeInput1();  
-		};
-}
+};
 
 // allows numbers to sum to 100 when student makes their guess
 function createResponsiveInputs () {
@@ -76,13 +46,18 @@ function createResponsiveInputs () {
 };
 
 // adds text based on the new teacher's examples
-function fetchSpeakerExamples (theta, firstExample, guess, teacher) 
+function fetchSpeakerExamples (currTrial) 
 {
     $.get('./precalc.json', function(data) {
-        $(".examples" + teacher).html(`Teacher ` + teacher + ` wants to show you an additional 
-			${ex_to_text(data.filter(x => x.theta == theta && 
-						x.firstExample.a == firstExample.a && 
-						x.guess.a == guess.a)[0].secondExample)}`);
+        $(".examples" + currTrial.adaptiveTeacher).
+		html(`Teacher ` + currTrial.adaptiveTeacher + ` wants to show you an additional 
+		${ex_to_text(data.filter(x => x.theta == currTrial.coinWeight && x.firstExample.a == 
+						teacherSets[currTrial.teacherPairing][currTrial.adaptiveTeacher].a && 
+						x.guess.a == currTrial.studentGuess.a)[0].secondExample)}`);
+		$(".examples" + currTrial.nonAdaptiveTeacher).
+		html(`Teacher ` + currTrial.nonAdaptiveTeacher + 
+						` wants to show you an additional ${ex_to_text(teacherSets
+						[currTrial.teacherPairing][currTrial.nonAdaptiveTeacher])}`);
     })
 };
 
@@ -92,7 +67,7 @@ function handleTimeouts (stage, data)
 	jsPsych.pluginAPI.clearAllTimeouts();
 	var nHeads, nTails, teacher;
     if (data.response != null) { // if no timeout
-        if (stage == 'first') 
+        if (stage !== 'final') 
         {
             nHeads = parseInt(data.response.heads);
             nTails = parseInt(data.response.tails);
@@ -100,7 +75,7 @@ function handleTimeouts (stage, data)
         teacher = data.response.teacher;
     } else {
         
-		if (stage == 'first')
+		if (stage !== 'final')
         {
             nHeads = 0;
             nTails = 0;
@@ -113,14 +88,14 @@ function handleTimeouts (stage, data)
 function makeInitialData (stage, currTrial)
 {
 	return {
-		type: 'response',
+		type: stage == 'attention' ? 'attention' : 'response',
 		condition: currTrial.condition,
 		trueTheta: currTrial.coinWeight,
 		teachers: currTrial.teacherPairing,
-		studentTrueClassroom: currTrial.condition == 'nonSeqPrior' ? currTrial.trueHyper : null,
+		studentTrueClassroom: currTrial.condition !== 'nonSeqNoPrior' ? null : currTrial.trueHyper,
 		responseSet: stage
 	}
-}
+};
 
 // saves data for each trial
 function saveData (stage, data, currTrial, i)
@@ -134,13 +109,21 @@ function saveData (stage, data, currTrial, i)
 	data.studentTrueHypers = studentTrueHypers;
 	data.teacher = info.teacher;
 
-	if (stage == 'first')
+	if (stage !== 'final')
 	{
 		data.heads = info.nHeads;
 		data.tails = info.nTails;
 		data.totalExamples = info.nHeads + info.nTails;
 		data.studentGuess = {a: data.heads, b: data.tails};
 		currTrial.studentGuess = data.studentGuess;
+
+		if (stage == 'attention')
+		{
+			data.attentionParams = currTrial.attentionParams;
+			data.attentionPassed = currTrial.attentionParams.a == currTrial.studentGuess.a &&
+									currTrial.attentionParams.b == currTrial.studentGuess.b
+									currTrial.attentionParams.teacher == data.teacher;
+		}
 	}
 	else
 	{
@@ -161,14 +144,29 @@ function loadFunction(stage, currTrial)
 		var elapsed_time = end_time - start_time;
 		jsPsych.finishTrial({ status: 'timeout' });
 	}, 90000);
-	if (stage == 'first') 
+	if (stage !== 'final') 
 	{
 		createResponsiveInputs();
 	}
 	else if (currTrial.condition == 'seqFeedback')
 	{
-		fetchSpeakerExamples(currTrial.coinWeight, 
-							teacherSets[currTrial.teacherPairing][currTrial.adaptiveTeacher], 
-                            currTrial.studentGuess, currTrial.adaptiveTeacher);
+		fetchSpeakerExamples(currTrial);
 	};
-}
+};
+
+function pushAttentionChecks (i) 
+{
+	if (attention_locations.includes(i)) {
+        timeline.push(jsPsych.randomization.sampleWithoutReplacement(attention_trials, 1)[0]);
+    }
+};
+
+function attentionTrial (i) 
+{
+	// randomly sample from design params for attention check
+    var currTrial = jsPsych.randomization.sampleWithoutReplacement(design, 1)[0];
+	currTrial.attentionParams = 
+						jsPsych.randomization.sampleWithoutReplacement(attention_params, 1)[0];
+	attention_trials.push([makeAttentionBlock(i, currTrial), 
+							makeIntermediateBlock('final'), fixationBlock(i)]);
+};
