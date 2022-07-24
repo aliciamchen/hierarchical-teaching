@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Teaching game!</title>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="shared/sprintf.min.js"></script>
 
     <!-- jsPsych -->
     <script src="https://unpkg.com/jspsych@7.3.0"></script>
@@ -26,15 +28,165 @@
     <script src="js/instructions.js"></script>
     <script src="js/comprehension.js"></script>
     <script src="js/trials.js"></script>
+    <script src="js/exit.js"></script>
     <script src="js/experiment.js"></script>
 
     <!-- Styling -->
     <link href="css/jspsych.css" rel="stylesheet" type="text/css" />
-    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+  </head>
 
+  <body>
+    <div id="templates">
+      <div id="consent">
+        <h3>
+          Please read this consent agreement carefully before deciding whether
+          to participate in this experiment.
+        </h3>
+        <p>
+          <b>Purpose of the research:</b> To examine how people teach
+          effectively.
+        </p>
+        <p>
+          <b>What you will do in this research:</b> You will teach students
+          about the tasty and bitter mushrooms on different islands.
+        </p>
+        <p>
+          <b>Time required:</b> This experiment will take %i minutes to
+          complete.
+        </p>
+        <p>
+          <b>Risks:</b> There are no anticipated risks associated with
+          participating in this study. The effects of participating should be
+          comparable to those you would experience from viewing a computer
+          monitor and using a mouse and keyboard for the duration of the
+          experiment.
+        </p>
+        <p>
+          <b>Benefits:</b> The study provides important information about the
+          nature of teaching.
+        </p>
+        <p>
+          <b>Compensation:</b> You will receive <b>$%i</b> for completing the
+          experiment and a performance bonus of up to <b>$%i</b>.
+        </p>
+        <p>
+          <b>Confidentiality:</b> Your participation in this study will remain
+          confidential. No personally identifiable information will be
+          associated with your data. Your de-identified data may be shared with
+          other researchers and used in future projects.
+        </p>
+        <p>
+          <b>Participation and withdrawal:</b> Your participation in this study
+          is completely voluntary and you may refuse to participate or you may
+          choose to withdraw at any time without penalty or loss of benefits to
+          which you are otherwise entitled.
+        </p>
+        <p>
+          <b>How to contact the researcher:</b> If you have questions or
+          concerns about your participation or payment, or want to request a
+          summary of research findings, please contact Alicia Chen,
+          aliciachen@college.harvard.edu.
+        </p>
+        <p>
+          <b>Whom to contact about your rights in this research:</b> For
+          questions, concerns, suggestions, or complaints that have not been or
+          cannot be addressed by the researcher, or to report research-related
+          harm, please contact the Committee on the Use of Human Subjects in
+          Research at Harvard University, 1414 Massachusetts Avenue, Second
+          Floor, Cambridge, MA 02138. Phone: 617-496-2847. Email:
+          cuhs@fas.harvard.edu.
+        </p>
+      </div>
 
-</head>
-
-<body></body>
-
+      <div id="exitSurvey">
+        <div>
+          <div style="margin-left: 0%; text-align: left">
+            Which gender do you most identify with?
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <input
+              type="radio"
+              id="genderChoice1"
+              name="gender"
+              value="male"
+            /><label for="genderChoice1">Male</label>
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <input
+              type="radio"
+              id="genderChoice2"
+              name="gender"
+              value="female"
+            /><label for="genderChoice2">Female</label>
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <input
+              type="radio"
+              id="genderChoice3"
+              name="gender"
+              value="nonconforming"
+            /><label for="genderChoice3">Gender Variant/Non-Conforming</label>
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <input
+              type="radio"
+              id="genderChoice4"
+              name="gender"
+              value="abstain"
+              required
+            /><label for="genderChoice4">Prefer not to answer</label>
+          </div>
+        </div>
+        <div>
+          <div style="margin-left: 0%; text-align: left">
+            <label for="age">Enter your age:</label>
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <input type="text" id="age" name="age" required />
+          </div>
+        </div>
+        <div>
+          <div style="margin-left: 0%; text-align: left">
+            Did you understand the instructions?
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <input
+              type="radio"
+              id="understoodChoice1"
+              name="understood"
+              value="yes"
+              required
+            /><label for="understoodChoice1">Yes</label>
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <input
+              type="radio"
+              id="understoodChoice2"
+              name="understood"
+              value="no"
+            /><label for="understoodChoice2">No</label>
+          </div>
+        </div>
+        <div>
+          <div style="margin-left: 0%; text-align: left">
+            <label for="strategy">What was the strategy you used?</label>
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <textarea id="strategy" name="strategy" rows="5" cols="50" >
+            </textarea>
+          </div>
+        </div>
+        <div>
+          <div style="margin-left: 0%; text-align: left">
+            <label for="comments">Comments or suggestions?</label>
+          </div>
+          <div style="margin-left: 0%; text-align: left">
+            <textarea id="strategy" name="strategy" rows="5" cols="50" >
+            </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

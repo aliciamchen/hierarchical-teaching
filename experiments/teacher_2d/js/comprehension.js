@@ -1,3 +1,13 @@
+function comprehensionLoop(instructionsParams, jsPsych) {
+
+    return {
+        timeline: [instructions(instructionsParams), comprehensionCheck(instructionsParams), failComprehensionCheck(jsPsych)],
+        loop_function: function (data) {
+            return !data.select("pass").values[0];
+        }
+    };
+
+}
 function comprehensionCheck(instructionsParams) {
     return {
         type: jsPsychSurveyMultiChoice,
