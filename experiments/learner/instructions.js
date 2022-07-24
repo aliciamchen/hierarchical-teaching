@@ -9,14 +9,14 @@ var instructions = {
 
         `<p>
         You have just landed on a new archipelago, consisting of many different islands. 
-        You’re there to study the famous rainbow turtles. 
+        You're there to study the famous rainbow turtles. 
         </p>
         <div class="center" style="margin-bottom:1em;">
             <img src='img/archipelago.png' width="600"></img>
         </div>
         <p>
-        You’ve heard that some turtles are purple and some are orange but you don’t know which 
-        is more common. You’d like to learn what percentage of turtles have each color. 
+        You've heard that some turtles are purple and some are orange but you don't know which 
+        is more common. You'd like to learn what percentage of turtles have each color. 
         </p>`,
 
         `<p>
@@ -39,13 +39,13 @@ var instructions = {
         </p>`,
 
         `<p>
-        Once you have selected a teacher, you will be asked to guess the island’s 
+        Once you have selected a teacher, you will be asked to guess the island's 
         actual turtle composition. You will be prompted to enter the number of orange 
         and purple turtles you expect to see out of every 100 turtles.
         </p>`,
 
         `<p>
-        After you select a teacher and make a guess, you will be shown the ‘right answer’ — 
+        After you select a teacher and make a guess, you will be shown the 'right answer' — 
         the percentage of orange and purple turtles that actually live on the island. 
         </p>`,
 
@@ -58,7 +58,7 @@ var instructions = {
         </p>`,
 
         `<p>
-        Finally, after being shown the ‘right answer,’ you will choose the teacher that 
+        Finally, after being shown the 'right answer,' you will choose the teacher that 
         you believe is better!
         </p>`,
 
@@ -79,9 +79,9 @@ var instructions = {
         `<h2>Review</h2>
         <ul>
             <li>You will first select one of the two teachers to learn from.</li>
-            <li>Using the teachers’ examples, you will guess what the island composition is.</li>
+            <li>Using the teachers' examples, you will guess what the island composition is.</li>
             <li>After you make the guess, you will be shown the true island 
-                composition — the ‘correct answer’</li>
+                composition — the 'correct answer'</li>
             <li>Finally, based on this true proportion, you will reassess 
                 which teacher you prefer.</li>
         </ul>`,
@@ -107,13 +107,13 @@ var comprehensionCheck = {
             prompt: 'Will you ever encounter the same teacher in two different blocks?',
             options: [
                 'Yes, I can sometimes encounter the same teacher twice.',
-                `No – even if the examples look familiar, I’ll always be learning from a 
+                `No – even if the examples look familiar, I'll always be learning from a 
                 new teacher.`
             ],
             required: true
         },
         {
-            prompt: `Before being shown teachers’ examples, you will see:`,
+            prompt: `Before being shown teachers' examples, you will see:`,
             options: [
                 'The turtle composition of the island.',
                 'A few turtles.',
@@ -199,10 +199,10 @@ var seqInstructions = {
         <ul>
             <li>The teachers do <b>not</b> know how many turtles of each color you have seen.</li>
             <li>The turtles you have seen are <b>not necessarily representative</b> of 
-				the island’s composition</li>
+				the island's composition</li>
             <li>Since the teachers are aware of this, they will try to <b>correct your 
 				initial impressions</b>.</li>
-            <li>Using the teachers’ examples and the turtles you have already seen, you will 
+            <li>Using the teachers' examples and the turtles you have already seen, you will 
 				guess what the true island proportion is.</li>
 			<li>After you make a guess, the teachers will see your guess and then 
 				show you more examples.</li>
