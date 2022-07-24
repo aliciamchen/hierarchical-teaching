@@ -2,9 +2,11 @@
 <html>
   <head>
     <title>Teaching game!</title>
-    <!-- jQuery -->
+
+    <!-- External stuff -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="shared/sprintf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
 
     <!-- jsPsych -->
     <script src="https://unpkg.com/jspsych@7.3.0"></script>
@@ -29,6 +31,7 @@
     <script src="js/comprehension.js"></script>
     <script src="js/trials.js"></script>
     <script src="js/exit.js"></script>
+    <script src="js/mushroom-grid.js"></script>
     <script src="js/experiment.js"></script>
 
     <!-- Styling -->
@@ -173,7 +176,7 @@
             <label for="strategy">What was the strategy you used?</label>
           </div>
           <div style="margin-left: 0%; text-align: left">
-            <textarea id="strategy" name="strategy" rows="5" cols="50" >
+            <textarea id="strategy" name="strategy" rows="5" cols="50">
             </textarea>
           </div>
         </div>
@@ -182,8 +185,107 @@
             <label for="comments">Comments or suggestions?</label>
           </div>
           <div style="margin-left: 0%; text-align: left">
-            <textarea id="strategy" name="strategy" rows="5" cols="50" >
+            <textarea id="strategy" name="strategy" rows="5" cols="50">
             </textarea>
+          </div>
+        </div>
+      </div>
+
+      <div id="mushroomGrid">
+        <div class="row">
+          <div class="column">
+            <img src="img/mushroom_s1c8.png" id="s1c8" />
+            <img src="img/mushroom_s2c8.png" id="s2c8" />
+            <img src="img/mushroom_s3c8.png" id="s3c8" />
+            <img src="img/mushroom_s4c8.png" id="s4c8" />
+            <img src="img/mushroom_s5c8.png" id="s5c8" />
+            <img src="img/mushroom_s6c8.png" id="s6c8" />
+            <img src="img/mushroom_s7c8.png" id="s7c8" />
+            <img src="img/mushroom_s8c8.png" id="s8c8" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img src="img/mushroom_s1c7.png" id="s1c7" />
+            <img src="img/mushroom_s2c7.png" id="s2c7" />
+            <img src="img/mushroom_s3c7.png" id="s3c7" />
+            <img src="img/mushroom_s4c7.png" id="s4c7" />
+            <img src="img/mushroom_s5c7.png" id="s5c7" />
+            <img src="img/mushroom_s6c7.png" id="s6c7" />
+            <img src="img/mushroom_s7c7.png" id="s7c7" />
+            <img src="img/mushroom_s8c7.png" id="s8c7" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img src="img/mushroom_s1c6.png" id="s1c6" />
+            <img src="img/mushroom_s2c6.png" id="s2c6" />
+            <img src="img/mushroom_s3c6.png" id="s3c6" />
+            <img src="img/mushroom_s4c6.png" id="s4c6" />
+            <img src="img/mushroom_s5c6.png" id="s5c6" />
+            <img src="img/mushroom_s6c6.png" id="s6c6" />
+            <img src="img/mushroom_s7c6.png" id="s7c6" />
+            <img src="img/mushroom_s8c6.png" id="s8c6" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img src="img/mushroom_s1c5.png" id="s1c5" />
+            <img src="img/mushroom_s2c5.png" id="s2c5" />
+            <img src="img/mushroom_s3c5.png" id="s3c5" />
+            <img src="img/mushroom_s4c5.png" id="s4c5" />
+            <img src="img/mushroom_s5c5.png" id="s5c5" />
+            <img src="img/mushroom_s6c5.png" id="s6c5" />
+            <img src="img/mushroom_s7c5.png" id="s7c5" />
+            <img src="img/mushroom_s8c5.png" id="s8c5" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img src="img/mushroom_s1c4.png" id="s1c4" />
+            <img src="img/mushroom_s2c4.png" id="s2c4" />
+            <img src="img/mushroom_s3c4.png" id="s3c4" />
+            <img src="img/mushroom_s4c4.png" id="s4c4" />
+            <img src="img/mushroom_s5c4.png" id="s5c4" />
+            <img src="img/mushroom_s6c4.png" id="s6c4" />
+            <img src="img/mushroom_s7c4.png" id="s7c4" />
+            <img src="img/mushroom_s8c4.png" id="s8c4" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img src="img/mushroom_s1c3.png" id="s1c3" />
+            <img src="img/mushroom_s2c3.png" id="s2c3" />
+            <img src="img/mushroom_s3c3.png" id="s3c3" />
+            <img src="img/mushroom_s4c3.png" id="s4c3" />
+            <img src="img/mushroom_s5c3.png" id="s5c3" />
+            <img src="img/mushroom_s6c3.png" id="s6c3" />
+            <img src="img/mushroom_s7c3.png" id="s7c3" />
+            <img src="img/mushroom_s8c3.png" id="s8c3" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img src="img/mushroom_s1c2.png" id="s1c2" />
+            <img src="img/mushroom_s2c2.png" id="s2c2" />
+            <img src="img/mushroom_s3c2.png" id="s3c2" />
+            <img src="img/mushroom_s4c2.png" id="s4c2" />
+            <img src="img/mushroom_s5c2.png" id="s5c2" />
+            <img src="img/mushroom_s6c2.png" id="s6c2" />
+            <img src="img/mushroom_s7c2.png" id="s7c2" />
+            <img src="img/mushroom_s8c2.png" id="s8c2" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="column">
+            <img src="img/mushroom_s1c1.png" id="s1c1" />
+            <img src="img/mushroom_s2c1.png" id="s2c1" />
+            <img src="img/mushroom_s3c1.png" id="s3c1" />
+            <img src="img/mushroom_s4c1.png" id="s4c1" />
+            <img src="img/mushroom_s5c1.png" id="s5c1" />
+            <img src="img/mushroom_s6c1.png" id="s6c1" />
+            <img src="img/mushroom_s7c1.png" id="s7c1" />
+            <img src="img/mushroom_s8c1.png" id="s8c1" />
           </div>
         </div>
       </div>
