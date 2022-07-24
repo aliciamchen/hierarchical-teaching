@@ -4,14 +4,15 @@ const instructionsParams = {
     maxBonus: 10,
     perTrialBonus: 0.7,
     feedbackCondition: 'studentPassive',
-    timeout: 30 // seconds
+    timeout: 30, // seconds
+    nStudents: 16
 };
 
 const scenarios = ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'];
 const classroomPriors = ['stem', 'cap']
 const trueConceptOptions = {
-    stemThresholds: [2.5],
-    capThresholds: [4.5],
+    stemThresholds: [2.5, 4.5, 6.5],
+    capThresholds: [2.5, 4.5, 6.5],
     stemDirections: ['less', 'greater'],
     capDirections: ['less', 'greater']
 }
@@ -81,7 +82,8 @@ const save_data = {
 
 /* Experiment */
 
-var design = jsPsych.randomization.factorial(factors, 1);
+var fullDesign = jsPsych.randomization.factorial(factors, 1);
+var design = jsPsych.randomization.sampleWithoutReplacement(fullDesign, instructionsParams.nStudents)
 
 var timeline = [];
 
