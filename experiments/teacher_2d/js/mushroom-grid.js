@@ -5,8 +5,10 @@ function makeGrid(capThreshold, capDirection, stemThreshold, stemDirection) {
 
     stems.forEach((stemVal) => {
         caps.forEach((capVal) => {
+            // console.log(stemVal)
+            // console.log(capVal)
             $(`#s${stemVal}c${capVal}`).css({
-                "border": "20px solid green"
+                "border": "8px solid green"
             });
         })
     })
