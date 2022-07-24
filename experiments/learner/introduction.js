@@ -56,3 +56,11 @@ var firstIslandWarning = {
     choices: "NO_KEYS",
     trial_duration: 3000,
 };
+
+var beginningSeq = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<div style="font-size:30px;">Congrats on passing the comprehension quiz! \
+                The second half of the experiment will begin in a few seconds.</div>',
+    choices: "NO_KEYS",
+    trial_duration: 3000,
+};

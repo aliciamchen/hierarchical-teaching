@@ -1,8 +1,6 @@
 var start_time;
 var end_test_timer;
 
-
-
 /* Start experiment */
 const local_testing = false;
 
@@ -53,7 +51,7 @@ const save_data = {
     func: function () {
         save_data_json(subjectId + "_output_all", jsPsych.data.get().json());
         save_data_json(subjectId + "_output_responsesOnly", 
-                    jsPsych.data.get().filter({ type: 'response' }).json())
+                    jsPsych.data.get().filter({ type: 'response' }).json());
     },
     timing_post_trial: 0
 };
@@ -68,16 +66,8 @@ var preload = {
     type: jsPsychPreload,
     images: ['img/archipelago.png']
 };
-timeline.push(preload);
 
-// from introduction.js
-// timeline.push(welcome, consent);
-
-// from instructions.js
-// timeline.push(comprehensionLoop);
-
-// from introduction.js
-// timeline.push(beginning, firstIslandWarning);
+timeline.push(preload, welcome, consent, comprehensionLoop, beginning, firstIslandWarning);
 
 
 /* Main logic of trials */
@@ -87,55 +77,47 @@ var design = jsPsych.randomization.shuffle(
     jsPsych.randomization.factorial(factorsNonSeqPrior, 1).concat( 
     jsPsych.randomization.factorial(factorsNonSeqNoPrior, 1)));
 
-
 // makes nonseq attention checks
-var attention_locations = [3, 8];
-var attention_params = [[70, 0], [35, 35]]; // turtle breakdown options
-var attention_trials = [];
+var attention_locations = [3, 8], attention_trials = [];
+var attention_params = [{a: 25, b: 75, teacher: 'A'}, {a: 50, b: 50, teacher: 'B'}];
 
 for (let i = 0; i < attention_locations.length; i++) {
-    // from attention.js
-    nonSeqAttentionTrial(i);
+    attentionTrial(i);
 };
 
 
 // Loop through individual trials in design to create timeline
 for (let i = 0; i < design.length; i++) {
-    // from nonseq.js
     nonSequentialTrial(i);
 };
 
 // creates design + attention checks for sequential conditions
 var len = design.length;
 var design = jsPsych.randomization.factorial(factorsSeq, 1);
-var adaptiveA = [2, 3, 5, 7];
-var attention_locations = [13];
-var attention_params = [[70, 0], [35, 35], [0, 70]]; // turtle breakdown options
-var attention_trials = [];
 
-// from instructions.js
-// timeline.push(seqComprehensionLoop);
+// sets locations where A is adaptive teacher
+var adaptiveA = [2, 3, 5, 7];
+
+var attention_locations = [0], attention_trials = [];
+var attention_params = [{a: 75, b: 25, teacher: 'A'}];
+
+// second set of instructions + comprehension check
+timeline.push(seqComprehensionLoop, beginningSeq);
 
 for (let i = 0; i < attention_locations.length; i++) {
-    // from attention.js
-    seqAttentionTrial(i);
+    attentionTrial(i);
 };
 
 
 // loop through individual trials in design to create timeline
 for (let i = 0; i < design.length; i++) {
-    // from trials.js
     sequentialTrial(i);
 };
 
-// from conclusion.js
-timeline.push(survey);
+timeline.push(survey); 
 
-if (!local_testing) {
-    timeline.push(save_data);
-}
+if (!local_testing) { timeline.push(save_data) };
 
-// from conclusion.js
 timeline.push(debrief_block);
 
-jsPsych.run(timeline.flat());
+jsPsych.run(timeline.flat(Infinity));
