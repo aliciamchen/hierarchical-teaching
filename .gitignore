@@ -6,7 +6,6 @@ scratch
 analysis/teacher/scratchpad.ipynb
 analysis/teacher/output
 .ipynb_checkpoints
-*.json
 *.ipynb
 model/teacher_2d/rectangleGame.wppl
 *.ai
