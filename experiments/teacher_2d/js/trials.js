@@ -8,19 +8,19 @@ function makeAllTrials(design, jsPsych) {
     for (let i = 0; i < design.length; i++) {
         var currTrial = design[i]
         currTrial['studentIdx'] = i
-        trials.push(makeTrialsForScenario(instructionsParams, currTrial, jsPsych))
+        trials.push(makeTrialsForScenario(instructionsParams, currTrial, design, jsPsych))
     }
     return trials.flat()
 }
 
 
-function makeTrialsForScenario(instructionsParams, trial, jsPsych) {
+function makeTrialsForScenario(instructionsParams, trial, design, jsPsych) {
     // TODO: if statements that return a specific timeline based on the trial type
     const trialsInScenario = {
-        'nonSeqFull': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, jsPsych)],
-        'nonSeqPartial': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, jsPsych)],
-        'seqNoFeedback': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), secondExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, jsPsych)],
-        'seqFeedback': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), feedback(trial, jsPsych), secondExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, jsPsych)]
+        'nonSeqFull': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
+        'nonSeqPartial': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
+        'seqNoFeedback': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), secondExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
+        'seqFeedback': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), feedback(trial, jsPsych), secondExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)]
     }
 
     return trialsInScenario[trial.scenario]
@@ -35,8 +35,8 @@ function classroomInfo(trial) {
             </h4>
             <h2>
             On this island, tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
-            </h2>
-            <p>In this block, you will be teaching ${trial.scenario == 'nonSeqPartial' || trial.scenario == 'nonSeqFull' ? '<b>one</b> lesson' : '<b>two</b> lessons'} to Student ${trial.studentIdx + 1}.</p>`
+            </h2>` + makeGrid(trial.capThreshold, trial.capDirection, trial.stemThreshold, trial.stemDirection) +
+            `<p style="text-align: center;">In this block, you will be teaching ${trial.scenario == 'nonSeqPartial' || trial.scenario == 'nonSeqFull' ? '<b>one</b> lesson' : '<b>two</b> lessons'} to Student ${trial.studentIdx + 1}.</p>`
         ,
         choices: ['Continue']
     }
@@ -206,7 +206,7 @@ function secondExample(instructionsParams, trial, jsPsych) {
                         </li>
                     </ul>
                     <p>
-                    Your student guessed that the mushrooms circled in green are tasty and that the mushrooms circled in red are bitter.
+                    Your student guessed that the mushrooms circled in green are tasty.
                     </p>
                     <p>
                     Select a second example tasty mushroom to send to your student.
@@ -288,7 +288,7 @@ function finish() {
 }
 
 
-function fixation(trial, jsPsych) {
+function fixation(trial, design, jsPsych) {
     return {
         timeline: [
             {

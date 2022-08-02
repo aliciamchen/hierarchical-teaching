@@ -1,3 +1,4 @@
+
 const instructionsParams = {
     completionMinutes: 30,
     basePay: 5,
@@ -27,8 +28,9 @@ const factors = {
 };
 
 
-$(function () {
 
+$(function () {
+    $('#templates').hide();
     const local_testing = false;
 
     var jsPsych = initJsPsych({
@@ -88,16 +90,15 @@ $(function () {
 
     var timeline = [];
     timeline.push(preload())
-    timeline.push(exitSurvey())
-    timeline.push(intro(instructionsParams))
+    // timeline.push(intro(instructionsParams))
     // timeline.push(comprehensionLoop(instructionsParams, jsPsych))
     timeline.push(makeAllTrials(design, jsPsych))
 
-    console.log(jsPsych.data.getLastTrialData())
-
+    timeline.push(exitSurvey())
     if (!local_testing) {
         timeline.push(save_data);
     }
+
     timeline.push(debrief(instructionsParams, jsPsych))
 
 

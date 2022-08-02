@@ -14,7 +14,6 @@ function exitSurvey() {
                 data.totalBonus = Number(totalBonus);
                 data.nAttentionChecksPassed = jsPsych.data.get().select('passAttentionCheck').sum()
                 data.passAllAttentionChecks = jsPsych.data.get().select('passAttentionCheck').sum() >= 2 ? true : false
-                // console.log(data.passAttentionChecks)
             },
     }
 }
