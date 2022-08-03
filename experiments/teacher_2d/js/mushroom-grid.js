@@ -27,11 +27,11 @@ function makeGrid(capThreshold, capDirection, stemThreshold, stemDirection) {
     return $('#mushroomGrid').html()
 }
 
-// alternate version of function for dynamic feedback
+// alternate version of function for dynamic feedback (this one takes in a HTML string)
 function makeGridFromHTML(capThreshold, capDirection, stemThreshold, stemDirection, myHTML) {
 
-    $html = $(myHTML) // = $.parseHTML(html)
-    // console.log(htmlStuff)
+    $html = $(myHTML)
+
     var values = _.range(1, 9)
 
     var stems = stemDirection === 'less' ? _.filter(values, function(i) {return i < stemThreshold}) : _.filter(values, function(i) {return i > stemThreshold})

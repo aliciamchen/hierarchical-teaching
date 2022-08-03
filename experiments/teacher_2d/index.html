@@ -32,6 +32,7 @@
     <script src="js/trials.js"></script>
     <script src="js/exit.js"></script>
     <script src="js/mushroom-grid.js"></script>
+    <script src="js/trialHelpers.js"></script>
     <script src="js/experiment.js"></script>
 
     <!-- Styling -->
@@ -280,46 +281,49 @@
       </div>
 
       <!-- Preambles for example selection screen -->
+      <div id="preambles">
+        <div id="preambleFullStem">
+          <h2>
+            On this island, <b style="color: #648fff">tasty</b> mushrooms have a
+            <b>stem height</b> of %s than %f and a <b>cap width</b> of %s than
+            %f.
+          </h2>
+          <div>
+            <p id="studentWarning">
+              Student %i knows about the island's
+              <b>stem height</b> but <b>not</b> its cap width.
+            </p>
+          </div>
+        </div>
 
-      <div id="preambleFullStem">
-        <h2>
-          On this island, <b style="color: #648fff">tasty</b> mushrooms have a
-          <b>stem height</b> of %s than %f and a <b>cap width</b> of %s than %f.
-        </h2>
-        <div>
-          <p id="studentWarning">
-            Student %i knows about the island's
-            <b>stem height</b> but <b>not</b> its cap width.
-          </p>
+        <div id="preambleFullCap">
+          <h2>
+            On this island, <b style="color: #648fff">tasty</b> mushrooms have a
+            <b>stem height</b> of %s than %f and a <b>cap width</b> of %s than
+            %f.
+          </h2>
+          <div>
+            <p id="studentWarning">
+              Student %i knows about the island's
+              <b>cap width</b> but <b>not</b> its stem height.
+            </p>
+          </div>
+        </div>
+
+        <div id="preamblePartial">
+          <h2>
+            On this island, <b style="color: #648fff">tasty</b> mushrooms have a
+            <b>stem height</b> of %s than %f and a <b>cap width</b> of %s than
+            %f.
+          </h2>
+          <div>
+            <p id="studentWarning">
+              Student %i knows about <b>either</b> the island's cap width
+              <b>or</b> its stem height.
+            </p>
+          </div>
         </div>
       </div>
-
-      <div id="preambleFullCap">
-        <h2>
-          On this island, <b style="color: #648fff">tasty</b> mushrooms have a
-          <b>stem height</b> of %s than %f and a <b>cap width</b> of %s than %f.
-        </h2>
-        <div>
-          <p id="studentWarning">
-            Student %i knows about the island's
-            <b>cap width</b> but <b>not</b> its stem height.
-          </p>
-        </div>
-      </div>
-
-      <div id="preamblePartial">
-        <h2>
-          On this island, <b style="color: #648fff">tasty</b> mushrooms have a
-          <b>stem height</b> of %s than %f and a <b>cap width</b> of %s than %f.
-        </h2>
-        <div>
-          <p id="studentWarning">
-            Student %i knows about <b>either</b> the island's cap width
-            <b>or</b> its stem height, but you don't know which.
-          </p>
-        </div>
-      </div>
-
     </div>
   </body>
 </html>

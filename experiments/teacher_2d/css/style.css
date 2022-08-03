@@ -29,8 +29,8 @@ h3 {
   grid-template-rows: repeat(9, 4vw);
   gap: 3px;
   position: relative;
-  /* align-items: center; */
-  /* justify-content: center; */
+  align-items: center;
+  justify-content: center;
 }
 
 #mushrooms {

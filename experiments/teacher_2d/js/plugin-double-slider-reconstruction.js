@@ -277,8 +277,7 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
 
             if (trial.require_movement) {
                 const enable_button = () => {
-                    console.log(slider1.value)
-
+                    // console.log(slider1.value)
                     if (trial.allowed1vals.includes(parseInt(slider1.value)) && trial.allowed2vals.includes(parseInt(slider2.value))) {
                         display_element.querySelector("#jspsych-html-slider-response-next").disabled = false;
                     } else {

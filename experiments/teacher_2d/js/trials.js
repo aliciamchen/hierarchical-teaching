@@ -35,52 +35,9 @@ function classroomInfo(trial) {
             </h4>
             <h2>
             On this island, <b style="color:#648FFF;">tasty</b> mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
-            </h2>` + makeGrid(trial.capThreshold, trial.capDirection, trial.stemThreshold, trial.stemDirection)
+            </h2><br>` + makeGrid(trial.capThreshold, trial.capDirection, trial.stemThreshold, trial.stemDirection)
         ,
         choices: ['Continue']
-    }
-}
-
-function makeLabels(threshold, direction, nLabels) {
-    var labels = []
-    for (let label = 1; label <= nLabels; label++) {
-        if (label < threshold) {
-            if (direction === 'less') {
-                labels.push(`<b style="color: #648FFF">${label}</b>`)
-            } else {
-                labels.push(`<b style="color:#f77140">${label}</b>`)
-            }
-        } else if (label > threshold) {
-            if (direction === 'less') {
-                labels.push(`<b style="color:#f77140">${label}</b>`)
-            } else {
-                labels.push(`<b style="color:#648FFF">${label}</b>`)
-            }
-        } else {
-            labels.push(label)
-        }
-    }
-    return labels;
-}
-// TODO: stim function that takes in trial type
-function checkResponseInConcept(data, trial) {
-    var stemResponse = data.values()[0].response1
-    var capResponse = data.values()[0].response2
-
-    var stemOK = trial.stemDirection === 'less' ? stemResponse < trial.stemThreshold : stemResponse > trial.stemThreshold
-    var capOK = trial.capDirection === 'less' ? capResponse < trial.capThreshold : capResponse > trial.capThreshold
-    return !(stemOK && capOK)
-}
-
-function makeExamplePreamble(trial) {
-    if (trial.scenario === 'nonSeqFull') {
-        return (trial.prior === 'stem' ?
-        sprintf($('#preambleFullStem').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
-        :
-        sprintf($('#preambleFullCap').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
-        )
-    } else {
-        return sprintf($('#preamblePartial').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
     }
 }
 
@@ -137,19 +94,19 @@ function feedback(trial, jsPsych) {
     // extract gridhtml, this doesn't work otherwise
     var gridhtml = $('#mushroomGrid').html()
     return {
-        type: jsPsychHtmlKeyboardResponse,
+        type: jsPsychHtmlButtonResponse,
         stimulus: function () {
 
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
-            var grid = makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml)
+            var grid = makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml) // testing; change later
 
-            return grid + `
+            return `<h2>Your student guessed that the shaded mushrooms below are tasty:</h2> <br>` + grid + `
                 ${firstResponse.scenario === 'seqFeedback' ? `` : ``}
-                <p>${firstResponse.scenario === 'seqFeedback' ? `You will now send another mushroom to your student.` : ''}</p>
-                <p>Press any key to continue.</p>`
+                <p>${firstResponse.scenario === 'seqFeedback' ? `You will now send another mushroom to your student.` : ''}</p>`
         },
-        trial_duration: 20000
+        choices: ['Continue'],
+        trial_duration: 2000000
     }
 }
 
@@ -165,15 +122,19 @@ function sending(jsPsych) {
 }
 
 function secondExample(instructionsParams, trial, jsPsych) {
+    var preamblesHTML = $('#preambles').html()
+    // console.log(preamblesHTML)
     return {
         type: jsPsychDoubleSliderReconstruction,
         require_movement: true,
         stim: function () {
+            // console.log(preamblesHTML)
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
             var stemHeightSent = firstResponse.response1
             var capWidthSent = firstResponse.response2
-            return makeExamplePreamble(trial) + `<b>Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`
+            // console.log(makeExamplePreambleFromHTML(trial, preamblesHTML))
+            return makeExamplePreambleFromHTML(trial, preamblesHTML) + `<b>Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`
         },
         stim_function: function (stemVal, capVal) {
             return `
