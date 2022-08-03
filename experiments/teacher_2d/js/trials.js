@@ -48,11 +48,11 @@ function makeLabels(threshold, direction, nLabels) {
             if (direction === 'less') {
                 labels.push(`<b style="color: #648FFF">${label}</b>`)
             } else {
-                labels.push(`<b style="color:Red">${label}</b>`)
+                labels.push(`<b style="color:#f77140">${label}</b>`)
             }
         } else if (label > threshold) {
             if (direction === 'less') {
-                labels.push(`<b style="color:Red">${label}</b>`)
+                labels.push(`<b style="color:#f77140">${label}</b>`)
             } else {
                 labels.push(`<b style="color:#648FFF">${label}</b>`)
             }
@@ -89,7 +89,7 @@ function firstExample(instructionsParams, trial, jsPsych) {
     var firstExampleTrial = {
         type: jsPsychDoubleSliderReconstruction,
         require_movement: true,
-        stim: makeExamplePreamble(trial) + `<b>Select an example tasty mushroom to send to your student.</b>`,
+        stim: makeExamplePreamble(trial) + `<b>Select an example <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`,
         stim_function: function (stemVal, capVal) {
             return `
             <div>
@@ -134,17 +134,18 @@ function firstExample(instructionsParams, trial, jsPsych) {
 
 
 function feedback(trial, jsPsych) {
+    // extract gridhtml, this doesn't work otherwise
+    var gridhtml = $('#mushroomGrid').html()
     return {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: function () {
 
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
-            // console.log(firstResponse);
+            var grid = makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml)
 
-            // TODO: fix for later
-            return `
-                ${firstResponse.scenario === 'seqFeedback' ? `` : ''}
+            return grid + `
+                ${firstResponse.scenario === 'seqFeedback' ? `` : ``}
                 <p>${firstResponse.scenario === 'seqFeedback' ? `You will now send another mushroom to your student.` : ''}</p>
                 <p>Press any key to continue.</p>`
         },
@@ -172,43 +173,7 @@ function secondExample(instructionsParams, trial, jsPsych) {
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
             var stemHeightSent = firstResponse.response1
             var capWidthSent = firstResponse.response2
-            return `
-        ${trial.scenario == 'seqFeedback' ?
-                    `<h2>
-                    On this island, tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
-                    </h2>
-                    <div style="color:DodgerBlue; text-align: center;">Student ${trial.studentIdx + 1} comes from <b>either</b></div>
-                    <ul style="color:DodgerBlue; display: inline-block; text-align: left;">
-                        <li>
-                        a classroom where they learned that tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold}, but don't know about their <b>cap width</b>.
-                        </li>
-                        <li>
-                        a classroom where they learned that tasty mushrooms have a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}, but don't know about their <b>stem height</b>.
-                        </li>
-                    </ul>
-                    <p>
-                    Your student guessed that the mushrooms circled in green are tasty.
-                    </p>
-                    <p>
-                    Select a second example tasty mushroom to send to your student.
-                    </p>`
-                    :
-                    `<h2>
-            On this island, tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
-            </h2>
-            <div style="color:DodgerBlue; text-align: center;">Student ${trial.studentIdx + 1} comes from <b>either</b></div>
-            <ul style="color:DodgerBlue; display: inline-block; text-align: left;">
-                <li>
-                a classroom where they learned that tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold}, but don't know about their <b>cap width</b>.
-                </li>
-                <li>
-                a classroom where they learned that tasty mushrooms have a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}, but don't know about their <b>stem height</b>.
-                </li>
-            </ul>
-            <p>
-            Select a second example tasty mushroom to send to your student.
-            </p>`
-                }`
+            return makeExamplePreamble(trial) + `<b>Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`
         },
         stim_function: function (stemVal, capVal) {
             return `
@@ -219,6 +184,8 @@ function secondExample(instructionsParams, trial, jsPsych) {
         },
         labels_1: makeLabels(trial.stemThreshold, trial.stemDirection, 8),
         labels_2: makeLabels(trial.capThreshold, trial.capDirection, 8),
+        allowed1vals: trial.stemDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < trial.stemThreshold}) : _.filter(_.range(1, 9), function(i) {return i > trial.stemThreshold}),
+        allowed2vals: trial.capDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < trial.capThreshold}) : _.filter(_.range(1, 9), function(i) {return i > trial.capThreshold}),
         min: 1,
         max: 8,
         prompt1: 'Stem height',
@@ -251,7 +218,7 @@ function sent(jsPsych) {
         stimulus: 'Mushroom sent to student! Waiting for student...',
         choices: "NO_KEYS",
         trial_duration: function () {
-            return jsPsych.randomization.sampleWithoutReplacement([4000, 4500, 5000], 1)[0];
+            return jsPsych.randomization.sampleWithoutReplacement([3000, 4000, 4500], 1)[0];
         }
     }
 }
