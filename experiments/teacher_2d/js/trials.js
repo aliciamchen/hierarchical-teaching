@@ -123,6 +123,8 @@ function sending(jsPsych) {
 
 function secondExample(instructionsParams, trial, jsPsych) {
     var preamblesHTML = $('#preambles').html()
+    var gridhtml = $('#mushroomGrid').html()
+    // TODO: set sizing
     // console.log(preamblesHTML)
     return {
         type: jsPsychDoubleSliderReconstruction,
@@ -134,7 +136,7 @@ function secondExample(instructionsParams, trial, jsPsych) {
             var stemHeightSent = firstResponse.response1
             var capWidthSent = firstResponse.response2
             // console.log(makeExamplePreambleFromHTML(trial, preamblesHTML))
-            return makeExamplePreambleFromHTML(trial, preamblesHTML) + `<b>Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`
+            return makeExamplePreambleFromHTML(trial, preamblesHTML) + `<h4>Your student guessed that the shaded mushrooms below are tasty:</h4>` + makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml) + `<b>Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`
         },
         stim_function: function (stemVal, capVal) {
             return `

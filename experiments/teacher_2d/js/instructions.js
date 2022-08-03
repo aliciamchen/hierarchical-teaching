@@ -56,6 +56,9 @@ function instructionsDirections() {
     <p>
     Although locals know these rules, students are often confused. Your goal is to show students <strong>examples of tasty mushrooms</strong> to teach them the correct rule.
     </p>
+    <p>
+    The tasty mushrooms will be marked in blue.
+    </p>
     `
 }
 
