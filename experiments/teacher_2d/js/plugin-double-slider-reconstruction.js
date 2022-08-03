@@ -66,6 +66,19 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                 default: [],
                 array: true,
             },
+            // Allowed values for slider
+            allowed1vals: {
+                type: jspsych.ParameterType.INT,
+                pretty_name: "Allowed 1 vals",
+                default: [],
+                array: true,
+            },
+            allowed2vals: {
+                type: jspsych.ParameterType.INT,
+                pretty_name: "Allowed 2 vals",
+                default: [],
+                array: true,
+            },
             /** Width of the slider in pixels. */
             slider_width: {
                 type: jspsych.ParameterType.INT,
@@ -130,7 +143,7 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
 
             var html = '<div id="jspsych-html-slider-response-stimulus">' + trial.stim + "</div>"
             // start with default values
-            html += '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(trial.starting_value_1, trial.starting_value_2) +  "</div>";
+            html += '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(trial.starting_value_1, trial.starting_value_2) + "</div>";
             // slider 1
             html += '<div id="jspsych-html-slider-response-wrapper" style="margin: 30px 0px;">';
             html +=
@@ -255,16 +268,24 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
             })
 
 
-
             var response = {
                 rt: null,
                 response: null,
             };
 
+            // console.log(trial.allowed2vals)
+
             if (trial.require_movement) {
                 const enable_button = () => {
-                    display_element.querySelector("#jspsych-html-slider-response-next").disabled = false;
+                    console.log(slider1.value)
+
+                    if (trial.allowed1vals.includes(parseInt(slider1.value)) && trial.allowed2vals.includes(parseInt(slider2.value))) {
+                        display_element.querySelector("#jspsych-html-slider-response-next").disabled = false;
+                    } else {
+                        display_element.querySelector("#jspsych-html-slider-response-next").disabled = true;
+                    }
                 };
+
                 display_element
                     .querySelector("#jspsych-html-slider-response-response1")
                     .addEventListener("mousedown", enable_button);
@@ -283,6 +304,7 @@ var jsPsychDoubleSliderReconstruction = (function (jspsych) {
                 display_element
                     .querySelector("#jspsych-html-slider-response-response2")
                     .addEventListener("change", enable_button);
+
             }
             // end slider stuff
 

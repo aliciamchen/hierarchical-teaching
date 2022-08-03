@@ -97,6 +97,8 @@ function firstExample(instructionsParams, trial, jsPsych) {
             </div>
             `
         },
+        allowed1vals: trial.stemDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < trial.stemThreshold}) : _.filter(_.range(1, 9), function(i) {return i > trial.stemThreshold}),
+        allowed2vals: trial.capDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < trial.capThreshold}) : _.filter(_.range(1, 9), function(i) {return i > trial.capThreshold}),
         labels_1: makeLabels(trial.stemThreshold, trial.stemDirection, 8),
         labels_2: makeLabels(trial.capThreshold, trial.capDirection, 8),
         min: 1,
