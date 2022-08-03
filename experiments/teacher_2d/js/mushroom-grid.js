@@ -1,4 +1,9 @@
 function makeGrid(capThreshold, capDirection, stemThreshold, stemDirection) {
+    // console.log($('#mushroomContainer').children('img'))
+    // $('#mushroomContainer').children('*').css({
+    //     "background-color": ""
+    // })
+    var values = _.range(1, 9)
 
     var stems = stemDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < stemThreshold}) : _.filter(_.range(1, 9), function(i) {return i > stemThreshold})
     var caps = capDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < capThreshold}) : _.filter(_.range(1, 9), function(i) {return i > capThreshold})
@@ -19,19 +24,31 @@ function makeGrid(capThreshold, capDirection, stemThreshold, stemDirection) {
     //                             'bottom': sprintf('%s%%', bottom),
     //                             'left': sprintf('%s%%', left),
     //                         });
-    var htmlCopy = $('#mushroomGrid').clone()
+    // var htmlCopy = $('#mushroomGrid').html()
+
 
     console.log(capThreshold)
     console.log(capDirection)
     console.log(stemThreshold)
     console.log(stemDirection)
 
+    // clear old stuff
+    values.forEach((stemVal) => {
+        values.forEach((capVal) => {
+            // console.log(stemVal)
+            // console.log(capVal)
+            $(`#s${stemVal}c${capVal}`).css({
+                "background-color": ''
+            });
+        })
+    })
+
     stems.forEach((stemVal) => {
         caps.forEach((capVal) => {
             // console.log(stemVal)
             // console.log(capVal)
             $(`#s${stemVal}c${capVal}`).css({
-                "background-color": "#2196F3"
+                "background-color": "#648FFF"
             });
         })
     })

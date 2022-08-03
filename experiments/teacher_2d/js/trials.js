@@ -34,7 +34,7 @@ function classroomInfo(trial) {
             Student ${trial.studentIdx + 1}
             </h4>
             <h2>
-            On this island, tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
+            On this island, <b style="color:#648FFF;">tasty</b> mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
             </h2>` + makeGrid(trial.capThreshold, trial.capDirection, trial.stemThreshold, trial.stemDirection) +
             `<p style="text-align: center;">In this block, you will be teaching ${trial.scenario == 'nonSeqPartial' || trial.scenario == 'nonSeqFull' ? '<b>one</b> lesson' : '<b>two</b> lessons'} to Student ${trial.studentIdx + 1}.</p>`
         ,
@@ -47,7 +47,7 @@ function makeLabels(threshold, direction, nLabels) {
     for (let label = 1; label <= nLabels; label++) {
         if (label < threshold) {
             if (direction === 'less') {
-                labels.push(`<span style="color:ForestGreen">${label}</span>`)
+                labels.push(`<span style="color: #648FFF">${label}</span>`)
             } else {
                 labels.push(`<span style="color:Red">${label}</span>`)
             }
@@ -55,7 +55,7 @@ function makeLabels(threshold, direction, nLabels) {
             if (direction === 'less') {
                 labels.push(`<span style="color:Red">${label}</span>`)
             } else {
-                labels.push(`<span style="color:ForestGreen">${label}</span>`)
+                labels.push(`<span style="color:#648FFF">${label}</span>`)
             }
         } else {
             labels.push(label)
@@ -80,7 +80,7 @@ function firstExample(instructionsParams, trial, jsPsych) {
         stim: `
         ${trial.scenario == 'nonSeqFull' ?
                 `<h2>
-            On this island, tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
+            On this island, <b style="color:#648FFF;">tasty</b> mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
             </h2>
             <div>
             <p style="color:DodgerBlue; text-align: center;">Student ${trial.studentIdx + 1} comes from
@@ -96,7 +96,7 @@ function firstExample(instructionsParams, trial, jsPsych) {
             </p>`
                 :
                 `<h2>
-            On this island, tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
+            On this island, <b style="color:#648FFF;">tasty</b> mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
             </h2>
             <div style="color:DodgerBlue; text-align: center;">Student ${trial.studentIdx + 1} comes from <b>either</b></div>
             <ul style="color:DodgerBlue; display: inline-block; text-align: left;">
@@ -162,8 +162,9 @@ function feedback(trial, jsPsych) {
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
             // console.log(firstResponse);
 
+            // TODO: fix for later
             return `
-                ${firstResponse.scenario === 'seqFeedback' ? `student guess filler` : ''}
+                ${firstResponse.scenario === 'seqFeedback' ? `` : ''}
                 <p>${firstResponse.scenario === 'seqFeedback' ? `You will now send another mushroom to your student.` : ''}</p>
                 <p>Press any key to continue.</p>`
         },
