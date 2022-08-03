@@ -35,8 +35,7 @@ function classroomInfo(trial) {
             </h4>
             <h2>
             On this island, <b style="color:#648FFF;">tasty</b> mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
-            </h2>` + makeGrid(trial.capThreshold, trial.capDirection, trial.stemThreshold, trial.stemDirection) +
-            `<p style="text-align: center;">In this block, you will be teaching ${trial.scenario == 'nonSeqPartial' || trial.scenario == 'nonSeqFull' ? '<b>one</b> lesson' : '<b>two</b> lessons'} to Student ${trial.studentIdx + 1}.</p>`
+            </h2>` + makeGrid(trial.capThreshold, trial.capDirection, trial.stemThreshold, trial.stemDirection)
         ,
         choices: ['Continue']
     }
@@ -47,15 +46,15 @@ function makeLabels(threshold, direction, nLabels) {
     for (let label = 1; label <= nLabels; label++) {
         if (label < threshold) {
             if (direction === 'less') {
-                labels.push(`<span style="color: #648FFF">${label}</span>`)
+                labels.push(`<b style="color: #648FFF">${label}</b>`)
             } else {
-                labels.push(`<span style="color:Red">${label}</span>`)
+                labels.push(`<b style="color:Red">${label}</b>`)
             }
         } else if (label > threshold) {
             if (direction === 'less') {
-                labels.push(`<span style="color:Red">${label}</span>`)
+                labels.push(`<b style="color:Red">${label}</b>`)
             } else {
-                labels.push(`<span style="color:#648FFF">${label}</span>`)
+                labels.push(`<b style="color:#648FFF">${label}</b>`)
             }
         } else {
             labels.push(label)
@@ -73,45 +72,24 @@ function checkResponseInConcept(data, trial) {
     return !(stemOK && capOK)
 }
 
+function makeExamplePreamble(trial) {
+    if (trial.scenario === 'nonSeqFull') {
+        return (trial.prior === 'stem' ?
+        sprintf($('#preambleFullStem').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
+        :
+        sprintf($('#preambleFullCap').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
+        )
+    } else {
+        return sprintf($('#preamblePartial').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
+    }
+}
+
+
 function firstExample(instructionsParams, trial, jsPsych) {
     var firstExampleTrial = {
         type: jsPsychDoubleSliderReconstruction,
         require_movement: true,
-        stim: `
-        ${trial.scenario == 'nonSeqFull' ?
-                `<h2>
-            On this island, <b style="color:#648FFF;">tasty</b> mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
-            </h2>
-            <div>
-            <p style="color:DodgerBlue; text-align: center;">Student ${trial.studentIdx + 1} comes from
-                ${trial.prior == 'stem' ? `
-                a classroom where they learned that tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold}, but don't know about their <b>cap width</b>.
-                ` : `
-                a classroom where they learned that tasty mushrooms have a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}, but don't know about their <b>stem height</b>.
-                `}
-            </p>
-            </div>
-            <p>
-            Select an example tasty mushroom to send to your student.
-            </p>`
-                :
-                `<h2>
-            On this island, <b style="color:#648FFF;">tasty</b> mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold} and a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}.
-            </h2>
-            <div style="color:DodgerBlue; text-align: center;">Student ${trial.studentIdx + 1} comes from <b>either</b></div>
-            <ul style="color:DodgerBlue; display: inline-block; text-align: left;">
-                <li>
-                a classroom where they learned that tasty mushrooms have a <b>stem height</b> of ${trial.stemDirection == 'less' ? 'less' : 'greater'} than ${trial.stemThreshold}, but don't know about their <b>cap width</b>.
-                </li>
-                <li>
-                a classroom where they learned that tasty mushrooms have a <b>cap width</b> of ${trial.capDirection == 'less' ? 'less' : 'greater'} than ${trial.capThreshold}, but don't know about their <b>stem height</b>.
-                </li>
-            </ul>
-            <p>
-            Select an example tasty mushroom to send to your student.
-            </p>`
-            }
-        `,
+        stim: makeExamplePreamble(trial) + `<b>Select an example tasty mushroom to send to your student.</b>`,
         stim_function: function (stemVal, capVal) {
             return `
             <div>
