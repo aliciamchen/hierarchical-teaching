@@ -48,13 +48,21 @@ var L0Mean = cache(function (examples, hypers) {
 var islandPrior = Categorical({vs: params.trueThetas})
 
 var L0 = cache(function (examplesArray, learnerHypers) {
-    var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
-    var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
-    return Beta_disc({
-        a: _.toNumber(learnerHypers.a + heads),
-        b: _.toNumber(learnerHypers.b + tails)
-    });
+    return Infer ({ method: 'enumerate' }, function () {
+        var theta = sample(islandPrior);
+        var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
+        var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
+        var learnerDist = Beta({
+            a: _.toNumber(learnerHypers.a + heads) == 0 ? 1 : _.toNumber(learnerHypers.a + heads),
+            b: _.toNumber(learnerHypers.b + tails) == 0 ? 1 : _.toNumber(learnerHypers.b + tails)
+        });
+        
+        observe(learnerDist, theta);
+        return theta;
+    })
 });
+
+viz.hist(L0([params.teacherExamples['A']], params.learnerHypers[1]))
 
 
 // pragmatic speaker
