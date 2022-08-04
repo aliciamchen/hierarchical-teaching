@@ -1,8 +1,15 @@
+
 p {
   width: 70%;
   margin: auto;
   margin-bottom: 15px;
   text-align: left;
+}
+
+h3 {
+  width: 80%;
+  text-align: center;
+  margin: auto;
 }
 
 .center {
@@ -11,33 +18,40 @@ p {
   margin-right: auto;
 }
 
-.row {
-  display: flex;
-  padding: 10 10px;
+#studentWarning {
+  color: #aa59d9;
+  text-align: center
 }
 
-.mushroomGrid {
-  display: inline-grid;
-  grid-template-columns: repeat(8, 30px);
-  grid-template-rows: repeat(8, 30px);
-  gap: 1px;
+#mushroomContainer {
+  display: grid;
+  grid-template-columns: repeat(9, 4vw);
+  grid-template-rows: repeat(9, 4vw);
+  gap: 3px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
 }
 
-.mushroomGrid div {
-    width: 50px;
-    height: 50px;
+#mushrooms {
+  margin: auto;
+  width: 60%;
 }
 
-.column {
-    padding: 0 0px;
+#label {
+  /* position: absolute; */
+  font-size: 10px;
+  float: bottom;
+  bottom: 0px;
+  /* justify-content: ; */
 }
 
-.column img {
-  max-width: 6%;
+#mushroomContainer div {
+  aspect-ratio: 1;
+}
+
+#mushroomContainer img {
+  width: 100%;
   height: auto;
-  border: 8px solid transparent;
+  /* border: 0.01px solid green; */
 }
-/* .column img {
-  margin-top: 10px;
-  vertical-align: middle;
-} */
