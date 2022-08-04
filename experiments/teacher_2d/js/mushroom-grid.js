@@ -28,7 +28,8 @@ function makeGrid(capThreshold, capDirection, stemThreshold, stemDirection) {
 }
 
 // alternate version of function for dynamic feedback (this one takes in a HTML string)
-function makeGridFromHTML(capThreshold, capDirection, stemThreshold, stemDirection, myHTML) {
+// size is size of grid elt (like something like `3vw`)
+function makeGridFromHTML(capThreshold, capDirection, stemThreshold, stemDirection, myHTML, size) {
 
     $html = $(myHTML)
 
@@ -37,6 +38,10 @@ function makeGridFromHTML(capThreshold, capDirection, stemThreshold, stemDirecti
     var stems = stemDirection === 'less' ? _.filter(values, function(i) {return i < stemThreshold}) : _.filter(values, function(i) {return i > stemThreshold})
     var caps = capDirection === 'less' ? _.filter(values, function(i) {return i < capThreshold}) : _.filter(values, function(i) {return i > capThreshold})
 
+    $html.find(`#mushroomContainer`).css({
+        "grid-template-columns": `repeat(9, ${size})`,
+        "grid-template-rows": `repeat(9, ${size})`
+    })
     // clear old coloring
     // (there's probably a better way to do this w/ css children but this suffices)
     values.forEach((stemVal) => {

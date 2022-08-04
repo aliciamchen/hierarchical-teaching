@@ -99,11 +99,11 @@ function feedback(trial, jsPsych) {
 
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
-            var grid = makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml) // testing; change later
+            var grid = makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml, '3vw') // testing; change later
 
             return `<h2>Your student guessed that the shaded mushrooms below are tasty:</h2> <br>` + grid + `
                 ${firstResponse.scenario === 'seqFeedback' ? `` : ``}
-                <p>${firstResponse.scenario === 'seqFeedback' ? `You will now send another mushroom to your student.` : ''}</p>`
+                <p>${firstResponse.scenario === 'seqFeedback' ? `<p style="text-align: center;">You will now send another mushroom to your student.</p>` : ''}</p>`
         },
         choices: ['Continue'],
         trial_duration: 2000000
@@ -136,7 +136,11 @@ function secondExample(instructionsParams, trial, jsPsych) {
             var stemHeightSent = firstResponse.response1
             var capWidthSent = firstResponse.response2
             // console.log(makeExamplePreambleFromHTML(trial, preamblesHTML))
-            return makeExamplePreambleFromHTML(trial, preamblesHTML) + `<h4>Your student guessed that the shaded mushrooms below are tasty:</h4>` + makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml) + `<b>Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`
+            return makeExamplePreambleFromHTML(trial, preamblesHTML)
+             + `<h4>Your student guessed that the shaded mushrooms below are tasty:</h4>`
+             + makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml, '1.1vw')
+            + `<br>`
+             + `<b>Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`
         },
         stim_function: function (stemVal, capVal) {
             return `
