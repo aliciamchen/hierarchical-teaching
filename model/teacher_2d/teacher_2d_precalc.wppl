@@ -1,0 +1,144 @@
+// precalculate feedback for 2d experiment
+
+var params = {
+    directions: ['less', 'more'],
+    alpha: 1,
+    nBins: 10,
+    inferOptions: { method: 'MCMC', samples: 5000 },
+    // classrooms: [0, 1],
+    // classroomPriors: {
+    //     0: {stemThreshold: 5, stemDirection: 'less'},
+    //     1: {capThreshold: 7, capDirection: 'less'}
+    // },
+    // trueLearnerClass: 0,
+    // trueH: {stemThreshold: 5, stemDirection: 'less', capThreshold: 7, capDirection: 'less'}
+};
+
+var trueConceptOptions = {
+    stemThresholds: [2.5, 4.5, 6.5],
+    capThresholds: [2.5, 4.5, 6.5],
+    stemDirections: ['less', 'greater'],
+    capDirections: ['less', 'greater']
+}
+
+var priors = ['stem', 'cap']
+
+var xs = _.range(0, params.nBins + 1), ys = _.range(0, params.nBins + 1);
+
+
+/////
+
+
+var prior = function (hypers) {
+
+    var stemThreshold = typeof hypers.stemThreshold == "undefined" ? uniformDraw(_.range(1, params.nBins)) : hypers.stemThreshold;
+    var capThreshold = typeof hypers.capThreshold == "undefined" ? uniformDraw(_.range(1, params.nBins)) : hypers.capThreshold;
+
+    var stemDirection = typeof hypers.stemDirection == "undefined" ? uniformDraw(params.directions) : hypers.stemDirection;
+    var capDirection = typeof hypers.capDirection == "undefined" ? uniformDraw(params.directions) : hypers.capDirection;
+
+    return {
+        stemThreshold: stemThreshold,
+        stemDirection: stemDirection,
+        capThreshold: capThreshold,
+        capDirection: capDirection
+    }
+}
+
+var L0 = cache(function (example, hypers) {
+
+    return Infer({ method: 'enumerate' }, function () {
+
+        var prior = prior(hypers);
+
+        var stemThreshold = prior.stemThreshold, capThreshold = prior.capThreshold
+        var stemDirection = prior.stemDirection, capDirection = prior.capDirection
+
+        var ps_x = stemDirection == 'less' ? map(function (i) { return i < stemThreshold ? 1 : 0 }, xs) : map(function (i) { return i > stemThreshold ? 1 : 0 }, xs)
+        var ps_y = capDirection == 'less' ? map(function (i) { return i < capThreshold ? 1 : 0 }, ys) : map(function (i) { return i > capThreshold ? 1 : 0 }, ys)
+
+        observe(Categorical({ vs: xs, ps: ps_x }), example.stem);
+        observe(Categorical({ vs: ys, ps: ps_y }), example.cap);
+
+        return {
+            stemThreshold: stemThreshold,
+            stemDirection: stemDirection,
+            capThreshold: capThreshold,
+            capDirection: capDirection
+        }
+    })
+});
+
+
+var findPossibleResponses = function (trueH) {
+    var values = _.range(1, 9)
+    var stems = trueH.stemDirection === 'less' ? filter(function (i) { return i < trueH.stemThreshold }, values) : filter(function (i) { return i > trueH.stemThreshold }, values)
+    var caps = trueH.capDirection === 'less' ? filter(function (i) { return i < trueH.capThreshold }, values) : filter(function (i) { return i > trueH.capThreshold }, values)
+    return {
+        possibleStems: stems,
+        possibleCaps: caps
+    }
+}
+
+// `prior` is either 'stem' or 'cap'
+// this function just takes the prior and outputs the stuff in the true H that learner knows
+var findHypers = function (trueH, prior) {
+    if (prior === 'stem') {
+        return {
+            stemThreshold: trueH.stemThreshold,
+            stemDirection: trueH.stemDirection
+        }
+    } else if (prior === 'cap') {
+        return {
+            capThreshold: trueH.capThreshold,
+            capDirection: trueH.capDirection
+        }
+    }
+}
+
+
+
+var makeFeedback = function () {
+    return _.flattenDeep(
+        map(function (stemThreshold) {
+            return map(function (capThreshold) {
+                return map(function (stemDirection) {
+                    return map(function (capDirection) {
+
+                        var trueH = {
+                            stemThreshold: stemThreshold,
+                            capThreshold: capThreshold,
+                            stemDirection: stemDirection,
+                            capDirection: capDirection
+                        }
+
+                        var response = findPossibleResponses(trueH)
+                        // console.log(trueH)
+                        // console.log(response)
+                        return map(function (prior) {
+                            return map(function (stemResponse) {
+                                return map(function (capResponse) {
+
+                                    var learnerGuess = MAP(L0({ stem: stemResponse, cap: capResponse }, findHypers(trueH, prior)))
+                                    // console.log({stemResponse: stemResponse, capResponse: capResponse})
+                                    // console.log(prior)
+                                    return {
+                                        trueH: trueH,
+                                        prior: prior,
+                                        response: {
+                                            stemResponse: stemResponse,
+                                            capResponse: capResponse
+                                        },
+                                        learnerGuess: learnerGuess.val
+                                    }
+                                }, response.possibleCaps)
+                            }, response.possibleStems)
+                        }, priors)
+                    }, trueConceptOptions.capDirections)
+                }, trueConceptOptions.stemDirections)
+            }, trueConceptOptions.capThresholds)
+        }, trueConceptOptions.stemThresholds)
+    )
+}
+
+console.log(makeFeedback())
