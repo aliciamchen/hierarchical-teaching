@@ -10,8 +10,8 @@ function exitSurvey() {
         data: { type: 'response' },
         on_finish:
             function (data) {
-                var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
-                data.totalBonus = Number(totalBonus);
+                // var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
+                // data.totalBonus = Number(totalBonus);
                 data.nAttentionChecksPassed = jsPsych.data.get().select('passAttentionCheck').sum()
                 data.passAllAttentionChecks = jsPsych.data.get().select('passAttentionCheck').sum() >= 2 ? true : false
             },
@@ -23,8 +23,8 @@ function debrief(instructionsParams, jsPsych){
         type: jsPsychHtmlKeyboardResponse,
         stimulus: function () {
 
-            var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
-            var totalPay = Number(totalBonus) + Number(instructionsParams.basePay);
+            // var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
+            // var totalPay = Number(totalBonus) + Number(instructionsParams.basePay);
             return `
                     <p>Thanks for participating in the experiment!</p>
                     <p>If you were curious, you weren't interacting with a real learner.</p>

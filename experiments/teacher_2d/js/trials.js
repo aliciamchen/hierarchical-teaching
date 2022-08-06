@@ -138,7 +138,8 @@ function firstExample(instructionsParams, trial, jsPsych) {
         ,
         on_finish: function (data) {
             // TODO: add feedback stuff here
-            data.feedback = 'placeholder feedback'
+            data.feedback = fetchLearnerFeedback(trial, data.response1, data.response2)
+            console.log('feedback' + data.feedback)
         }
     }
 }
@@ -241,6 +242,7 @@ function secondExample(instructionsParams, trial, jsPsych) {
         on_finish: function (data) {
             // TODO: add feedback stuff here
             data.bonus = 'placeholder calculated bonus'
+
         }
     }
 }

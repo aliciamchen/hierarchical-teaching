@@ -27,10 +27,22 @@ const factors = {
     capDirection: trueConceptOptions.capDirections
 };
 
+// for testing
+const testTrialSeq = {
+    scenario: 'seqFeedback',
+    prior: 'stem',
+    stemThreshold: 4.5,
+    capThreshold: 2.5,
+    stemDirection: 'less',
+    capDirection: 'less',
+    studentIdx: 1
+}
+
 
 
 $(function () {
     $('#templates').hide();
+
     const local_testing = false;
 
     var jsPsych = initJsPsych({
@@ -90,9 +102,12 @@ $(function () {
 
     var timeline = [];
     timeline.push(preload())
-    // timeline.push(intro(instructionsParams))
-    // timeline.push(comprehensionLoop(instructionsParams, jsPsych))
+    timeline.push(intro(instructionsParams))
+    timeline.push(comprehensionLoop(instructionsParams, jsPsych))
     timeline.push(makeAllTrials(design, jsPsych))
+
+    // for testing
+    // timeline.push(makeTrialsForScenario(instructionsParams, testTrialSeq, design, jsPsych))
 
     timeline.push(exitSurvey())
     if (!local_testing) {
