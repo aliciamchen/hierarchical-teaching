@@ -3,14 +3,73 @@ function makeAllTrials(design, jsPsych) {
     // todo: loop through design, do `makeTrial` for each part
     // TODO: add attention trials here s
 
+    const attentionLocations = [3, 8, 14]
+    const attentionParams = [[1, 8], [8, 1], [4, 5]]
+    var attentionTrials = makeAttentionTrials(attentionParams, jsPsych)
     // for trial in design
     trials = []
     for (let i = 0; i < design.length; i++) {
         var currTrial = design[i]
         currTrial['studentIdx'] = i
         trials.push(makeTrialsForScenario(instructionsParams, currTrial, design, jsPsych))
+
+        // Add attention check
+        if (attentionLocations.includes(i)) {
+            trials.push(jsPsych.randomization.sampleWithoutReplacement(attentionTrials, 1)[0])
+            trials.push(sending(jsPsych))
+            trials.push(sent(jsPsych))
+        }
     }
     return trials.flat()
+}
+
+function makeAttentionTrials(attentionParams, jsPsych) {
+    var attentionTrials = []
+
+    for (let i = 0; i < attentionParams.length; i++) {
+
+        var attentionMain = {
+            type: jsPsychDoubleSliderReconstruction,
+            require_movement: true,
+            stim: `
+            <h2>This is an attention check.</h2>
+            <p>
+            Select a mushroom with a stem height of <b>${attentionParams[i][0]}</b> and a cap width of <b>${attentionParams[i][1]}</b>.
+            </p>
+            `,
+            stim_function: function (stemVal, capVal) {
+                return `
+                <div>
+                <img src='img/mushroom_s${stemVal}c${capVal}.png' width="200"></img>
+                </div>
+                `
+            },
+            allowed1vals: _.range(1, 9),
+            allowed2vals: _.range(1, 9),
+            labels_1: makeLabels(0.5, 'greater', 8),
+            labels_2: makeLabels(0.5, 'greater', 8),
+            min: 1,
+            max: 8,
+            prompt1: 'Stem height',
+            prompt2: 'Cap width',
+            slider_width: 500,
+            button_label: 'Send mushroom to student',
+            trial_duration: instructionsParams.timeout * 10000,
+            data: {
+                type: 'attention',
+                attentionParams: attentionParams[i]
+            },
+            on_finish: function (data) {
+                data.passAttentionCheck = (data.response1 == data.attentionParams[0]) && (data.response2 == data.attentionParams[1])
+                console.log(data.passAttentionCheck)
+            }
+        }
+
+        attentionTrials.push(attentionMain)
+
+
+    }
+    return attentionTrials
 }
 
 
@@ -43,7 +102,7 @@ function classroomInfo(trial) {
 
 
 function firstExample(instructionsParams, trial, jsPsych) {
-    var firstExampleTrial = {
+    return {
         type: jsPsychDoubleSliderReconstruction,
         require_movement: true,
         stim: makeExamplePreamble(trial) + `<b>Select an example <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`,
@@ -82,17 +141,13 @@ function firstExample(instructionsParams, trial, jsPsych) {
             data.feedback = 'placeholder feedback'
         }
     }
-
-    return {
-        timeline: [firstExampleTrial],
-        loop_function: function (data) { return checkResponseInConcept(data, trial) }
-    }
 }
 
 
 function feedback(trial, jsPsych) {
     // extract gridhtml, this doesn't work otherwise
     var gridhtml = $('#mushroomGrid').html()
+
     return {
         type: jsPsychHtmlButtonResponse,
         stimulus: function () {
@@ -102,14 +157,14 @@ function feedback(trial, jsPsych) {
             var stemResponse = firstResponse.response1
             var capResponse = firstResponse.response2
             var learnerFeedback = fetchLearnerFeedback(trial, stemResponse, capResponse)
-            var grid = makeGridFromHTML(learnerFeedback.stemThreshold, learnerFeedback.stemDirection, learnerFeedback.capThreshold, learnerFeedback.capDirection, gridhtml, '3vw') // testing; change later
+            var grid = makeGridFromHTML(learnerFeedback.capThreshold, learnerFeedback.capDirection, learnerFeedback.stemThreshold, learnerFeedback.stemDirection, gridhtml, '3vw') // testing; change later
 
             return `<h2>Your student guessed that the shaded mushrooms below are tasty:</h2> <br>` + grid + `
                 ${firstResponse.scenario === 'seqFeedback' ? `` : ``}
                 <p>${firstResponse.scenario === 'seqFeedback' ? `<p style="text-align: center;">You will now send another mushroom to your student.</p>` : ''}</p>`
         },
         choices: ['Continue'],
-        trial_duration: 2000000
+        trial_duration: 200000
     }
 }
 
@@ -136,13 +191,15 @@ function secondExample(instructionsParams, trial, jsPsych) {
             // console.log(preamblesHTML)
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
-            var stemHeightSent = firstResponse.response1
-            var capWidthSent = firstResponse.response2
-            // console.log(makeExamplePreambleFromHTML(trial, preamblesHTML))
+            var stemResponse = firstResponse.response1
+            var capResponse = firstResponse.response2
+            var learnerFeedback = fetchLearnerFeedback(trial, stemResponse, capResponse)
+            var grid = makeGridFromHTML(learnerFeedback.capThreshold, learnerFeedback.capDirection, learnerFeedback.stemThreshold, learnerFeedback.stemDirection, gridhtml, '1.1vw') // testing; change later
+
             return trial.scenario === 'seqFeedback' ?
                 (makeExamplePreambleFromHTML(trial, preamblesHTML)
                     + `<h4>Your student guessed that the shaded mushrooms below are tasty:</h4>`
-                    + makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml, '1.1vw')
+                    +   grid
                     + `<br>`
                     + `<p style="text-align: center;">Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</p>`)
                 : (
