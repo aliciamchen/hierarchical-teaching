@@ -104,6 +104,7 @@ $(function () {
     timeline.push(preload())
     timeline.push(intro(instructionsParams))
     timeline.push(comprehensionLoop(instructionsParams, jsPsych))
+    timeline.push(beginning())
     timeline.push(makeAllTrials(design, jsPsych))
 
     // for testing

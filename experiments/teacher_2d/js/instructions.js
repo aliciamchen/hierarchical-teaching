@@ -176,7 +176,7 @@ function instructionsMoney(instructionsParams) {
     Make sure to send each student a mushroom on every lesson. You have ${instructionsParams.timeout} seconds to send a mushroom for every lesson. If you miss a mushroom, you can't earn a bonus for that student.
     </p>
     <p>
-    We will tell you how much bonus you have earned at the end of the study.
+    It takes a few days to test the students! We will award you your bonus a few days after the study.
     </p>
     <p>
     <b>

@@ -7,9 +7,17 @@ function makeAllTrials(design, jsPsych) {
     const attentionLocations = [3, 8, 14]
     const attentionParams = [[1, 8], [8, 1], [4, 5]]
     var attentionTrials = makeAttentionTrials(attentionParams, jsPsych)
+    var sentAttention = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: 'Mushroom sent to student!',
+        choices: "NO_KEYS",
+        trial_duration: function () {
+            return jsPsych.randomization.sampleWithoutReplacement([3000, 4000, 4500], 1)[0];
+        }
+    }
+
     // for trial in design
     trials = []
-
     for (let i = 0; i < design.length; i++) {
         var currTrial = design[i]
         currTrial['studentIdx'] = i
@@ -19,7 +27,7 @@ function makeAllTrials(design, jsPsych) {
         if (attentionLocations.includes(i)) {
             trials.push(jsPsych.randomization.sampleWithoutReplacement(attentionTrials, 1)[0])
             trials.push(sending(jsPsych))
-            trials.push(sent(jsPsych))
+            trials.push(sentAttention)
         }
     }
     return trials.flat()
