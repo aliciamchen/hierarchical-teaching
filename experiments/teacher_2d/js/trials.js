@@ -54,8 +54,8 @@ function firstExample(instructionsParams, trial, jsPsych) {
             </div>
             `
         },
-        allowed1vals: trial.stemDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < trial.stemThreshold}) : _.filter(_.range(1, 9), function(i) {return i > trial.stemThreshold}),
-        allowed2vals: trial.capDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < trial.capThreshold}) : _.filter(_.range(1, 9), function(i) {return i > trial.capThreshold}),
+        allowed1vals: trial.stemDirection === 'less' ? _.filter(_.range(1, 9), function (i) { return i < trial.stemThreshold }) : _.filter(_.range(1, 9), function (i) { return i > trial.stemThreshold }),
+        allowed2vals: trial.capDirection === 'less' ? _.filter(_.range(1, 9), function (i) { return i < trial.capThreshold }) : _.filter(_.range(1, 9), function (i) { return i > trial.capThreshold }),
         labels_1: makeLabels(trial.stemThreshold, trial.stemDirection, 8),
         labels_2: makeLabels(trial.capThreshold, trial.capDirection, 8),
         min: 1,
@@ -99,7 +99,10 @@ function feedback(trial, jsPsych) {
 
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
-            var grid = makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml, '3vw') // testing; change later
+            var stemResponse = firstResponse.response1
+            var capResponse = firstResponse.response2
+            var learnerFeedback = fetchLearnerFeedback(trial, stemResponse, capResponse)
+            var grid = makeGridFromHTML(learnerFeedback.stemThreshold, learnerFeedback.stemDirection, learnerFeedback.capThreshold, learnerFeedback.capDirection, gridhtml, '3vw') // testing; change later
 
             return `<h2>Your student guessed that the shaded mushrooms below are tasty:</h2> <br>` + grid + `
                 ${firstResponse.scenario === 'seqFeedback' ? `` : ``}
@@ -136,11 +139,17 @@ function secondExample(instructionsParams, trial, jsPsych) {
             var stemHeightSent = firstResponse.response1
             var capWidthSent = firstResponse.response2
             // console.log(makeExamplePreambleFromHTML(trial, preamblesHTML))
-            return makeExamplePreambleFromHTML(trial, preamblesHTML)
-             + `<h4>Your student guessed that the shaded mushrooms below are tasty:</h4>`
-             + makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml, '1.1vw')
-            + `<br>`
-             + `<b>Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</b>`
+            return trial.scenario === 'seqFeedback' ?
+                (makeExamplePreambleFromHTML(trial, preamblesHTML)
+                    + `<h4>Your student guessed that the shaded mushrooms below are tasty:</h4>`
+                    + makeGridFromHTML(1.5, 'less', 5.5, 'greater', gridhtml, '1.1vw')
+                    + `<br>`
+                    + `<p style="text-align: center;">Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</p>`)
+                : (
+                    makeExamplePreambleFromHTML(trial, preamblesHTML)
+                    + `<br>`
+                    + `<p style="text-align: center;">Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</p>`
+                )
         },
         stim_function: function (stemVal, capVal) {
             return `
@@ -151,8 +160,8 @@ function secondExample(instructionsParams, trial, jsPsych) {
         },
         labels_1: makeLabels(trial.stemThreshold, trial.stemDirection, 8),
         labels_2: makeLabels(trial.capThreshold, trial.capDirection, 8),
-        allowed1vals: trial.stemDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < trial.stemThreshold}) : _.filter(_.range(1, 9), function(i) {return i > trial.stemThreshold}),
-        allowed2vals: trial.capDirection === 'less' ? _.filter(_.range(1, 9), function(i) {return i < trial.capThreshold}) : _.filter(_.range(1, 9), function(i) {return i > trial.capThreshold}),
+        allowed1vals: trial.stemDirection === 'less' ? _.filter(_.range(1, 9), function (i) { return i < trial.stemThreshold }) : _.filter(_.range(1, 9), function (i) { return i > trial.stemThreshold }),
+        allowed2vals: trial.capDirection === 'less' ? _.filter(_.range(1, 9), function (i) { return i < trial.capThreshold }) : _.filter(_.range(1, 9), function (i) { return i > trial.capThreshold }),
         min: 1,
         max: 8,
         prompt1: 'Stem height',

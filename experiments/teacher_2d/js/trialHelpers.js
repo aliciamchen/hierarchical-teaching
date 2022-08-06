@@ -11,9 +11,9 @@ function checkResponseInConcept(data, trial) {
 function makeExamplePreamble(trial) {
     if (trial.scenario === 'nonSeqFull') {
         return (trial.prior === 'stem' ?
-        sprintf($('#preambleFullStem').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
-        :
-        sprintf($('#preambleFullCap').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
+            sprintf($('#preambleFullStem').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
+            :
+            sprintf($('#preambleFullCap').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
         )
     } else {
         return sprintf($('#preamblePartial').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
@@ -26,9 +26,9 @@ function makeExamplePreambleFromHTML(trial, myHTML) {
     $html = $(myHTML)
     if (trial.scenario === 'nonSeqFull') {
         return (trial.prior === 'stem' ?
-        sprintf($html.filter('#preambleFullStem').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
-        :
-        sprintf($html.filter('#preambleFullCap').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
+            sprintf($html.filter('#preambleFullStem').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
+            :
+            sprintf($html.filter('#preambleFullCap').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
         )
     } else {
         return sprintf($html.filter('#preamblePartial').html(), trial.stemDirection, trial.stemThreshold, trial.capDirection, trial.capThreshold, trial.studentIdx + 1)
@@ -56,3 +56,40 @@ function makeLabels(threshold, direction, nLabels) {
     }
     return labels;
 }
+
+
+function getJSON(path) {
+    return fetch(path).then(response => response.json());
+}
+
+function fetchLearnerFeedback(currTrial, stemResponse, capResponse) {
+
+    var arr = null;
+
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': "./precalc_2d.json",
+        'dataType': "json",
+        'success': function (data) {
+            thisTrial = data.filter(
+                x => (
+                    x.trueH.stemThreshold == currTrial.stemThreshold
+                    && x.trueH.stemDirection == currTrial.stemDirection
+                    && x.trueH.capThreshold == currTrial.capThreshold
+                    && x.trueH.capDirection == currTrial.capDirection
+                    && x.prior == currTrial.prior
+                    && x.response.stemResponse == stemResponse
+                    && x.response.capResponse == capResponse
+                )
+
+            )
+
+            learnerFeedback = thisTrial[0].learnerGuess
+            arr = learnerFeedback;
+        }
+    });
+
+    console.log(arr)
+    return arr;
+};
