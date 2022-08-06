@@ -1,18 +1,7 @@
 // precalculate feedback for 2d experiment
+// webppl teacher_2d_precalc.wppl --require webppl-json
 
-var params = {
-    directions: ['less', 'more'],
-    alpha: 1,
-    nBins: 10,
-    inferOptions: { method: 'MCMC', samples: 5000 },
-    // classrooms: [0, 1],
-    // classroomPriors: {
-    //     0: {stemThreshold: 5, stemDirection: 'less'},
-    //     1: {capThreshold: 7, capDirection: 'less'}
-    // },
-    // trueLearnerClass: 0,
-    // trueH: {stemThreshold: 5, stemDirection: 'less', capThreshold: 7, capDirection: 'less'}
-};
+var directions = ['less', 'greater']
 
 var trueConceptOptions = {
     stemThresholds: [2.5, 4.5, 6.5],
@@ -23,7 +12,7 @@ var trueConceptOptions = {
 
 var priors = ['stem', 'cap']
 
-var xs = _.range(0, params.nBins + 1), ys = _.range(0, params.nBins + 1);
+var xs = _.range(1, 9), ys = _.range(1, 9);
 
 
 /////
@@ -31,11 +20,11 @@ var xs = _.range(0, params.nBins + 1), ys = _.range(0, params.nBins + 1);
 
 var prior = function (hypers) {
 
-    var stemThreshold = typeof hypers.stemThreshold == "undefined" ? uniformDraw(_.range(1, params.nBins)) : hypers.stemThreshold;
-    var capThreshold = typeof hypers.capThreshold == "undefined" ? uniformDraw(_.range(1, params.nBins)) : hypers.capThreshold;
+    var stemThreshold = typeof hypers.stemThreshold == "undefined" ? uniformDraw(_.range(1.5, 8, 0.5)) : hypers.stemThreshold;
+    var capThreshold = typeof hypers.capThreshold == "undefined" ? uniformDraw(_.range(1.5, 8, 0.5)) : hypers.capThreshold;
 
-    var stemDirection = typeof hypers.stemDirection == "undefined" ? uniformDraw(params.directions) : hypers.stemDirection;
-    var capDirection = typeof hypers.capDirection == "undefined" ? uniformDraw(params.directions) : hypers.capDirection;
+    var stemDirection = typeof hypers.stemDirection == "undefined" ? uniformDraw(directions) : hypers.stemDirection;
+    var capDirection = typeof hypers.capDirection == "undefined" ? uniformDraw(directions) : hypers.capDirection;
 
     return {
         stemThreshold: stemThreshold,
@@ -113,15 +102,13 @@ var makeFeedback = function () {
                         }
 
                         var response = findPossibleResponses(trueH)
-                        // console.log(trueH)
-                        // console.log(response)
+
                         return map(function (prior) {
                             return map(function (stemResponse) {
                                 return map(function (capResponse) {
 
                                     var learnerGuess = MAP(L0({ stem: stemResponse, cap: capResponse }, findHypers(trueH, prior)))
-                                    // console.log({stemResponse: stemResponse, capResponse: capResponse})
-                                    // console.log(prior)
+
                                     return {
                                         trueH: trueH,
                                         prior: prior,
@@ -141,4 +128,7 @@ var makeFeedback = function () {
     )
 }
 
-console.log(makeFeedback())
+var output = makeFeedback()
+
+json.write('../../experiments/teacher_2d/precalc_2d.json', output);
+console.log('success! :)');
