@@ -26,8 +26,14 @@ function instructionsIntro() {
 
 function instructionsMycotopiaIntro() {
     return `
+    <h2>🏝 Mycotopia 🏝</h2>
     <p>
-    You live on Mycotopia, an archipelago of islands which is famous for its large variety of native mushrooms. Locals know that some of the mushrooms are tasty but others are bitter. Every year people visit the islands to taste the mushrooms, but it's often hard for them to tell the difference between tasty mushrooms and bitter ones.
+    You live on Mycotopia, an archipelago of islands that is famous for its large variety of native mushrooms 🍄
+    </p>
+    <p>Locals know that some of the mushrooms are <b>tasty</b> but others are <b>bitter</b>.
+    </p>
+    <p>
+    Every year people visit the islands to taste the mushrooms, but it's often hard for them to tell the difference between tasty mushrooms and bitter ones. 😕
     </p>
     `
 }
@@ -35,18 +41,29 @@ function instructionsMycotopiaIntro() {
 function instructionsStemCapIntro() {
     return `
     <p>
-    The first thing every child learns on Mycotopia is mushrooms primarily differ in their <strong>stem height</strong> and <strong>cap width</strong>. You can always tell whether a mushroom is tasty or bitter based on these two features, but different islands have different rules; a mushroom that is tasty on one island may be bitter on another island.
+    The first thing every child learns on Mycotopia is that mushrooms primarily differ in their <strong>stem height</strong> and <strong>cap width</strong>.
+    </p>
+    <p>
+    You can always tell whether a mushroom is tasty or bitter based on these two features, but <b>different islands have different rules</b>; a mushroom that is tasty on one island may be bitter on another island.
     </p>
     `
 }
 
 function instructionsStemCapExamples() {
+    var gridhtml = $('#mushroomGrid').html()
     return `
-    <p>
-    For example, on one island, mushrooms with a stem height greater than 3 inches and a cap width less than 7 may be tasty.
+    <p style="text-align: center;">
+    For example, on one island, mushrooms with a stem height greater than 6.5 inches and a cap width less than 3.5 inches may be tasty:
     </p>
-    <p>
+    ${makeGridFromHTML(3.5, 'less', 6.5, 'greater', gridhtml, '1.8vw')}
+    <br>
+    <p style="text-align: center;">
     But on another island, it may be the other way around:
+    </p>
+    ${makeGridFromHTML(3.5, 'greater', 6.5, 'less', gridhtml, '1.8vw')}
+    <br>
+    <p style="text-align: center;">
+    The tasty mushrooms will be marked in <b style="color: #648FFF">blue</b>.
     </p>
     `
 }
@@ -54,10 +71,10 @@ function instructionsStemCapExamples() {
 function instructionsDirections() {
     return `
     <p>
-    Although locals know these rules, students are often confused. Your goal is to show students <strong>examples of tasty mushrooms</strong> to teach them the correct rule.
+    Although locals know these rules, students are often confused 🤔
     </p>
     <p>
-    The tasty mushrooms will be marked in blue.
+    Your goal is to show students <strong>examples of tasty mushrooms</strong> to teach them the correct rule.
     </p>
     `
 }
@@ -84,6 +101,7 @@ function instructionsFeedbackDetails(instructionsParams) {
         `
     } else if (instructionsParams.feedbackCondition === 'teacherPassive') {
         return `
+        <h2>How to teach</h2>
         <p>
         You will teach each student over either one or two lessons. During each lesson, you will send the student one example of a tasty mushroom.
         </p>
@@ -96,11 +114,13 @@ function instructionsFeedbackDetails(instructionsParams) {
         `
     } else if (instructionsParams.feedbackCondition === 'studentPassive') {
         return `
+        <h2>🍄 How to teach 🍄</h2>
         <p>
-        You will teach each student over either one or two lessons. During each lesson, you will send the student one example of a tasty mushroom.
+        You will teach each student <b>over either one or two lessons</b>. During each lesson, you will send the student one example of a tasty mushroom. You will be able to use sliders to select the mushroom's stem height and cap width.
         </p>
+        <h4>Two-lesson students</h4>
         <p>
-        For some of the two-lesson students, after you send them the first mushroom we will give them all XXX mushrooms and ask them to classify all the mushrooms into tasty and bitter. Then we will show you how they classified the mushrooms.
+        For some of the two-lesson students, after you send them the first mushroom we will ask them to guess the rule for what makes mushrooms tasty or bitter. Then we will show you their guess.
         </p>
         <p>
         Then you will proceed to the second lesson, where you will send them a second example mushroom.
@@ -123,14 +143,15 @@ function instructionsFeedbackDetails(instructionsParams) {
 
 function instructionsPriors() {
     return `
+    <h2>🧑‍🏫 Different classrooms 🧑‍🏫</h2>
     <p>
     Each student comes from a classroom, where they have already been taught some information about the island.
     </p>
     <p>
-    However, their teachers in these classrooms don't know the full mushroom rule on the island! Each student will only have learned something about either the stem size rule or the cap size rule.
+    However, their teachers in these classrooms <b>don't know the full mushroom rule on the island</b>! Each student will only have learned something about either the <b>stem size rule</b> or the <b>cap size rule</b>.
     </p>
     <p>
-    Every time you encounter a new student, you will be given information about their classroom. For some students you might not know exactly which classroom they belonged to.
+    For some of the students, we will tell you which classroom they belonged to.
     </p>
     <p>
     So to teach effectively, you will want to consider what the students already know about the island.
@@ -140,14 +161,16 @@ function instructionsPriors() {
 
 function instructionsMoney(instructionsParams) {
     return `
-    <h3>
-    How can I earn as much money as possible from this experiment?
-    </h3>
+    <h2>
+    💰 How can I earn as much money as possible from this experiment? 💰
+    </h2>
     <p>
-    After you teach the students, we will test them. We will give them a bunch more example mushrooms from the island and they will have to classify them into tasty and safe mushrooms. We will award you a bonus for each student based on how well they did! In addition to your base pay of $${instructionsParams.basePay}, you can receive a total bonus of up to $${instructionsParams.maxBonus}.
+    After you teach the students, <b>we will test them</b>. We will give them a bunch more example mushrooms from the island and they will have to classify them into tasty and safe mushrooms. We will award you a bonus for each student based on how well they did! In addition to your base pay of $${instructionsParams.basePay}, you can receive a total bonus of up to $${instructionsParams.maxBonus}.
     </p>
     <p>
+    <b>
     So to teach effectively, you should select mushroom(s) that lead your students as close as possible to the correct rules.
+    </b>
     </p>
     <p>
     Make sure to send each student a mushroom on every lesson. You have ${instructionsParams.timeout} seconds to send a mushroom for every lesson. If you miss a mushroom, you can't earn a bonus for that student.
@@ -156,7 +179,9 @@ function instructionsMoney(instructionsParams) {
     We will tell you how much bonus you have earned at the end of the study.
     </p>
     <p>
+    <b>
     On to the comprehension quiz! Feel free to flip back and forth in the instructions before pressing “Next” to proceed to the quiz.
+    </b>
     </p>
     `
 }

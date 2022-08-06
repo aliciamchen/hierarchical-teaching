@@ -27,8 +27,6 @@ function debrief(instructionsParams, jsPsych){
             var totalPay = Number(totalBonus) + Number(instructionsParams.basePay);
             return `
                     <p>Thanks for participating in the experiment!</p>
-                    <p>Your total bonus is <b>$${totalBonus}</b>.</p>
-                    <p>Your total pay is <b>$${totalPay}</b></p>
                     <p>If you were curious, you weren't interacting with a real learner.</p>
                     <p>Press any key to exit and collect your bonus.</p>
                     <p>After you exit, it is safe to close the screen and your responses will be saved automatically.</p>
