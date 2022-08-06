@@ -3,11 +3,13 @@ function makeAllTrials(design, jsPsych) {
     // todo: loop through design, do `makeTrial` for each part
     // TODO: add attention trials here s
 
+
     const attentionLocations = [3, 8, 14]
     const attentionParams = [[1, 8], [8, 1], [4, 5]]
     var attentionTrials = makeAttentionTrials(attentionParams, jsPsych)
     // for trial in design
     trials = []
+
     for (let i = 0; i < design.length; i++) {
         var currTrial = design[i]
         currTrial['studentIdx'] = i
@@ -21,6 +23,25 @@ function makeAllTrials(design, jsPsych) {
         }
     }
     return trials.flat()
+}
+
+function beginning() {
+
+    var beginning = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: '<div style="font-size:30px;">Congrats on passing the comprehension quiz! The experiment will begin in a few seconds.</div>',
+        choices: "NO_KEYS",
+        trial_duration: 3000,
+    };
+
+    var firstStudentWarning = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: '<div style="font-size:50px;">First student</div>',
+        choices: "NO_KEYS",
+        trial_duration: 3000,
+    };
+
+    return [beginning, firstStudentWarning]
 }
 
 function makeAttentionTrials(attentionParams, jsPsych) {
