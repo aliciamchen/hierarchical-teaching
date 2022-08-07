@@ -116,7 +116,6 @@ var L1 = cache(function (examplesArray, hypers, nExamples) {
 // pragmatic learner compares teacher trustworthiness
 var L = cache(function (hypers, examplesArray, nExamples) {
     return Infer({ method: 'enumerate' }, function () {
-        var cw = params.costWeight;
 
         var theta = sample(islandPrior);
         var teacherKnowledge = sample(teacherKnowledgePrior)
@@ -182,6 +181,7 @@ var sequentialModel = cache(function (trueTheta, trueLearnerHypers, teacherExamp
         var nExamples = params.nExamples;
 
         var step1examples = teacherExamples;
+
         // if we wanna actually simulate the step1examples
         // var step1examples = (teacherKnowledgeLevel === 'full'
         //                     ? sample(S1(trueTheta, trueLearnerHypers, nExamples))
@@ -210,4 +210,4 @@ var sequentialModel = cache(function (trueTheta, trueLearnerHypers, teacherExamp
 });
 
 
-var posterior = sequentialModel(params.trueTheta, params.learnerHypers[1], params.teacherExamples['A']);
+// var posterior = sequentialModel(params.trueTheta, params.learnerHypers[1], params.teacherExamples['A']);
