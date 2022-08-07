@@ -1,14 +1,74 @@
-function firstExamples (i, currTrial) {
+function makeFirstExamples (currTrial) {
 	return `
-	<h2 style="color:Blue;">Welcome to Island ${i + 1}!</h2>
-	${currTrial.condition !== 'nonSeqNoPrior' ?
-	`<h4>Upon arriving, you wander around one part of the island, where you saw 
-	${ex_to_text(hyperParams[currTrial.trueHyper])}.</h4>`
-	: `<h4>You land on this island, and you don't see any turtles yet</h4>`}
-	<p>Teacher A wants to show you 
-	${ex_to_text(teacherSets[currTrial.teacherPairing]['A'])}, while </b>
-	<p>Teacher B wants to show you 
-	${ex_to_text(teacherSets[currTrial.teacherPairing]['B'])}.</p><br>`
+	<div class="firstExamples">
+		<h2 style="color:Blue; padding-bottom:0.5em;">Lesson 1</h2>
+		<em style="color:#980000;">
+			Reminder: you initially saw
+			${ex_to_text(hyperParams[currTrial.trueHyper])}.
+		</em><br>
+		<p class="examples"></p><br>
+	</div>`
+};
+
+function makeKnowledgeSlider () {
+	return `
+	<div class="jspysch-html-slider-response-container" 
+	style="position:relative; margin: 0 auto 3em auto; width=auto">
+		<p>Do you think the teacher knows the turtles you have seen?</p>
+		<div class="knowledgeSliderContainer" id="sliderContainer">
+			<input type="range" class="jspsych-slider" value="50" min="0" max="100" +
+			id="jspsych-html-slider-response-response2" name="teacherKnowledge"></input>
+			<div class="knowledgeSliderLabels">
+				<div style="border: 1px solid transparent; display: inline-block; 
+				position: absolute; left:calc(-13.75% + 7.5px); text-align: center; width: 50%;">
+					<span style="text-align: center; font-size: 90%;">Doesn't know</span>
+				</div>
+				<div style="border: 1px solid transparent; display: inline-block; 
+				position: absolute;	left:calc(63.75% - 7.5px); text-align: center; width: 50%;">
+					<span style="text-align: center; font-size: 90%;">Knows</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<input class="examplesA" style="display:none" type="number" name="examplesA">
+	<input class="examplesB" style="display:none" type="number" name="examplesB">
+	`
+};
+
+function makeIslandSlider (stage) {
+	return `
+	<div class="jspysch-html-slider-response-container" 
+	style="position:relative; margin: 1em auto 3em auto; width=auto">
+		<p>Out of every 10 turtles on the island, how many orange and purple 
+		turtles do you ${stage == 'final' ? `now ` : ``}expect to see?</p>
+		<div class="islandSliderContainer" id="sliderContainer">
+			<input type="range" class="jspsych-slider" value="50" min="0" max="100" +
+			id="jspsych-html-slider-response-response2" name="studentGuess"></input>
+			<div class="islandSliderLabels">
+				<div style="border: 1px solid transparent; display: inline-block; 
+				position: absolute; left:calc(-18.75% + 7.5px); text-align: center; width: 50%;">
+					<span style="text-align: center; font-size: 90%;">
+						<b style="color:Orange">3</b><b> : </b><b style="color:Purple">7</b>
+					</span>
+				</div>
+				<div style="border: 1px solid transparent; display: inline-block; 
+				position: absolute; left:calc(25%); text-align: center; width: 50%;">
+					<span style="text-align: center; font-size: 90%;">Unsure</span>
+				</div>
+				<div style="border: 1px solid transparent; display: inline-block; 
+				position: absolute; left:calc(68.75% - 7.5px); text-align: center; width: 50%;">
+					<span style="text-align: center; font-size: 90%;">
+						<b style="color:Orange">7</b><b> : </b><b style="color:Purple">3</b>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<input class="examplesA" style="display:none" type="number" name="examplesA">
+	<input class="examplesB" style="display:none" type="number" name="examplesB">
+	`
 };
 
 function attentionExamples(currTrial)
@@ -16,49 +76,48 @@ function attentionExamples(currTrial)
 	return `
 	<h4 class="heading" style="color:Blue;">Welcome to a new island!</h4>
 	<h4><b>This page is an attention check and does not count toward your bonus.</b></h4>
-	<p>Please select teacher <b style="color:Blue">${currTrial.attentionParams.teacher}</b>
-	and make a guess of ${ex_to_text(currTrial.attentionParams)}.</p>
-	<p>You must pass all attention checks to have your HIT accepted.</p>`
+	<p style="padding: 0.5em 0em 0.5em;">Please select that your teacher 
+		<b style="color:Orange">
+			${currTrial.attentionParams.knowledge == 'full' ? `knows` : `doesn't know`}
+		</b>
+	what turtles you have seen, 
+	and select that you 
+		<b style="color:Purple">
+			would ${currTrial.attentionParams.feedback == 'no' ? `not ` : ``}
+		</b>
+	like to send the teacher a guess.
+	</p>
+	<p style="padding-bottom: 0.5em;">
+		You must pass all attention checks to have your HIT accepted.
+	</p>`
 }
 
-function teacherChoice (stage) {
+function feedbackChoice () {
 	return `
 	<div>
-		<p>
-		Which teacher would you ${stage == 'final' ? `now` : ``} like to learn from?
-		</p>
+		<p>Would you like to send the teacher a guess for $${params.feedbackCost.toFixed(2)}?</p>
 	</div>
-	<fieldset style="border:0; padding-top:0;" class="center">
-		<input type="radio" name="teacher" value="A" id="A">
-		<label for="A">A</label>
-		<input type="radio" name="teacher" value="B" id="B">
-		<label for="B">B</label>
-    </fieldset>`
-};
-
-function studentGuess () {
-	return `<div style="text-align:center;width:65%;margin:auto">
-	<p>Out of <b>100</b> turtles on the island, how many orange and purple 
-	turtles do you expect to see?</p>
-	<p><input name="heads" type="number" min="0" max="${params.maxExamples}" value="0"
-	id="1" required/><b style="color:Orange;"> orange</b> turtles </p>
-	<p><input name="tails" type="number" min="0" max="${params.maxExamples}" value="0"
-	id="2" required/><b style="color:Purple;"> purple</b> turtles </p>
-	</div><br>`
+	<fieldset style="border:0; padding-top:0;" class="center" id="feedbackChoice">
+		<input type="radio" name="feedbackChoice" value="yes" id="yes">
+		<label for="yes">Yes</label>
+		<input type="radio" name="feedbackChoice" value="no" id="no">
+		<label for="no">No</label>
+    </fieldset>
+	<div id="islandGuess"></div>`
 };
 
 function makeFirstExampleBlock (i, currTrial) 
 {
 	return {
         type: jsPsychSurveyHtmlForm,
-        preamble: firstExamples(i, currTrial),
-        html: teacherChoice('first') + studentGuess(),
-        button_label: 'Send guess to teachers',
+        preamble: makeFirstExamples(currTrial),
+        html: makeKnowledgeSlider() + feedbackChoice(),
+        button_label: 'Submit information',
         data: makeInitialData ('first', currTrial),
         on_load: function () { loadFunction('first', currTrial) },
         on_finish: function (data) { data, currTrial = saveData('first', data, currTrial, i) }
     }
-}
+};
 
 function makeIntermediateBlock (stage) 
 {
@@ -68,7 +127,7 @@ function makeIntermediateBlock (stage)
 						Press any key to continue.</p>`,
         trial_duration: stage == 'int' ? 10000 : 20000
     }
-}
+};
 
 function fixationBlock (i) 
 {
@@ -102,110 +161,70 @@ function makeLoop(stage, timelineArr)
 			}
 			else 
 			{
-				var teacher = data.values()[0].teacher;
 				if (stage == 'first') 
 				{
-					var totalFlips = parseInt(data.values()[0].heads) + 
-									parseInt(data.values()[0].tails);
-					return totalFlips !== params.maxExamples || (teacher !== 'A' && teacher !== 'B')
-				}
-				else
-				{
-					return teacher !== 'A' && teacher !== 'B'
+					var feedbackChoice = data.values()[0].response.feedbackChoice;
+					return feedbackChoice !== 'yes' && feedbackChoice !== 'no';
 				}
 			}
 		}
 	}
 };
 
-function makeReview (i, currTrial)
-{
+function makeSecondExamples (currTrial) {
 	return `
-        <h3>Island ${i + 1}'s actual turtle composition</h3>
-        <h3 style="color:tomato; padding-top: 1em">Review</h3>
-        <ul>
-        <li>
-        	<p>
-            Upon arriving on the island, you
-			${currTrial.condition === 'nonSeqNoPrior' ? ` didn't see any turtles`
-									: ` saw ` + ex_to_text(hyperParams[currTrial.trueHyper])}
-        	</p>
-        </li>
-        <li>
-            <p>
-            Teacher A wanted to show you ${ex_to_text(teacherSets[currTrial.teacherPairing]['A'])}
-            </p>
-        </li>
-        <li>
-            <p>
-            Teacher B wanted to show you ${ex_to_text(teacherSets[currTrial.teacherPairing]['B'])}
-            </p>
-        </li>
-        </ul><br>`
-}
+	<div class="secondExamplesContainer">
+		<h2 style="color:Blue; padding-bottom:0.5em;" class="heading">Lesson 2</h2>
+		<em style="color:#980000;">
+			Reminder: you initially saw
+			${ex_to_text(hyperParams[currTrial.trueHyper])}, and
+		</em><p></p>
+		<em style="color:#980000;" class="examples"></em><br>
+		<p class="secondExamples" style="padding-top:0.5em;"></p>
+	</div>`
+};
 
-function makeSecondExamples (currTrial)
-{
-	return `
-	<ul>
-	<li>
-		<p class="examplesA"></p>
-	</li>
-	<li>
-		<p class="examplesB"></p>
-	</li>
-	</ul><br>
-	`
-}
-
-function makeFinalDecision (i, currTrial, firstResponse = null)
-{
-	return makeReview(i, currTrial) + 
-		(currTrial.condition == 'seqFeedback' ?
-			`<p>After seeing your guess of <b style="color:Orange;">${firstResponse.heads}</b>
-			orange turtle${firstResponse.heads === 1 ? '' : 's'} to 
-			<b style="color:Purple;">${firstResponse.tails}</b>
-			purple turtle${firstResponse.tails === 1 ? '' : 's'},
-			the teachers gave you the following sets of examples:<br>` 
-			+ makeSecondExamples (currTrial)
-		: ``) 
-		+ `<p>On this island, out of 100 turtles you can actually expect to see
-		${ex_to_text({a: currTrial.coinWeight * 100, b: 100 - currTrial.coinWeight * 100})}. <br>`
-}
+// ${ex_to_text(currTrial.firstExamples)}
 
 function makeFinalDecisionBlock (i, currTrial)
 {
 	return {
         type: jsPsychSurveyHtmlForm,
-        preamble: function () {
-			if (currTrial.condition == 'seqFeedback')
-			{
-				var firstResponse = jsPsych.data.get().filter
-                                        ({studentIndex: i, responseSet: 'first'}).values()[0];
-		    	return makeFinalDecision(i, currTrial, firstResponse);
-			}
-			else
-			{
-				return makeFinalDecision(i, currTrial);
-			}
-		},
-        html: teacherChoice('final'),
-        button_label: 'Submit your teacher choice',
+        preamble: makeSecondExamples(currTrial),
+        html: makeIslandSlider('final'),
+        button_label: 'Submit information',
         data: makeInitialData('final', currTrial),
         on_load: function () { loadFunction('final', currTrial) },
         on_finish: function (data) { data, currTrial = saveData('final', data, currTrial, i) }
     }
-}
+};
 
 function makeAttentionBlock (i, currTrial) 
 {
 	return {
         type: jsPsychSurveyHtmlForm,
         preamble: attentionExamples(currTrial),
-        html: teacherChoice('attention') + studentGuess(),
+        html: makeKnowledgeSlider() + feedbackChoice(),
         button_label: 'Send guess to teachers',
         data: makeInitialData ('attention', currTrial),
         on_load: function () { loadFunction('attention', currTrial) },
         on_finish: function (data) { data, currTrial = saveData('attention', data, currTrial, i) }
+    }
+};
+
+function makePriorBlock (i, currTrial) 
+{
+	return {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: 
+		`<h4 class="heading" style="color:Blue;">Welcome to Island ${i + 1}!</h4>
+		<p> 
+			Upon arriving, you wander around one part of the island, where you saw 
+			${ex_to_text(hyperParams[currTrial.trueHyper])}.
+		</p>
+		<img src='img/${hyperParams[currTrial.trueHyper].a}orange
+						${hyperParams[currTrial.trueHyper].b}purple
+		.png' width="600"></img>
+		<p>Press any key to continue.</p>`
     }
 };

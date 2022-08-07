@@ -28,6 +28,33 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     width: 100%;
 }
 
-.jspsych-survey-multi-choice-option {
+.jspsych-survey-multi-choice-option, .consent {
     text-align: left;
+}
+
+.instruction, .consent {
+    width: 70%;
+    padding: 0.5em 0em 0.5em 0em;
+}
+
+
+.jspsych-content {
+    width: 65%;
+}
+
+#sliderContainer {
+    margin: auto;
+}
+
+.knowledgeSliderContainer {
+    width: 75%;
+}
+
+.islandSliderContainer {
+    width: 85%;
+}
+
+img {
+    padding-top: 1em;
+    padding-bottom: 1em;
 }

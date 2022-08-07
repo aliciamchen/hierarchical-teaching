@@ -1,0 +1,155 @@
+var params = {
+    alpha: 4,
+    costWeight: 0.05,
+    trueTheta: .5, // true coin flip weight
+    nExamples: 10,
+    nTeachers: 2,
+	maxExamples: 20,
+	teachers: ['A', 'B'],
+    teacherExamples: {
+		'A': {a: 2, b: 0},
+		'B': {a: 3, b: 2}
+	},
+    teacherKnowledgeLevels: ['full', 'partial'],
+	learners: [1, 2],
+    learnerHypers: {
+        1: {a: 2, b: 8},
+        2: {a: 8, b: 2}
+    },
+	inferOptions: { method: 'MCMC', samples: 4000 },
+	adaptiveTeacher: 'B',
+	nonAdaptiveTeacher: 'A'
+};
+
+var round = function (num, precision) {
+	Number.parseFloat(num.toFixed(precision));
+  } ;
+
+
+// discretizes a beta distribution over hypers (allows dp)
+var Beta_disc = cache(function (hypers) {
+	return Infer({method: 'enumerate'}, function() {
+		var n = uniformDraw(_.range(0, 1, 0.01));
+        var bta = Beta({ a: hypers.a == 0 ? 1 : hypers.a, 
+                        b: hypers.b == 0 ? 1 : hypers.b});
+		factor(bta.score(n));
+        return round(n, 2);
+	})
+});
+
+var L0Mean = cache(function (examples, hypers) {
+	var nExamples = examples.a + examples.b + hypers.a + hypers.b;
+	return (examples.a + hypers.a) / nExamples;
+});
+
+// literal learner
+var L0 = cache(function (examples, hypers) {
+	return Beta_disc({ a: hypers.a + examples.a, 
+		b: hypers.b + examples.b });
+});
+
+// pragmatic speaker
+var S1 = cache(function (theta, hypers, maxExamples) {
+    return Infer({ method: 'enumerate' }, function () {
+      var nExamples = uniformDraw(_.range(1, maxExamples + 1));
+      var alpha = params.alpha, cw = params.costWeight;  
+      var nHeads = uniformDraw(_.range(0, nExamples + 1));
+      var sampledExamples = {a: nHeads, b: nExamples - nHeads};
+      factor(alpha * (L0(sampledExamples, hypers).score(theta) - cw * nExamples));
+      return {a: sampledExamples.a, b: sampledExamples.b};
+    });
+});
+
+// pragmatic learner
+var L1 = cache(function (examples, hypers, maxExamples) {
+    return Infer({ method: 'enumerate' }, function () {
+        var theta = sample(Beta_disc(hypers));
+        observe(S1(theta, hypers, maxExamples), examples);
+        return theta;
+    });
+});
+
+// pragmatic learner compares teacher trustworthiness
+var L = cache(function (theta, hypers, teacherExamples, maxExamples) {
+    return Infer({ method: 'enumerate' }, function () {
+        var cw = params.costWeight;
+        var teacherClass = uniformDraw(params.teachers);
+        var teacher = teacherExamples[teacherClass];
+        var nExamples = teacher.a + teacher.b + hypers.a + hypers.b;
+      
+//         judges how much student trusts examples / how close examples are to true theta
+        factor(params.alpha * (L1(teacher, hypers, maxExamples).score(theta) - cw * nExamples));
+        return {teacher: teacherClass};
+    });
+});
+
+
+// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
+var updateSpeakerPosterior = cache(function (examples, trueLearnerHypers) {
+    return Infer({method: 'enumerate'}, function () {
+        var learnerClass = uniformDraw(params.learners);
+        var learnerHypers = params.learnerHypers[learnerClass];
+        
+//         aligns teacher towards the true learner's hypers (analagous to receiving feedback)
+        var learnerDist = L0(examples, learnerHypers);
+        var trueLearnerDist = L0(examples, trueLearnerHypers);
+        var learnerEstimate = sample(trueLearnerDist);
+        observe(learnerDist, learnerEstimate);
+      
+        return learnerClass;
+    })
+});
+
+// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
+var updateLearnerPosterior = cache(function (trueExamples, trueLearnerHypers, trueTheta) {
+    return Infer({method: 'enumerate'}, function () {
+        var teacherKnowledgeLevel = uniformDraw(params.teacherKnowledgeLevels);
+        var teacherAssumedPriors = teacherKnowledgeLevel == 'partial' ?  
+                                    uniformDraw(params.learnerHypers) : trueLearnerHypers;
+        
+//         aligns teacher towards the true learner's hypers (analagous to receiving feedback)
+        var teacherDist = S1(trueTheta, teacherAssumedPriors);
+        var teacherEstimate = sample(teacherDist);
+        condition(trueExamples == teacherEstimate);
+      
+        return teacherKnowledgeLevel;
+    })
+});
+
+var sumExamples = function(ex1, ex2) {
+	return {a: ex1.a + ex2.a, b: ex1.b + ex2.b}
+}
+
+var sequentialModel = cache(function (trueTheta, trueLearnerHypers, teacherExamples) {
+    return Infer({ method: 'enumerate' }, function () {
+		var adaptive = params.adaptiveTeacher, nonAdaptive = params.nonAdaptiveTeacher;
+      
+//         learner assesses confidence based on teachers' first set of examples
+		var step1examples = teacherExamples[adaptive];
+		var step1dist = sample(L(trueTheta, trueLearnerHypers, teacherExamples, params.maxExamples));
+      
+//         'adaptive' teacher updates posterior on learner hypers
+		var speakerPosterior = updateSpeakerPosterior(step1examples, trueLearnerHypers);
+      
+//         considers the learner's new hypers to be the inferred hypers + the first example set
+        var newHypers = sumExamples(params.learnerHypers[sample(speakerPosterior)], step1examples);
+      
+//         'adaptive' teacher creates a second set of examples based on inferred learner hypers
+		var step2examples = sample(S1(trueTheta, newHypers, params.maxExamples));
+      
+//         learner reassesses confidence based on combined examples
+		var newTeacherExamples = {'A': sumExamples(teacherExamples[nonAdaptive], teacherExamples[nonAdaptive]), 
+                                  'B': sumExamples(step1examples, step2examples)};
+        var step2dist = sample(L(trueTheta, trueLearnerHypers, newTeacherExamples, params.maxExamples * 2));
+      
+        return {
+            step1dist: step1dist,
+            step2dist: step2dist
+        }
+    })
+});
+
+var posterior = sequentialModel(params.trueTheta, params.learnerHypers[1], params.teacherExamples);
+
+
+viz.marginals(posterior);

@@ -31,7 +31,7 @@ var round = function (num, precision) {
 var Beta_disc = cache(function (hypers) {
 	return Infer({method: 'enumerate'}, function() {
 		var n = uniformDraw(_.range(0, 1, 0.01));
-        var bta = Beta({ a: hypers.a == 0 ? 1 : hypers.a,
+        var bta = Beta({ a: hypers.a == 0 ? 1 : hypers.a, 
                         b: hypers.b == 0 ? 1 : hypers.b});
 		factor(bta.score(n));
         return round(n, 2);
@@ -44,45 +44,25 @@ var L0Mean = cache(function (examples, hypers) {
 });
 
 // literal learner
-
-var islandPrior = Categorical({vs: params.trueThetas})
-
 var L0 = cache(function (examplesArray, learnerHypers) {
-    return Infer ({ method: 'enumerate' }, function () {
-        var theta = sample(islandPrior);
-        var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
-        var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
-        var learnerDist = Beta({
-            a: _.toNumber(learnerHypers.a + heads) == 0 ? 1 : _.toNumber(learnerHypers.a + heads),
-            b: _.toNumber(learnerHypers.b + tails) == 0 ? 1 : _.toNumber(learnerHypers.b + tails)
-        });
-        
-        observe(learnerDist, theta);
-        return theta;
-    })
+    var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
+    var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
+    return Beta_disc({
+        a: _.toNumber(learnerHypers.a + heads),
+        b: _.toNumber(learnerHypers.b + tails)
+    });
 });
-
-viz.hist(L0([params.teacherExamples['A']], params.learnerHypers[1]))
 
 
 // pragmatic speaker
 var S1 = cache(function (theta, hypers, nExamples) {
     return Infer({ method: 'enumerate' }, function () {
-      var alpha = params.alpha, cw = params.costWeight;
+      var alpha = params.alpha, cw = params.costWeight;  
       var nHeads = uniformDraw(_.range(0, nExamples + 1));
       var sampledExamples = {a: nHeads, b: nExamples - nHeads};
       factor(alpha * (L0([sampledExamples], hypers).score(theta) - cw * nExamples));
       return {a: sampledExamples.a, b: sampledExamples.b};
     });
-});
-
-// uncertain pragmatic speaker
-var S = cache(function (theta, nExamples) {
-    return Mixture({
-        dists: [S1(theta, params.learnerHypers[0], nExamples),
-        S1(theta, params.learnerHypers[1], nExamples)],
-        ps: [0.5, 0.5]
-    })
 });
 
 // second example in sequential case
@@ -93,7 +73,7 @@ var S_second_ex = cache(function (first_ex, theta, posterior, nExamples) {
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var second_ex = { a: nHeads, b: nExamples - nHeads };
 
-        factor(params.alpha * (L0([first_ex, second_ex], learnerHypers).score(theta)
+        factor(params.alpha * (L0([first_ex, second_ex], learnerHypers).score(theta) 
 			- params.costWeight * (first_ex.a + first_ex.b + second_ex.a + second_ex.b)));
 
         return second_ex;
@@ -103,44 +83,29 @@ var S_second_ex = cache(function (first_ex, theta, posterior, nExamples) {
 // pragmatic learner
 var L1 = cache(function (examplesArray, hypers, nExamples) {
     return Infer({ method: 'enumerate' }, function () {
-		var examples =
+		var examples = 
 		{a: reduce(function (example, acc) { return example.a + acc }, 0, examplesArray),
 		b: reduce(function (example, acc) { return example.b + acc }, 0, examplesArray)};
 //         print(examples)
-        var theta = sample(islandPrior);
-        // var theta = sample(Beta_disc(hypers));
+        var theta = uniformDraw(params.trueThetas);
+        var theta = sample(Beta_disc(hypers));
         observe(S1(theta, hypers, nExamples), examples);
         return theta;
     });
 });
 
 // pragmatic learner compares teacher trustworthiness
-var L = cache(function (hypers, examplesArray, nExamples) {
+var L = cache(function (hypers, examples, posterior, nExamples) {
     return Infer({ method: 'enumerate' }, function () {
         var cw = params.costWeight;
 		var theta = uniformDraw(params.trueThetas);
-        var teacherKnowledge = uniformDraw(params.teacherKnowledgeLevels);
-        var examples =
-		{a: reduce(function (example, acc) { return example.a + acc }, 0, examplesArray),
-		b: reduce(function (example, acc) { return example.b + acc }, 0, examplesArray)};
-        var s1Sample = sample(S1(theta, hypers, nExamples));
-        var sSample = sample(S(theta, nExamples));
-        if(teacherKnowledge == 'full')
-        {
-//           condition(s1Sample.a == examples.a)
-        //   factor(params.alpha * (S1(theta, hypers, nExamples).score(examples)));
-        observe(S1(theta, hypers, nExamples), examples)
-        }
-        else
-        {
-//           condition(sSample.a == examples.a)
-        //   factor(params.alpha * (S(theta, nExamples).score(examples)));
-        observe(S(theta, nExamples), examples)
-        }
-        return {theta: theta, teacherKnowledge: teacherKnowledge};
+        var teacherKnowledge = sample(posterior);
+        var assumedHypers = teacherKnowledge == 'full' ? hypers : uniformDraw(params.learnerHypers);
+//         judges how much student trusts examples / how close examples are to true theta
+        factor(params.alpha * (L1(examples, assumedHypers, nExamples).score(theta) - cw * nExamples));
+        return theta;
     });
 });
-
 
 
 // after speaker sees learner's feedback after step 1, update speaker posterior over class membership
@@ -148,11 +113,11 @@ var updateSpeakerPosterior = cache(function (examples, learnerGuess) {
     return Infer({method: 'enumerate'}, function () {
         var learnerClass = uniformDraw(params.learners);
         var learnerHypers = params.learnerHypers[learnerClass];
-
+        
 //         observes learner feedback and adjusts posterior as follows
         var learnerDist = L0(examples, learnerHypers);
         observe(learnerDist, learnerGuess);
-
+      
         return learnerClass;
     })
 });
@@ -160,14 +125,14 @@ var updateSpeakerPosterior = cache(function (examples, learnerGuess) {
 // after speaker sees learner's feedback after step 1, update speaker posterior over class membership
 var updateLearnerPosterior = cache(function (examplesArray, trueLearnerHypers, nExamples) {
     return Infer({method: 'enumerate'}, function () {
-		var examples =
+		var examples = 
 		{a: reduce(function (example, acc) { return example.a + acc }, 0, examplesArray),
 		b: reduce(function (example, acc) { return example.b + acc }, 0, examplesArray)};
         var teacherKnowledge = uniformDraw(params.teacherKnowledgeLevels);
-        var teacherAssumedHypers = teacherKnowledge == 'partial' ?
-                                    uniformDraw(params.learnerHypers) :
+        var teacherAssumedHypers = teacherKnowledge == 'partial' ?  
+                                    uniformDraw(params.learnerHypers) : 
                                     trueLearnerHypers;
-
+      
         var theta = uniformDraw(params.trueThetas);
         var teacherDist = S1(theta, teacherAssumedHypers, nExamples);
         var teacherEstimate = sample(teacherDist);
@@ -184,43 +149,43 @@ var updateLearnerPosterior = cache(function (examplesArray, trueLearnerHypers, n
 
 var sequentialModel = cache(function (trueTheta, trueLearnerHypers, teacherExamples) {
     return Infer({ method: 'enumerate' }, function () {
-
+      
         var nExamples = params.nExamples;
 //         learner assesses confidence based on teachers' first set of examples
 		var step1examples = teacherExamples;
-
-        var learnerInitial = sample(L(trueLearnerHypers, [step1examples], nExamples));
-		var learnerInitialPosterior = learnerInitial.teacherKnowledge;
+        
+		var learnerInitialPosterior = updateLearnerPosterior([step1examples], trueLearnerHypers, nExamples);
 //       print(learnerInitialPosterior)
-		var step1guess = learnerInitial.theta;
+		var step1guess = sample(L(trueLearnerHypers, [step1examples],
+                                  learnerInitialPosterior, nExamples));
 //         'adaptive' teacher updates posterior on learner hypers
 		var speakerPosterior = updateSpeakerPosterior([step1examples], step1guess);
 //       print(speakerPosterior)
-
+      
 //         considers the learner's new hypers to be the inferred hypers + the first example set
         // var newHypers = sumExamples(params.learnerHypers[sample(speakerPosterior)], step1examples);
-
+      
 //         'adaptive' teacher creates a second set of examples based on inferred learner hypers
-		var step2examples = sample(S_second_ex(step1examples, trueTheta,
+		var step2examples = sample(S_second_ex(step1examples, trueTheta, 
                                                speakerPosterior, nExamples));
 //       print(step2examples)
+		var learnerFinalPosterior = updateLearnerPosterior([step1examples, step2examples], 
+														trueLearnerHypers, nExamples * 2)
+//         print(learnerFinalPosterior)
 //         learner reassesses confidence based on combined examples
-        var learnerFinal = sample(L(trueLearnerHypers, [step1examples, step2examples], nExamples * 2));
-        var learnerFinalPosterior = learnerFinal.teacherKnowledge;
-        var step2guess = learnerFinal.theta;
-
+		// var newTeacherExamples = {'A': sumExamples(teacherExamples[nonAdaptive], teacherExamples[nonAdaptive]), 
+        //                           'B': sumExamples(step1examples, step2examples)};
+        var step2guess = sample(L(trueLearnerHypers, [step1examples, step2examples],
+                                  learnerFinalPosterior, nExamples * 2));
+//       print(step2guess)
         return {
             step1guess: step1guess,
-            learnerInitialPosterior: learnerInitialPosterior,
-            step2guess: step2guess,
-            learnerFinalPosterior: learnerFinalPosterior
+            step2guess: step2guess
         }
     })
 });
-// (7, 3) teacher examples, learner hypers is (1, 9), true theta is 0.7
+
 var posterior = sequentialModel(params.trueTheta, params.learnerHypers[1], params.teacherExamples['A']);
 
 
 viz.marginals(posterior);
-
-// viz.marginals(L(params.learnerHypers[0], [params.teacherExamples['A']], params.nExamples))

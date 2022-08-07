@@ -1,9 +1,13 @@
+var feedback = true, noFeedback = false;
+
 var params = {
     alpha: 4,
-    costWeight: 0.05,
-    trueTheta: .5, // true coin flip weight
+    costWeight: 10,
+    trueTheta: .7, // true coin flip weight
     nTeachers: 2,
+    nExamples: 10,
 	maxExamples: 20,
+    feedbackOptions: [feedback, noFeedback],
 	teachers: ['A', 'B'],
     teacherExamples: {
 		'A': {a: 4, b: 3},
@@ -12,7 +16,7 @@ var params = {
 	learners: [1, 2],
     learnerHypers: {
         1: {a: 2, b: 8},
-        2: {a: 2, b: 3}
+        2: {a: 8, b: 2}
     },
 	inferOptions: { method: 'MCMC', samples: 4000 }
 };
@@ -60,20 +64,20 @@ var L1 = cache(function (examples, hypers) {
     });
 });
 
-// pragmatic learner compares teacher trustworthiness
+// pragmatic learner decides whether or not to provide hypers
 var L = cache(function (theta, hypers) {
     return Infer({ method: 'enumerate' }, function () {
-        var cw = params.costWeight;
-        var teacherClass = uniformDraw(params.teachers);
-        var teacher = params.teacherExamples[teacherClass];
-        var nExamples = teacher.a + teacher.b + hypers.a + hypers.b;
-//         TODO: is it okay to sum prior and examples and remove cost weight in this case?
-//       Q: is this value of cw good enough? how to examine results to check
-        factor(params.alpha * (L1(teacher, hypers).score(theta) - cw * nExamples));
-        return {teacher: teacherClass};
+        var cw = params.costWeight, nExamples = params.nExamples;
+        var feedbackStatus = uniformDraw(params.feedbackOptions);
+        var assumedHypers = feedbackStatus ? hypers : {a: 0, b: 0};
+        var unknowingExamplesA = round(expectation(marginalize(S1(theta, assumedHypers), 'a')), 0);
+        var knowingExamplesA = sample(S1(theta, hypers));
+        var unknowingTeacherExamples = {a: unknowingExamplesA, b: nExamples - unknowingExamplesA}
+        var unknowingTeacherExamples = {a: unknowingExamplesA, b: nExamples - unknowingExamplesA}
+        factor(params.alpha * (L1(teacherExamples, hypers).score(theta) - cw * nExamples));
+        return {feedbackProvided: feedbackStatus};
     });
 });
 
-// viz.auto(L1(params.teachers[1], params.learnerHypers[2]));
-// viz.auto(L1(params.teachers[2], params.learnerHypers[2]));
+// viz.auto(
 L(params.trueTheta, params.learnerHypers[1]);

@@ -15,10 +15,8 @@ var jsPsych = initJsPsych({
 
 jsPsych.data.addProperties({
     params: params,
-    teacherSets: teacherSets,
     hyperParams: hyperParams,
     conditions: conditions,
-    teacherPairings: teacherPairings,
     hyperPairings: hyperPairings,
     coinWeights: coinWeights
 });
@@ -52,6 +50,8 @@ const save_data = {
         save_data_json(subjectId + "_output_all", jsPsych.data.get().json());
         save_data_json(subjectId + "_output_responsesOnly", 
                     jsPsych.data.get().filter({ type: 'response' }).json());
+        save_data_json(subjectId + "_output_attention", 
+                    jsPsych.data.get().filter({ type: 'attention' }).json());
     },
     timing_post_trial: 0
 };
@@ -64,7 +64,7 @@ var timeline = [];
 
 var preload = {
     type: jsPsychPreload,
-    images: ['img/archipelago.png']
+    images: ['img/archipelago.png', 'img/9orange1purple.png', 'img/1orange9purple.png']
 };
 
 timeline.push(preload, welcome, consent, comprehensionLoop, beginning, firstIslandWarning);
@@ -73,46 +73,22 @@ timeline.push(preload, welcome, consent, comprehensionLoop, beginning, firstIsla
 /* Main logic of trials */
 
 // makes combinations of possible nonseq trials, randomly orders
-var design = jsPsych.randomization.shuffle(
-    jsPsych.randomization.factorial(factorsNonSeqPrior, 1).concat( 
-    jsPsych.randomization.factorial(factorsNonSeqNoPrior, 1)));
+var design = jsPsych.randomization.factorial(factors, 1);
 
 // makes nonseq attention checks
-var attention_locations = [3, 8], attention_trials = [];
-var attention_params = [{a: 25, b: 75, teacher: 'A'}, {a: 50, b: 50, teacher: 'B'}];
+var attention_locations = [0, 5], attention_trials = [];
+var attention_params = [{knowledge: "full", feedback: "no"}, 
+                        {knowledge: "partial", feedback: "yes"}];
 
 for (let i = 0; i < attention_locations.length; i++) {
     attentionTrial(i);
 };
-
 
 // Loop through individual trials in design to create timeline
 for (let i = 0; i < design.length; i++) {
-    nonSequentialTrial(i);
-};
-
-// creates design + attention checks for sequential conditions
-var len = design.length;
-var design = jsPsych.randomization.factorial(factorsSeq, 1);
-
-// sets locations where A is adaptive teacher
-var adaptiveA = [2, 3, 5, 7];
-
-var attention_locations = [0], attention_trials = [];
-var attention_params = [{a: 75, b: 25, teacher: 'A'}];
-
-// second set of instructions + comprehension check
-timeline.push(seqComprehensionLoop, beginningSeq);
-
-for (let i = 0; i < attention_locations.length; i++) {
-    attentionTrial(i);
-};
-
-
-// loop through individual trials in design to create timeline
-for (let i = 0; i < design.length; i++) {
     sequentialTrial(i);
 };
+
 
 timeline.push(survey); 
 

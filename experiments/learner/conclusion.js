@@ -23,9 +23,9 @@ var survey = {
     data: { type: 'response' },
     on_finish:
         function (data) {
-            var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
-            data.totalBonus = Number(totalBonus);
-            data.passAttentionChecks = jsPsych.data.get().select('passAttentionCheck').sum() == 3 ? true : false
+            data.totalBonus = Number(jsPsych.data.get().select('bonus').sum().toFixed(2));
+            data.nAttentionPassed = jsPsych.data.get().select('attentionPassed').sum();
+            data.attentionChecksPassed = data.nAttentionPassed == 3 ? true : false;
         },
 };
 

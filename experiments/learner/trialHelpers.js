@@ -17,47 +17,59 @@ function calc_teacher (hypers, trueTheta, teachers) {
 };
 
 // allows numbers to sum to 100 when student makes their guess
-function createResponsiveInputs () {
-	function changeInput2(){
-		var val_1 = document.getElementById('1').value;
-		var val_2 = 100 - parseInt(val_1);
-		document.getElementById('2').value = val_2;
+function responsiveIslandGuess () {
+	function islandGuess(state)
+	{
+		var islandGuess = document.getElementById('islandGuess');
+		if (state == 'appear')
+		{
+			islandGuess.innerHTML = makeIslandSlider('first');
+		}
+		else 
+		{
+			islandGuess.innerHTML = ``;
+		}
 	};
-	var input_1 = document.getElementById('1');
-	input_1.onchange = function(){
-		changeInput2();
+	var yes_input = document.getElementById('yes');
+	yes_input.onclick = function(){
+		islandGuess("appear");
 	};
-	input_1.onkeyup = function(){
-		changeInput2();
-	};
-		
-	var input_2 = document.getElementById('2');
-	function changeInput1(){
-		var val_2 = document.getElementById('2').value;
-		var val_1 = 100 - parseInt(val_2);
-		document.getElementById('1').value = val_1;
-	}
-	input_2.onchange = function(){
-		changeInput1();
-	}
-	input_2.onkeyup = function(){
-		changeInput1();  
+	var no_input = document.getElementById('no');
+	no_input.onclick = function(){
+		islandGuess("disappear");
 	};
 };
 
+
 // adds text based on the new teacher's examples
-function fetchSpeakerExamples (currTrial) 
+function fetchFirstExamples (currTrial, stage = 'first') 
 {
-    $.get('./precalc.json', function(data) {
-        $(".examples" + currTrial.adaptiveTeacher).
-		html(`Teacher ` + currTrial.adaptiveTeacher + ` wants to show you an additional 
-		${ex_to_text(data.filter(x => x.theta == currTrial.coinWeight && x.firstExample.a == 
-						teacherSets[currTrial.teacherPairing][currTrial.adaptiveTeacher].a && 
-						x.guess.a == currTrial.studentGuess.a)[0].secondExample)}`);
-		$(".examples" + currTrial.nonAdaptiveTeacher).
-		html(`Teacher ` + currTrial.nonAdaptiveTeacher + 
-						` wants to show you an additional ${ex_to_text(teacherSets
-						[currTrial.teacherPairing][currTrial.nonAdaptiveTeacher])}`);
+    $.get('./json/firstExamples.json', function(data) {
+		var firstExamples = data.filter(x => x.theta == currTrial.coinWeight && 
+											x.condition == currTrial.condition &&
+											x.hypers.a == hyperParams[currTrial.trueHyper].a
+											)[0].examples;
+        $(".examples")
+			.html(`${stage == 'first' ? `Your teacher shows` : `your teacher showed`}
+				 you ${ex_to_text(firstExamples)}.`);
+		$(".examplesA").val(firstExamples.a);
+		$(".examplesB").val(firstExamples.b);
+    })
+};
+
+// adds text based on the new teacher's examples
+function fetchSecondExamples (currTrial) 
+{
+    $.get('./json/precalc.json', function(data) {
+		fetchFirstExamples(currTrial, 'final');
+		var secondExamples = data.filter(x => x.theta == currTrial.coinWeight && 
+											x.firstExample.a == currTrial.firstExamples.a && 
+											x.guess.a == currTrial.studentGuess.a > 50 ? 30 : 70
+											)[0].secondExample;
+        $(".secondExamples")
+			.html(`<p>Your teacher shows you an additional ${ex_to_text(secondExamples)}</p>`);
+		$(".examplesA").val(secondExamples.a);
+		$(".examplesB").val(secondExamples.b);
     })
 };
 
@@ -65,24 +77,33 @@ function fetchSpeakerExamples (currTrial)
 function handleTimeouts (stage, data) 
 {
 	jsPsych.pluginAPI.clearAllTimeouts();
-	var nHeads, nTails, teacher;
-    if (data.response != null) { // if no timeout
+	var teacherKnowledge, feedbackChoice, studentGuess;
+
+	// checks there has been no timeout
+    if (data.response != null) 
+	{
         if (stage !== 'final') 
         {
-            nHeads = parseInt(data.response.heads);
-            nTails = parseInt(data.response.tails);
+            teacherKnowledge = data.response.teacherKnowledge;
+			feedbackChoice = data.response.feedbackChoice;
+			studentGuess = feedbackChoice == 'yes' ? data.response.studentGuess : null;
+			return {teacherKnowledge: teacherKnowledge, 
+				feedbackChoice: feedbackChoice, 
+				studentGuess: studentGuess}
         }
-        teacher = data.response.teacher;
-    } else {
-        
-		if (stage !== 'final')
-        {
-            nHeads = 0;
-            nTails = 0;
-        }
-        teacher = null;
+        else
+		{
+			studentGuess = data.response.studentGuess;
+			return {studentGuess: studentGuess}
+		}
+    } 
+	else 
+	{
+			teacherKnowledge = feedbackChoice = studentGuess = null;
+			return {teacherKnowledge: teacherKnowledge, 
+				feedbackChoice: feedbackChoice, 
+				studentGuess: studentGuess}
     }
-	return {nHeads: nHeads, nTails: nTails, teacher: teacher}
 };
 
 function makeInitialData (stage, currTrial)
@@ -91,8 +112,7 @@ function makeInitialData (stage, currTrial)
 		type: stage == 'attention' ? 'attention' : 'response',
 		condition: currTrial.condition,
 		trueTheta: currTrial.coinWeight,
-		teachers: currTrial.teacherPairing,
-		studentTrueClassroom: currTrial.condition !== 'nonSeqNoPrior' ? null : currTrial.trueHyper,
+		studentTrueClassroom: currTrial.trueHyper,
 		responseSet: stage
 	}
 };
@@ -102,34 +122,36 @@ function saveData (stage, data, currTrial, i)
 {
 	info = handleTimeouts(stage, data);
 
-	var studentTrueHypers = currTrial.condition === 'nonSeqNoPrior' ? 
-							{ a: 0, b: 0 } : hyperParams[currTrial.trueHyper];
-
 	data.studentIndex = i;
-	data.studentTrueHypers = studentTrueHypers;
-	data.teacher = info.teacher;
+	data.studentTrueHypers = hyperParams[currTrial.trueHyper];
+
 
 	if (stage !== 'final')
 	{
-		data.heads = info.nHeads;
-		data.tails = info.nTails;
-		data.totalExamples = info.nHeads + info.nTails;
-		data.studentGuess = {a: data.heads, b: data.tails};
-		currTrial.studentGuess = data.studentGuess;
+		data.teacherKnowledge = info.teacherKnowledge;
+		data.feedbackChoice = info.feedbackChoice;
 
-		if (stage == 'attention')
+		if (stage == 'first')
+		{
+			data.firstGuess = currTrial.studentGuess = info.studentGuess;
+			data.firstExamples = currTrial.firstExamples = {a: data.examplesA, b: data.examplesB};
+		}
+		else
 		{
 			data.attentionParams = currTrial.attentionParams;
-			data.attentionPassed = currTrial.attentionParams.a == currTrial.studentGuess.a &&
-									currTrial.attentionParams.b == currTrial.studentGuess.b
-									currTrial.attentionParams.teacher == data.teacher;
+			data.attentionPassed = (currTrial.attentionParams.knowledge == 'full' 
+									? data.teacherKnowledge > 50
+									: data.teacherKnowledge < 50) &&
+									currTrial.attentionParams.feedback == data.feedbackChoice;
 		}
 	}
 	else
 	{
-		var correctTeacher = calc_teacher(studentTrueHypers, data.trueTheta, 
-											teacherSets[data.teachers]);
-		data.bonus = data.teacher === correctTeacher ? params.perTrialBonus : 0;
+		data.finalGuess = info.studentGuess;
+		data.secondExamples = currTrial.secondExamples = {a: data.examplesA, b: data.examplesB};
+		data.bonus = data.trueTheta == 0.7 ? 
+						data.finalGuess > 50 ? params.perTrialBonus : 0 
+						: data.finalGuess < 50 ? params.perTrialBonus : 0;
 		data.bonusSoFar = Number(jsPsych.data.get().select('bonus').sum().toFixed(2));
 	}
 
@@ -144,13 +166,14 @@ function loadFunction(stage, currTrial)
 		var elapsed_time = end_time - start_time;
 		jsPsych.finishTrial({ status: 'timeout' });
 	}, 90000);
-	if (stage !== 'final') 
+	if (stage == 'first') 
 	{
-		createResponsiveInputs();
+		fetchFirstExamples(currTrial);
+		responsiveIslandGuess();
 	}
-	else if (currTrial.condition == 'seqFeedback')
+	else if (stage == 'final')
 	{
-		fetchSpeakerExamples(currTrial);
+		fetchSecondExamples(currTrial);
 	};
 };
 

@@ -47,22 +47,35 @@ var L0Mean = cache(function (examples, hypers) {
 
 var islandPrior = Categorical({vs: params.trueThetas})
 
-var L0 = cache(function (examplesArray, learnerHypers) {
-    return Infer ({ method: 'enumerate' }, function () {
-        var theta = sample(islandPrior);
-        var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
-        var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
-        var learnerDist = Beta({
-            a: _.toNumber(learnerHypers.a + heads) == 0 ? 1 : _.toNumber(learnerHypers.a + heads),
-            b: _.toNumber(learnerHypers.b + tails) == 0 ? 1 : _.toNumber(learnerHypers.b + tails)
-        });
+// var L0 = cache(function (examplesArray, learnerHypers) {
+//     return Infer ({ method: 'enumerate' }, function () {
+//         var theta = sample(islandPrior);
+//         var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
+//         var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
+//         var learnerDist = Beta({
+//             a: _.toNumber(learnerHypers.a + heads) == 0 ? 1 : _.toNumber(learnerHypers.a + heads),
+//             b: _.toNumber(learnerHypers.b + tails) == 0 ? 1 : _.toNumber(learnerHypers.b + tails)
+//         });
         
-        observe(learnerDist, theta);
-        return theta;
-    })
+//         observe(learnerDist, theta);
+//         return theta;
+//     })
+// });
+
+var L0 = cache(function (examplesArray, learnerHypers) {
+  var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
+  var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
+  return Beta_disc({
+    a: _.toNumber(learnerHypers.a + heads),
+    b: _.toNumber(learnerHypers.b + tails)
+  });
 });
 
-viz.hist(L0([params.teacherExamples['A']], params.learnerHypers[1]))
+// var L0 = cache(function (examples, hypers) {
+// 	return Beta_disc({ a: hypers.a + examples.a, 
+// 		b: hypers.b + examples.b });
+// });
+// viz.hist(L0([params.teacherExamples['A']], params.learnerHypers[1]))
 
 
 // pragmatic speaker
@@ -84,6 +97,10 @@ var S = cache(function (theta, nExamples) {
         ps: [0.5, 0.5]
     })
 });
+
+print(round(expectation(marginalize(S(0.7, 10), 'a')), 0))
+viz.table(S(0.7, 10))
+viz.table(S1(0.7, {a: 9, b: 1}, 10))
 
 // second example in sequential case
 var S_second_ex = cache(function (first_ex, theta, posterior, nExamples) {
@@ -206,18 +223,17 @@ var sequentialModel = cache(function (trueTheta, trueLearnerHypers, teacherExamp
 //       print(step2examples)
 //         learner reassesses confidence based on combined examples
         var learnerFinal = sample(L(trueLearnerHypers, [step1examples, step2examples], nExamples * 2));
-        var learnerFinalPosterior = learnerFinal.teacherKnowledge;
         var step2guess = learnerFinal.theta;
 
         return {
             step1guess: step1guess,
             learnerInitialPosterior: learnerInitialPosterior,
             step2guess: step2guess,
-            learnerFinalPosterior: learnerFinalPosterior
         }
     })
 });
-// (7, 3) teacher examples, learner hypers is (1, 9), true theta is 0.7
+
+// (7, 3) teacher examples, learner hypers are (1, 9), true theta is 0.7
 var posterior = sequentialModel(params.trueTheta, params.learnerHypers[1], params.teacherExamples['A']);
 
 
