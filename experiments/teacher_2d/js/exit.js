@@ -10,10 +10,8 @@ function exitSurvey() {
         data: { type: 'response' },
         on_finish:
             function (data) {
-                // var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
-                // data.totalBonus = Number(totalBonus);
                 data.nAttentionChecksPassed = jsPsych.data.get().select('passAttentionCheck').sum()
-                data.passAllAttentionChecks = jsPsych.data.get().select('passAttentionCheck').sum() >= 2 ? true : false
+                data.passAllAttentionChecks = jsPsych.data.get().select('passAttentionCheck').sum() >= 3 ? true : false
             },
     }
 }
@@ -22,13 +20,10 @@ function debrief(instructionsParams, jsPsych){
     return {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: function () {
-
-            // var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
-            // var totalPay = Number(totalBonus) + Number(instructionsParams.basePay);
             return `
                     <p>Thanks for participating in the experiment!</p>
                     <p>If you were curious, you weren't interacting with a real learner.</p>
-                    <p>Press any key to exit and collect your bonus.</p>
+                    <p>Press any key to exit. Your bonus will be delivered within a few days.</p>
                     <p>After you exit, it is safe to close the screen and your responses will be saved automatically.</p>
                     `;
 

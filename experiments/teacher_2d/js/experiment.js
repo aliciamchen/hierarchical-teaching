@@ -5,12 +5,13 @@ const instructionsParams = {
     maxBonus: 10,
     perTrialBonus: 0.7,
     feedbackCondition: 'studentPassive',
-    timeout: 30, // seconds
+    timeout: 90, // seconds
     nStudents: 16
 };
 
 const scenarios = ['nonSeqFull', 'nonSeqPartial', 'seqNoFeedback', 'seqFeedback'];
 const classroomPriors = ['stem', 'cap']
+
 const trueConceptOptions = {
     stemThresholds: [2.5, 4.5, 6.5],
     capThresholds: [2.5, 4.5, 6.5],
@@ -38,8 +39,6 @@ const testTrialSeq = {
     studentIdx: 1
 }
 
-
-
 $(function () {
     $('#templates').hide();
 
@@ -58,7 +57,6 @@ $(function () {
         instructionsParams: instructionsParams,
         factors: factors
     });
-
 
     /* Save stuff */
 
@@ -86,9 +84,9 @@ $(function () {
     const save_data = {
         type: jsPsychCallFunction,
         func: function () {
-            save_data_json(subjectId + "_output_all", jsPsych.data.get().json());
-            save_data_json(subjectId + "_output_responsesOnly", jsPsych.data.get().filter({ type: 'response' }).json())
-            save_data_json(subjectId + "_output_attention", jsPsych.data.get().filter({ type: 'attention' }).json())
+            save_data_json("output_all" + subjectId, jsPsych.data.get().json());
+            save_data_json("output_responsesOnly" + subjectId, jsPsych.data.get().filter({ type: 'response' }).json())
+            save_data_json("output_attention" + subjectId, jsPsych.data.get().filter({ type: 'attention' }).json())
         },
         timing_post_trial: 0
     };

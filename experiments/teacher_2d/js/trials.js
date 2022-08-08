@@ -1,8 +1,5 @@
 function makeAllTrials(design, jsPsych) {
 
-    // todo: loop through design, do `makeTrial` for each part
-    // TODO: add attention trials here s
-
 
     const attentionLocations = [3, 8, 14]
     const attentionParams = [[1, 8], [8, 1], [4, 5]]
@@ -83,19 +80,18 @@ function makeAttentionTrials(attentionParams, jsPsych) {
             prompt2: 'Cap width',
             slider_width: 500,
             button_label: 'Send mushroom to student',
-            trial_duration: instructionsParams.timeout * 10000,
+            trial_duration: instructionsParams.timeout * 1000,
             data: {
                 type: 'attention',
                 attentionParams: attentionParams[i]
             },
             on_finish: function (data) {
                 data.passAttentionCheck = (data.response1 == data.attentionParams[0]) && (data.response2 == data.attentionParams[1])
-                console.log(data.passAttentionCheck)
+                // console.log(data.passAttentionCheck)
             }
         }
 
         attentionTrials.push(attentionMain)
-
 
     }
     return attentionTrials
@@ -152,7 +148,7 @@ function firstExample(instructionsParams, trial, jsPsych) {
         prompt2: 'Cap width',
         slider_width: 500,
         button_label: 'Send mushroom to student',
-        trial_duration: instructionsParams.timeout * 10000,
+        trial_duration: instructionsParams.timeout * 1000,
         data: {
             type: 'response',
             scenario: trial.scenario,
@@ -166,9 +162,8 @@ function firstExample(instructionsParams, trial, jsPsych) {
         }
         ,
         on_finish: function (data) {
-            // TODO: add feedback stuff here
             data.feedback = fetchLearnerFeedback(trial, data.response1, data.response2)
-            console.log('feedback' + data.feedback)
+            console.log(data.feedback)
         }
     }
 }
@@ -187,6 +182,8 @@ function feedback(trial, jsPsych) {
             var stemResponse = firstResponse.response1
             var capResponse = firstResponse.response2
             var learnerFeedback = fetchLearnerFeedback(trial, stemResponse, capResponse)
+            console.log(learnerFeedback)
+
             var grid = makeGridFromHTML(learnerFeedback.capThreshold, learnerFeedback.capDirection, learnerFeedback.stemThreshold, learnerFeedback.stemDirection, gridhtml, '3vw') // testing; change later
 
             return `<h2>Your student guessed that the shaded mushrooms below are tasty:</h2> <br>` + grid + `
@@ -194,7 +191,7 @@ function feedback(trial, jsPsych) {
                 <p>${firstResponse.scenario === 'seqFeedback' ? `<p style="text-align: center;">You will now send another mushroom to your student.</p>` : ''}</p>`
         },
         choices: ['Continue'],
-        trial_duration: 200000
+        trial_duration: 20000
     }
 }
 
@@ -204,7 +201,7 @@ function sending(jsPsych) {
         stimulus: 'Sending mushroom to student... ',
         choices: "NO_KEYS",
         trial_duration: function () {
-            return jsPsych.randomization.sampleWithoutReplacement([1250, 1500, 1750, 2000], 1)[0];
+            return jsPsych.randomization.sampleWithoutReplacement([1250, 1500, 1750], 1)[0];
         }
     }
 }
@@ -212,13 +209,10 @@ function sending(jsPsych) {
 function secondExample(instructionsParams, trial, jsPsych) {
     var preamblesHTML = $('#preambles').html()
     var gridhtml = $('#mushroomGrid').html()
-    // TODO: set sizing
-    // console.log(preamblesHTML)
     return {
         type: jsPsychDoubleSliderReconstruction,
         require_movement: true,
         stim: function () {
-            // console.log(preamblesHTML)
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
             var stemResponse = firstResponse.response1
@@ -255,7 +249,7 @@ function secondExample(instructionsParams, trial, jsPsych) {
         prompt2: 'Cap width',
         slider_width: 500,
         button_label: 'Send mushroom to student',
-        trial_duration: instructionsParams.timeout * 10000,
+        trial_duration: instructionsParams.timeout * 1000,
         data: {
             type: 'response',
             scenario: trial.scenario,
@@ -266,12 +260,6 @@ function secondExample(instructionsParams, trial, jsPsych) {
             capDirection: trial.capDirection,
             studentIndex: trial.studentIdx,
             exampleSet: 'second'
-        }
-        ,
-        on_finish: function (data) {
-            // TODO: add feedback stuff here
-            data.bonus = 'placeholder calculated bonus'
-
         }
     }
 }
@@ -295,7 +283,7 @@ function finish() {
                 <p>Time to move on to the next student! Press any key to continue.</p>
                 `
         },
-        trial_duration: 20000
+        trial_duration: 10000
     }
 }
 
@@ -324,18 +312,5 @@ function fixation(trial, design, jsPsych) {
     }
 }
 
-// for (let i = 0; i < design.length; i++) {
 
-
-
-
-
-//     // timeline.push(trialsInCondition[currTrial.condition])
-
-//     // Add attention check
-//     if (attention_locations.includes(i)) {
-//         // timeline.push(jsPsych.randomization.sampleWithoutReplacement(attention_trials, 1)[0]);
-//         // timeline.push([sending, sent, fixation])
-//     }
-// }
 
