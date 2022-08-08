@@ -3,143 +3,150 @@ var instructions = {
     pages: [
         `<p class="instruction">
         Please read the following instructions carefully as there will be a comprehension quiz.
-        If your answers on the comprehension quiz indicate that you have not read the 
+        If your answers on the comprehension quiz indicate that you have not read the
         instructions, we will repeat them.
         </p>`,
 
-        `<p class="instruction">
-        You have just landed on a new archipelago, consisting of many different islands. You're 
-        there to study the famous rainbow turtles. 
+        `<h2>🏝 Archipelago 🏝</h2>
+        <p class="instruction">
+        You have just landed on a new archipelago, consisting of many different islands. You're
+        there to study the famous rainbow turtles. </p>
 
-        You've heard that on some islands, purple turtles are more common, and on others, orange 
+        <p class="instruction">
+        You've heard that on some islands, <b style="color:purple;">purple</b> turtles are more common, and on others, <b style="color:orange;">orange</b>
         turtles are more common. You'd like to learn what sort of island each island is.
         </p>`,
 
-        `<p class="instruction">
-        Interestingly enough, all the islands have 7 out of 10 turtles in the <b>majority color</b> 
-        and 3 out of 10 turtles in the <b>minority color</b>. However, you don't know what 
+        `
+        <h2>Two types of islands</h2>
+        <p class="instruction">
+        Interestingly enough, all the islands have 7 out of every 10 turtles in the <b>majority color</b>
+        and 3 out of every 10 turtles in the <b>minority color</b>. However, you don't know what
         the majority and minority colors are on each island!
         </p>
         <p class="instruction">
         So, each island is either:
         </p>
         <ul>
-            <li><b>majority-purple</b>, with 7 out of 10 purple turtles and 3 out 
+            <li>majority-<b style="color:purple;">purple</b>, with 7 out of 10 purple turtles and 3 out
             of 10 orange turtles, or</li>
-            <li><b>majority-orange</b>, with 3 out of 10 purple turtles and 7 out of 
+            <li>majority-<b style="color:orange;">orange</b>, with 3 out of 10 purple turtles and 7 out of
             10 orange turtles.</li>
         </ul>
-        <div class="center" style="margin-bottom:1em;">
+        <div class="center" style="margin-bottom:0.5em;">
             <img src='img/archipelago.png' width="600"></img>
         </div>
         <p class="instruction">
-            Your goal is to <b>determine whether each island is 
+            Your goal is to <b>determine whether each island is
             majority-purple or majority-orange.</b>
         </p>`,
- 
-        `<h4>How will I learn about each island?</h4>
+
+        `<h2>How will I learn about each island?</h2>
         <p class="instruction">
-        Some local residents luckily have agreed to help show you around a total of 
-        ${params.nTrials} different islands. Every time you arrive on a new island, you will 
-        be matched with a new teacher.
+        Some local residents luckily have agreed to help show you around a total of
+        <b>${params.nTrials}</b> different islands. Every time you arrive on a new island, you will
+        be matched with a new teacher 🧑‍🏫
         </p>
         <!-- insert a teacher image here maybe? -->
         <p class="instruction">
-        This teacher knows where all the turtles on the island live and how many of them 
-        are orange compared to purple. They will <b>take you to see turtles that live in 
-        distinct regions of the island</b> to help you learn.  
+        This teacher knows where all the turtles on the island live and how many of them
+        are orange compared to purple. They will <b>take you to see turtles that live in
+        distinct regions of the island</b> to help you learn.
         </p>
         <p class="instruction">
-        So the teacher will give you information to <b>help you figure out whether each 
-        island is majority-purple or majority-orange.</b> Each teacher will show you <b>two 
-        sets</b> of orange and purple turtles from the island.   
+        So the teacher will give you information to <b>help you figure out whether each
+        island is majority-purple or majority-orange.</b> Each teacher will show you <b>two
+        sets</b> of orange and purple turtles from the island.
         </p>
         <p class="instruction">
-        At the end of each block, you will guess whether the island is 
-        majority-purple or majority-orange. You will receive a bonus each time you 
-        successfully guess the island type!   
+        At the end of each block, you will guess whether the island is
+        majority-purple or majority-orange. You will receive a bonus each time you
+        successfully guess the island type!
         </p>`,
 
-        `<p class="instruction">
-        <b>Before</b> the teacher begins to show you around each island, you will 
-        <b>have already come across ten orange and purple turtles on the island.</b>
-        On some of these islands, nine out of the ten turtles you come across will be orange. 
-        On some other islands, nine out of the ten turtles you come across will be purple. 
+        `
+        <h2>Prior knowledge</h2>
+        <p class="instruction">
+        <b>Before</b> the teacher begins to show you around each island, you will
+        <b>have already come across ten turtles on the island.</b>
+        On some of these islands, nine out of the ten turtles you come across will have been orange.
+        On some other islands, nine out of the ten turtles you come across will have been purple.
         We will give you this information every time you arrive on a new island.
         </p>
         <p class="instruction">
-        Sometimes, the teacher will know exactly which turtles you have seen, but other times 
-        they will be uncertain <b>as to whether you saw 9 orange turtles or 9 purple turtles 
+        Sometimes, the teacher will know exactly which turtles you have seen, but other times
+        they will be uncertain <b>as to whether you saw 9 orange turtles or 9 purple turtles
         out of 10 turtles.</b>
         </p>
         <p class="instruction">
-        <b>We won't tell you</b> whether the teacher <b>knows or doesn't know</b> 
-        what you have already seen. 
+        <b>We won't tell you</b> whether the teacher <b>knows or doesn't know</b>
+        what you have already seen.
         </p>`,
 
         `<p class="instruction">
-        All teachers will teach through two rounds.
+        All teachers will teach through two lessons.
         </p>`,
 
         `<h3 class="instruction">Lesson 1</h3>
         <p class="instruction">
-        Based on their knowledge of what you have seen, on the first round the teacher will 
-        show you an additional number of orange and purple turtles from the island to help 
-        you learn which type of island you are on. 
+        Based on their knowledge of what you have seen, on the first lesson the teacher will
+        show you an additional number of orange and purple turtles from the island to help
+        you learn which type of island you are on.
         </p>
         <p class="instruction">
-        Using these examples, you will use a slider to guess whether <b>the teacher 
+        Using these examples, you will use a slider to guess whether <b>the teacher
         knew what turtles you initially saw.</b>
         </p>
         <p class="instruction">
-        Then, you will have an option to send information to the teacher. You can select 
-        whether you would like to <b>enter a guess for the island type</b> and send it 
+        Then, you will have an option to send information to the teacher. You can select
+        whether you would like to <b>enter a guess for the island type</b> and send it
         to the teacher.
         </p>
         <p class="instruction">
-        If you send a guess, the teacher will consider this guess when showing you 
-        the second set of turtles. 
+        If you send a guess, the teacher will consider this guess when showing you
+        the second set of turtles.
         </p>`,
 
         `<h3 class="instruction">Lesson 2</h3>
         <p class="instructions">
-        In this round, the teacher will <b>send you a second set of example turtles.</b>
+        In this lesson, the teacher will <b>send you a second set of example turtles.</b>
         </p>
         <p class="instruction">
-        Then, you will enter your final guess for what type of island you are on 
+        Then, you will enter your final guess for what type of island you are on
         (<b>majority-orange</b> or <b>majority-purple</b>).
         </p>`,
 
         `<p class="instructions">
-        Then the block will end and you will move on to the next block, 
+        Then the block will end and you will move on to the next block,
         where you will encounter a new teacher on a <em>completely new island.</em>
         </p>`,
 
-        `<h3>How to earn a bonus</h3> 
+        `<h3>How to earn a bonus</h3>
         <p class="instruction">
-        Every time you select the correct island <b>during the final lesson</b>, you will 
-        earn a bonus of $${params.perTrialBonus.toFixed(2)}. 
+        Every time you select the correct island <b>during the final lesson</b>, you will
+        earn a bonus of $${params.perTrialBonus.toFixed(2)}.
         </p>
         <p class="instruction">
-        Sending feedback to the teacher costs money: every time you send feedback 
-        to the teacher, $${params.feedbackCost.toFixed(2)} will be subtracted from your bonus.  
+        Sending feedback to the teacher costs money: every time you send feedback
+        to the teacher, $${params.feedbackCost.toFixed(2)} will be subtracted from your bonus.
         </p>`,
 
         `<h2>Review</h2>
+        <br>
         <h4>Lesson 1</h4>
         <ul>
-            <li>You will come across some turtles, then see additional example 
+            <li>You will come across some turtles, then see additional example
             turtles from a teacher</li>
-            <li>After seeing the examples, you will guess whether the teacher 
-            knows which turtles you saw at first</li>
+            <li>After seeing the examples, you will guess whether the teacher
+            knew which turtles you saw at first</li>
             <li>You will decide whether or not to send a guess to the teacher</li>
         </ul>
         <h4>Lesson 2</h4>
         <ul>
             <li>The teacher will send you <b>another</b> set of examples</li>
-            <li>Based on all of the turtles you have seen, you will guess what island type 
+            <li>Based on all of the turtles you have seen, you will guess what island type
             you are on (majority-orange or majority-purple)</li>
-            <li>Your bonus will be based on this final guess, minus a cost if you 
+            <li>Your bonus will be based on this final guess, minus a cost if you
             previously sent the teacher information</li>
         </ul>`,
     ],
@@ -164,7 +171,7 @@ var comprehensionCheck = {
             prompt: 'Will you ever encounter the same teacher for two different islands?',
             options: [
                 `Yes, I can sometimes encounter the same teacher twice.`,
-                `No: even if the examples look familiar, I'll always be learning from a 
+                `No: even if the examples look familiar, I'll always be learning from a
                 new teacher.`
             ],
             required: true
@@ -201,9 +208,9 @@ var comprehensionCheck = {
     randomize_question_order: true,
 
     on_finish: function (data) {
-        data.pass = [data.response.Q0.includes('either'), 
-                    data.response.Q1.includes('familiar'), 
-                    data.response.Q2.includes('Some turtles.'), 
+        data.pass = [data.response.Q0.includes('either'),
+                    data.response.Q1.includes('familiar'),
+                    data.response.Q2.includes('Some turtles.'),
                     data.response.Q3.includes('final'),
                     data.response.Q4.includes('another')].every(Boolean)
     }
