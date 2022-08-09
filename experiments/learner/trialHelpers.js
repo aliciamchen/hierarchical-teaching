@@ -20,6 +20,7 @@ function calc_teacher (hypers, trueTheta, teachers) {
 function responsiveIslandGuess () {
 	function islandGuess(state)
 	{
+		$("#jspsych-survey-html-form-next").attr("disabled", false);
 		var islandGuess = document.getElementById('islandGuess');
 		if (state == 'appear')
 		{
@@ -45,10 +46,15 @@ function responsiveIslandGuess () {
 function fetchFirstExamples (currTrial, stage = 'first') 
 {
     $.get('./json/firstExamples.json', function(data) {
-		var firstExamples = data.filter(x => x.theta == currTrial.coinWeight && 
+		if (currTrial.firstExamples) {
+			var firstExamples = currTrial.firstExamples;
+		}
+		else {
+			var firstExamples = data.filter(x => x.theta == currTrial.coinWeight && 
 											x.condition == currTrial.condition &&
 											x.hypers.a == hyperParams[currTrial.trueHyper].a
 											)[0].examples;
+		}
         $(".examples")
 			.html(`${stage == 'first' ? `Your teacher shows` : `your teacher showed`}
 				 you ${ex_to_text(firstExamples)}.`);
@@ -60,16 +66,17 @@ function fetchFirstExamples (currTrial, stage = 'first')
 // adds text based on the new teacher's examples
 function fetchSecondExamples (currTrial) 
 {
-    $.get('./json/precalc.json', function(data) {
+	$.get('./json/precalc.json', function(data) {
 		fetchFirstExamples(currTrial, 'final');
-		var secondExamples = data.filter(x => x.theta == currTrial.coinWeight && 
-											x.firstExample.a == currTrial.firstExamples.a && 
-											x.guess.a == currTrial.studentGuess.a > 50 ? 30 : 70
+		var secondExamples = data.filter(x => x.theta == currTrial.coinWeight 
+											&& x.firstExample.a == currTrial.firstExamples.a 
+											// needs fixing, not accurate second examples
+											&& x.guess.a == currTrial.coinWeight * 100
 											)[0].secondExample;
         $(".secondExamples")
 			.html(`<p>Your teacher shows you an additional ${ex_to_text(secondExamples)}</p>`);
-		$(".examplesA").val(secondExamples.a);
-		$(".examplesB").val(secondExamples.b);
+		$(".secondExA").val(secondExamples.a);
+		$(".secondExB").val(secondExamples.b);
     })
 };
 
@@ -125,16 +132,16 @@ function saveData (stage, data, currTrial, i)
 	data.studentIndex = i;
 	data.studentTrueHypers = hyperParams[currTrial.trueHyper];
 
-
 	if (stage !== 'final')
 	{
 		data.teacherKnowledge = info.teacherKnowledge;
-		data.feedbackChoice = info.feedbackChoice;
+		data.feedbackChoice = currTrial.feedbackChoice = info.feedbackChoice;
 
 		if (stage == 'first')
 		{
 			data.firstGuess = currTrial.studentGuess = info.studentGuess;
-			data.firstExamples = currTrial.firstExamples = {a: data.examplesA, b: data.examplesB};
+			data.firstExamples = currTrial.firstExamples = 
+					{a: parseInt(data.response.examplesA), b: parseInt(data.response.examplesB)};
 		}
 		else
 		{
@@ -148,14 +155,16 @@ function saveData (stage, data, currTrial, i)
 	else
 	{
 		data.finalGuess = info.studentGuess;
-		data.secondExamples = currTrial.secondExamples = {a: data.examplesA, b: data.examplesB};
+		data.secondExamples = currTrial.secondExamples = 
+				{a: parseInt(data.response.secondExA), b: parseInt(data.response.secondExB)};
 		data.bonus = data.trueTheta == 0.7 ? 
 						data.finalGuess > 50 ? params.perTrialBonus : 0 
 						: data.finalGuess < 50 ? params.perTrialBonus : 0;
+		data.bonus -= currTrial.feedbackChoice == 'yes' ? params.feedbackCost : 0;
 		data.bonusSoFar = Number(jsPsych.data.get().select('bonus').sum().toFixed(2));
 	}
 
-	return data, currTrial;
+	return {data: data, currTrial: currTrial};
 };
 
 function loadFunction(stage, currTrial)
@@ -170,6 +179,7 @@ function loadFunction(stage, currTrial)
 	{
 		fetchFirstExamples(currTrial);
 		responsiveIslandGuess();
+		$("#jspsych-survey-html-form-next").attr("disabled", true);
 	}
 	else if (stage == 'final')
 	{

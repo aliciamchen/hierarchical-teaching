@@ -25,7 +25,7 @@ var survey = {
         function (data) {
             data.totalBonus = Number(jsPsych.data.get().select('bonus').sum().toFixed(2));
             data.nAttentionPassed = jsPsych.data.get().select('attentionPassed').sum();
-            data.attentionChecksPassed = data.nAttentionPassed == 3 ? true : false;
+            data.attentionChecksPassed = data.nAttentionPassed == 2 ? true : false;
         },
 };
 
@@ -34,12 +34,11 @@ var debrief_block = {
     stimulus: function () {
 
         var totalBonus = jsPsych.data.get().select('bonus').sum().toFixed(2);
-        var totalPay = Number(totalBonus) + Number(params.basePay);
+        var totalPay = (Number(totalBonus) + Number(params.basePay)).toFixed(2);
         return `
                 <p>Thanks for participating in the experiment!</p>
                 <p>Your total bonus is <b>$${totalBonus}</b>.</p>
                 <p>Your total pay is <b>$${totalPay}</b></p>
-                <p>If you were curious, you weren't interacting with a real learner.</p>
                 <p>Press any key to exit and collect your bonus.</p>
                 <p>After you exit, it is safe to close the screen and your responses will be saved automatically.</p>
                 `;
