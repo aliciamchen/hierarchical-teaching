@@ -136348,5 +136348,35 @@
 			"a": 9,
 			"b": 1
 		}
+	},
+	{
+		"theta": 0.7,
+		"firstExample": {
+			"a": 10,
+			"b": 0
+		},
+		"guess": {
+			"a": 70,
+			"b": 30
+		},
+		"secondExample": {
+			"a": 8,
+			"b": 2
+		}
+	},
+	{
+		"theta": 0.3,
+		"firstExample": {
+			"a": 10,
+			"b": 0
+		},
+		"guess": {
+			"a": 30,
+			"b": 70
+		},
+		"secondExample": {
+			"a": 1,
+			"b": 9
+		}
 	}
 ]
