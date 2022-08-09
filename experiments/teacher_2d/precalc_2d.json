@@ -11,7 +11,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -27,7 +27,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -43,7 +43,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -59,7 +59,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -73,7 +73,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -89,7 +89,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -105,7 +105,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -121,7 +121,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -139,7 +139,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -155,7 +155,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -235,7 +235,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -251,7 +251,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -329,7 +329,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -345,7 +345,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -361,7 +361,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -377,7 +377,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -393,7 +393,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -409,7 +409,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -425,7 +425,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -441,7 +441,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -457,7 +457,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -473,7 +473,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -489,7 +489,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -505,7 +505,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -523,7 +523,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -539,7 +539,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -555,7 +555,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -571,7 +571,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -587,7 +587,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -603,7 +603,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -619,7 +619,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -635,7 +635,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -651,7 +651,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -667,7 +667,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -683,7 +683,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -699,7 +699,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -713,7 +713,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -729,7 +729,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -745,7 +745,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -761,7 +761,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -907,7 +907,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -923,7 +923,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -1003,7 +1003,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -1019,7 +1019,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -1099,7 +1099,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -1115,7 +1115,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -1195,7 +1195,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -1211,7 +1211,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -1291,7 +1291,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -1307,7 +1307,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -1387,7 +1387,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -1403,7 +1403,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -1481,7 +1481,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1497,7 +1497,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1513,7 +1513,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1529,7 +1529,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1545,7 +1545,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1561,7 +1561,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1577,7 +1577,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1593,7 +1593,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1609,7 +1609,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1625,7 +1625,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1641,7 +1641,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -1657,7 +1657,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -2059,7 +2059,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -2075,7 +2075,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -2091,7 +2091,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -2107,7 +2107,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -2123,7 +2123,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -2139,7 +2139,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -2155,7 +2155,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -2171,7 +2171,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -2185,7 +2185,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2201,7 +2201,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2217,7 +2217,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2233,7 +2233,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2249,7 +2249,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2265,7 +2265,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2281,7 +2281,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2297,7 +2297,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2441,7 +2441,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -2457,7 +2457,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -2473,7 +2473,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -2489,7 +2489,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -2505,7 +2505,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -2521,7 +2521,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -2537,7 +2537,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -2553,7 +2553,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -2571,7 +2571,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -2587,7 +2587,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -2603,7 +2603,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -2619,7 +2619,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -2635,7 +2635,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -2651,7 +2651,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -2667,7 +2667,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -2683,7 +2683,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -2699,7 +2699,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -2715,7 +2715,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -2731,7 +2731,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -2747,7 +2747,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -2763,7 +2763,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -2779,7 +2779,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -2795,7 +2795,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -2811,7 +2811,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -2827,7 +2827,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -2843,7 +2843,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -2859,7 +2859,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -2875,7 +2875,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -2891,7 +2891,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -2907,7 +2907,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -2923,7 +2923,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -2939,7 +2939,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -2953,7 +2953,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2969,7 +2969,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -2985,7 +2985,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -3001,7 +3001,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -3017,7 +3017,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -3033,7 +3033,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -3049,7 +3049,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -3065,7 +3065,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -3721,7 +3721,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -3737,7 +3737,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -3753,7 +3753,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -3769,7 +3769,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -3785,7 +3785,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -3801,7 +3801,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -3817,7 +3817,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -3833,7 +3833,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -4107,7 +4107,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -4123,7 +4123,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -4139,7 +4139,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -4155,7 +4155,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -4203,7 +4203,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -4219,7 +4219,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -4235,7 +4235,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -4251,7 +4251,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -4297,7 +4297,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4313,7 +4313,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4329,7 +4329,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4345,7 +4345,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4361,7 +4361,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4377,7 +4377,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4393,7 +4393,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4409,7 +4409,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4425,7 +4425,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4441,7 +4441,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4457,7 +4457,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4473,7 +4473,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -4553,7 +4553,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -4569,7 +4569,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -4585,7 +4585,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -4601,7 +4601,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -4619,7 +4619,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -4635,7 +4635,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -4651,7 +4651,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -4667,7 +4667,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -4715,7 +4715,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -4731,7 +4731,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -4747,7 +4747,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -4763,7 +4763,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -4811,7 +4811,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -4827,7 +4827,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -4843,7 +4843,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -4859,7 +4859,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -4907,7 +4907,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -4923,7 +4923,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -4939,7 +4939,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -4955,7 +4955,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -5003,7 +5003,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -5019,7 +5019,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -5035,7 +5035,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -5051,7 +5051,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -5099,7 +5099,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -5115,7 +5115,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -5131,7 +5131,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -5147,7 +5147,7 @@
     "learnerGuess": {
       "stemThreshold": 2.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -5193,7 +5193,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5209,7 +5209,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5225,7 +5225,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5241,7 +5241,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5257,7 +5257,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5273,7 +5273,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5289,7 +5289,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5305,7 +5305,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5321,7 +5321,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5337,7 +5337,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5353,7 +5353,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5369,7 +5369,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -5961,7 +5961,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -5977,7 +5977,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -5993,7 +5993,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -6009,7 +6009,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -6155,7 +6155,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -6171,7 +6171,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -6187,7 +6187,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -6203,7 +6203,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -6219,7 +6219,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -6235,7 +6235,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -6251,7 +6251,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -6267,7 +6267,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -6281,7 +6281,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -6297,7 +6297,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -6313,7 +6313,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -6329,7 +6329,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -6345,7 +6345,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -6361,7 +6361,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -6377,7 +6377,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -6393,7 +6393,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -6411,7 +6411,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -6427,7 +6427,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -6507,7 +6507,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -6523,7 +6523,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -6603,7 +6603,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -6619,7 +6619,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -6699,7 +6699,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -6715,7 +6715,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -6793,7 +6793,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6809,7 +6809,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6825,7 +6825,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6841,7 +6841,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6857,7 +6857,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6873,7 +6873,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6889,7 +6889,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6905,7 +6905,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6921,7 +6921,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6937,7 +6937,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6953,7 +6953,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6969,7 +6969,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -6985,7 +6985,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7001,7 +7001,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7017,7 +7017,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7033,7 +7033,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7049,7 +7049,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7065,7 +7065,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7081,7 +7081,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7097,7 +7097,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7113,7 +7113,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7129,7 +7129,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7145,7 +7145,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7161,7 +7161,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -7179,7 +7179,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -7195,7 +7195,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -7211,7 +7211,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -7227,7 +7227,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -7243,7 +7243,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -7259,7 +7259,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -7275,7 +7275,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -7291,7 +7291,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -7435,7 +7435,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -7451,7 +7451,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -7531,7 +7531,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -7547,7 +7547,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -7627,7 +7627,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -7643,7 +7643,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -7723,7 +7723,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -7739,7 +7739,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -8203,7 +8203,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -8219,7 +8219,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -8235,7 +8235,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -8251,7 +8251,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -8267,7 +8267,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -8283,7 +8283,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -8299,7 +8299,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -8315,7 +8315,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -8331,7 +8331,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -8347,7 +8347,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -8363,7 +8363,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -8379,7 +8379,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -8395,7 +8395,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -8411,7 +8411,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -8427,7 +8427,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -8443,7 +8443,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -8457,7 +8457,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8473,7 +8473,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8489,7 +8489,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8505,7 +8505,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8521,7 +8521,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8537,7 +8537,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8553,7 +8553,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8569,7 +8569,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8585,7 +8585,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8601,7 +8601,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8617,7 +8617,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8633,7 +8633,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8649,7 +8649,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8665,7 +8665,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8681,7 +8681,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8697,7 +8697,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -8969,7 +8969,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -8985,7 +8985,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9001,7 +9001,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9017,7 +9017,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9033,7 +9033,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9049,7 +9049,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9065,7 +9065,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9081,7 +9081,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9097,7 +9097,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9113,7 +9113,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9129,7 +9129,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9145,7 +9145,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9161,7 +9161,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9177,7 +9177,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9193,7 +9193,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9209,7 +9209,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -9227,7 +9227,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -9243,7 +9243,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -9259,7 +9259,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -9275,7 +9275,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -9291,7 +9291,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -9307,7 +9307,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -9323,7 +9323,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -9339,7 +9339,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -9355,7 +9355,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -9371,7 +9371,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -9387,7 +9387,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -9403,7 +9403,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -9419,7 +9419,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -9435,7 +9435,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -9451,7 +9451,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -9467,7 +9467,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -10251,7 +10251,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -10267,7 +10267,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -10283,7 +10283,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -10299,7 +10299,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -10347,7 +10347,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -10363,7 +10363,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -10379,7 +10379,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -10395,7 +10395,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -10443,7 +10443,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -10459,7 +10459,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -10475,7 +10475,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -10491,7 +10491,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -10539,7 +10539,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -10555,7 +10555,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -10571,7 +10571,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -10587,7 +10587,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -10633,7 +10633,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10649,7 +10649,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10665,7 +10665,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10681,7 +10681,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10697,7 +10697,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10713,7 +10713,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10729,7 +10729,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10745,7 +10745,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10761,7 +10761,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10777,7 +10777,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10793,7 +10793,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10809,7 +10809,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10825,7 +10825,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10841,7 +10841,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10857,7 +10857,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10873,7 +10873,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10889,7 +10889,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10905,7 +10905,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10921,7 +10921,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10937,7 +10937,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10953,7 +10953,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10969,7 +10969,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -10985,7 +10985,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -11001,7 +11001,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -11145,7 +11145,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -11161,7 +11161,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -11177,7 +11177,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -11193,7 +11193,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -11209,7 +11209,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -11225,7 +11225,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -11241,7 +11241,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -11257,7 +11257,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -11275,7 +11275,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -11291,7 +11291,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -11307,7 +11307,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -11323,7 +11323,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -11371,7 +11371,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -11387,7 +11387,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -11403,7 +11403,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -11419,7 +11419,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -11467,7 +11467,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -11483,7 +11483,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -11499,7 +11499,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -11515,7 +11515,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -11563,7 +11563,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -11579,7 +11579,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -11595,7 +11595,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -11611,7 +11611,7 @@
     "learnerGuess": {
       "stemThreshold": 4.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -12299,7 +12299,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -12315,7 +12315,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -12331,7 +12331,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -12347,7 +12347,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -12363,7 +12363,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -12379,7 +12379,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -12395,7 +12395,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -12411,7 +12411,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -12427,7 +12427,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -12443,7 +12443,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -12459,7 +12459,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -12475,7 +12475,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -12489,7 +12489,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -12505,7 +12505,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -12521,7 +12521,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -12537,7 +12537,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -12553,7 +12553,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -12569,7 +12569,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -12585,7 +12585,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -12601,7 +12601,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "less"
@@ -12683,7 +12683,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -12699,7 +12699,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -12779,7 +12779,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -12795,7 +12795,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -12875,7 +12875,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -12891,7 +12891,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -12971,7 +12971,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -12987,7 +12987,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -13067,7 +13067,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -13083,7 +13083,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -13163,7 +13163,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -13179,7 +13179,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -13257,7 +13257,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13273,7 +13273,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13289,7 +13289,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13305,7 +13305,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13321,7 +13321,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13337,7 +13337,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13353,7 +13353,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13369,7 +13369,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13385,7 +13385,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13401,7 +13401,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13417,7 +13417,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13433,7 +13433,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13449,7 +13449,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13465,7 +13465,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13481,7 +13481,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13497,7 +13497,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13513,7 +13513,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13529,7 +13529,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13545,7 +13545,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13561,7 +13561,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13577,7 +13577,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13593,7 +13593,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13609,7 +13609,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13625,7 +13625,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 2.5,
       "capDirection": "greater"
@@ -13835,7 +13835,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -13851,7 +13851,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -13867,7 +13867,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -13883,7 +13883,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -13963,7 +13963,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -13979,7 +13979,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -14059,7 +14059,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -14075,7 +14075,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -14347,7 +14347,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -14363,7 +14363,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -14379,7 +14379,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -14395,7 +14395,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -14411,7 +14411,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -14427,7 +14427,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -14443,7 +14443,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -14459,7 +14459,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -14475,7 +14475,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -14491,7 +14491,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -14507,7 +14507,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -14523,7 +14523,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -14539,7 +14539,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -14555,7 +14555,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -14571,7 +14571,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -14587,7 +14587,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -14603,7 +14603,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -14619,7 +14619,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -14635,7 +14635,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -14651,7 +14651,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -14667,7 +14667,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -14683,7 +14683,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -14699,7 +14699,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -14715,7 +14715,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -14729,7 +14729,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14745,7 +14745,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14761,7 +14761,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14777,7 +14777,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14793,7 +14793,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14809,7 +14809,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14825,7 +14825,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14841,7 +14841,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14857,7 +14857,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14873,7 +14873,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14889,7 +14889,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14905,7 +14905,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14921,7 +14921,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14937,7 +14937,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14953,7 +14953,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -14969,7 +14969,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "less"
@@ -15497,7 +15497,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15513,7 +15513,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15529,7 +15529,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15545,7 +15545,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15561,7 +15561,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15577,7 +15577,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15593,7 +15593,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15609,7 +15609,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15625,7 +15625,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15641,7 +15641,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15657,7 +15657,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15673,7 +15673,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15689,7 +15689,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15705,7 +15705,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15721,7 +15721,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15737,7 +15737,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 4.5,
       "capDirection": "greater"
@@ -15883,7 +15883,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -15899,7 +15899,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -15915,7 +15915,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -15931,7 +15931,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -15947,7 +15947,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -15963,7 +15963,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -15979,7 +15979,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -15995,7 +15995,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -16395,7 +16395,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -16411,7 +16411,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -16427,7 +16427,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -16443,7 +16443,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -16491,7 +16491,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -16507,7 +16507,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -16523,7 +16523,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -16539,7 +16539,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -16587,7 +16587,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -16603,7 +16603,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -16619,7 +16619,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -16635,7 +16635,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -16683,7 +16683,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -16699,7 +16699,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -16715,7 +16715,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -16731,7 +16731,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -16779,7 +16779,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -16795,7 +16795,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -16811,7 +16811,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -16827,7 +16827,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -16875,7 +16875,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -16891,7 +16891,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -16907,7 +16907,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -16923,7 +16923,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "less",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -16969,7 +16969,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -16985,7 +16985,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17001,7 +17001,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17017,7 +17017,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17033,7 +17033,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17049,7 +17049,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17065,7 +17065,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17081,7 +17081,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17097,7 +17097,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17113,7 +17113,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17129,7 +17129,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17145,7 +17145,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17161,7 +17161,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17177,7 +17177,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17193,7 +17193,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17209,7 +17209,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17225,7 +17225,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17241,7 +17241,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17257,7 +17257,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 1 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17273,7 +17273,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 2 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17289,7 +17289,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 3 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17305,7 +17305,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 4 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17321,7 +17321,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 5 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17337,7 +17337,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 6 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "less"
@@ -17737,7 +17737,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -17753,7 +17753,7 @@
     "prior": "cap",
     "response": { "stemResponse": 1, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 2,
+      "stemThreshold": 1.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -17769,7 +17769,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -17785,7 +17785,7 @@
     "prior": "cap",
     "response": { "stemResponse": 2, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 3,
+      "stemThreshold": 2.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -17801,7 +17801,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -17817,7 +17817,7 @@
     "prior": "cap",
     "response": { "stemResponse": 3, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 4,
+      "stemThreshold": 3.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -17833,7 +17833,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 7 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -17849,7 +17849,7 @@
     "prior": "cap",
     "response": { "stemResponse": 4, "capResponse": 8 },
     "learnerGuess": {
-      "stemThreshold": 5,
+      "stemThreshold": 4.5,
       "stemDirection": "less",
       "capThreshold": 6.5,
       "capDirection": "greater"
@@ -17931,7 +17931,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -17947,7 +17947,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -17963,7 +17963,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -17979,7 +17979,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },
@@ -18027,7 +18027,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 2,
+      "capThreshold": 1.5,
       "capDirection": "less"
     }
   },
@@ -18043,7 +18043,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 3,
+      "capThreshold": 2.5,
       "capDirection": "less"
     }
   },
@@ -18059,7 +18059,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 4,
+      "capThreshold": 3.5,
       "capDirection": "less"
     }
   },
@@ -18075,7 +18075,7 @@
     "learnerGuess": {
       "stemThreshold": 6.5,
       "stemDirection": "greater",
-      "capThreshold": 5,
+      "capThreshold": 4.5,
       "capDirection": "less"
     }
   },

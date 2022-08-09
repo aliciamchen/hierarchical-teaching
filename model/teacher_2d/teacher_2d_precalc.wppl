@@ -20,8 +20,8 @@ var xs = _.range(1, 9), ys = _.range(1, 9);
 
 var prior = function (hypers) {
 
-    var stemThreshold = typeof hypers.stemThreshold == "undefined" ? uniformDraw(_.range(1.5, 8, 0.5)) : hypers.stemThreshold;
-    var capThreshold = typeof hypers.capThreshold == "undefined" ? uniformDraw(_.range(1.5, 8, 0.5)) : hypers.capThreshold;
+    var stemThreshold = typeof hypers.stemThreshold == "undefined" ? uniformDraw(_.range(1.5, 8, 1)) : hypers.stemThreshold;
+    var capThreshold = typeof hypers.capThreshold == "undefined" ? uniformDraw(_.range(1.5, 8, 1)) : hypers.capThreshold;
 
     var stemDirection = typeof hypers.stemDirection == "undefined" ? uniformDraw(directions) : hypers.stemDirection;
     var capDirection = typeof hypers.capDirection == "undefined" ? uniformDraw(directions) : hypers.capDirection;

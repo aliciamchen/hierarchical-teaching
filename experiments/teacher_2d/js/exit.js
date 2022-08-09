@@ -1,5 +1,5 @@
 
-function exitSurvey() {
+function exitSurvey(jsPsych) {
     return {
         type: jsPsychSurveyHtmlForm,
         preamble: `
