@@ -107,7 +107,7 @@ var makeFeedback = function () {
                             return map(function (stemResponse) {
                                 return map(function (capResponse) {
 
-                                    var learnerGuess = MAP(L0({ stem: stemResponse, cap: capResponse }, findHypers(trueH, prior)))
+                                    var learnerGuess = sample(L0({ stem: stemResponse, cap: capResponse }, findHypers(trueH, prior)))
 
                                     return {
                                         trueH: trueH,
@@ -116,7 +116,7 @@ var makeFeedback = function () {
                                             stemResponse: stemResponse,
                                             capResponse: capResponse
                                         },
-                                        learnerGuess: learnerGuess.val
+                                        learnerGuess: learnerGuess
                                     }
                                 }, response.possibleCaps)
                             }, response.possibleStems)
