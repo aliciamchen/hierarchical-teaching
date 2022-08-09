@@ -84,9 +84,9 @@ $(function () {
     const save_data = {
         type: jsPsychCallFunction,
         func: function () {
-            save_data_json("output_all" + subjectId, jsPsych.data.get().json());
-            save_data_json("output_responsesOnly" + subjectId, jsPsych.data.get().filter({ type: 'response' }).json())
-            save_data_json("output_attention" + subjectId, jsPsych.data.get().filter({ type: 'attention' }).json())
+            save_data_json("output_all_" + subjectId, jsPsych.data.get().json());
+            save_data_json("output_responsesOnly_" + subjectId, jsPsych.data.get().filter({ type: 'response' }).json())
+            save_data_json("output_attention_" + subjectId, jsPsych.data.get().filter({ type: 'attention' }).json())
         },
         timing_post_trial: 0
     };
@@ -108,12 +108,12 @@ $(function () {
     // for testing
     // timeline.push(makeTrialsForScenario(instructionsParams, testTrialSeq, design, jsPsych))
 
-    timeline.push(exitSurvey())
+    timeline.push(exitSurvey(jsPsych))
     if (!local_testing) {
         timeline.push(save_data);
     }
 
-    timeline.push(debrief(instructionsParams, jsPsych))
+    timeline.push(debrief())
 
 
     jsPsych.run(timeline.flat());

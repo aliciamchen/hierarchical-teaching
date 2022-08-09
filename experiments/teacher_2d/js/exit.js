@@ -16,7 +16,7 @@ function exitSurvey(jsPsych) {
     }
 }
 
-function debrief(instructionsParams, jsPsych){
+function debrief(){
     return {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: function () {
