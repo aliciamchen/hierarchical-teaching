@@ -91,7 +91,7 @@ var instructions = {
         <p class="instruction">
         Based on their knowledge of what you have seen, on the first lesson the teacher will
         show you an additional number of orange and purple turtles from the island to help
-        you learn which type of island you are on.
+        you learn whether you are on a majority-orange island or a majority-purple island.
         </p>
         <p class="instruction">
         Using these examples, you will use a slider to guess whether <b>the teacher
@@ -162,7 +162,7 @@ var comprehensionCheck = {
             options: [
                 `The teacher always knows the turtles I have seen.`,
                 `The teacher either knows the turtles I have seen, or is uncertain as to \
-                the turtles I've seen.`,
+                whether I've seen 9 out of 10 orange turtles or 9 out of 10 purple turtles. `,
                 `The teacher is always uncertain as to what turtles I have seen.`
             ],
             required: true

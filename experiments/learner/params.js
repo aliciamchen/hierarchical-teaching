@@ -1,9 +1,9 @@
 const params = {
     nTrials: 10,
     maxExamples: 100,
-    completionMinutes: 30,
-    basePay: 5,
-    maxBonus: 12,
+    completionMinutes: 20,
+    basePay: 3,
+    maxBonus: 7,
     perTrialBonus: 0.25,
     perTrialBonusThreshold: 0.08,
     feedbackCost: 0.10
