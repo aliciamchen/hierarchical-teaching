@@ -1,5 +1,5 @@
 # Preprocess raw `.json` data from experiment
-# python preprocess.py --in_dir full_sample --out_dir teacher_1d --expt_label expt1
+# python preprocess.py --in_dir pilot_1a_data --out_dir pilot_1a --expt_label pilot_1a
 
 import glob
 import json
@@ -74,59 +74,39 @@ if __name__ == "__main__":
         }, index=[0])
 
         # Make data dataframe
-        cols = ['subject_id', 'student_idx', 'block_type', 'trial_num', 'true_theta',
-                'student_a', 'student_b', 'student_class', 'heads', 'tails', 'student_guess']
+        cols = ['subject_id', 'island_idx', 'block_type', 'trial_num', 'theta',
+                'student_a', 'student_b', 'first_examples_a', 'first_examples_b', 
+                'first_guess', 'teacher_knowledge', 'feedback_choice', 'bonus',
+                'second_examples_a', 'second_examples_b', 'final_guess']
         df_data = pd.DataFrame(columns=cols)
 
         for i, trial in enumerate(data):
             df_data.loc[i, 'subject_id'] = trial['subjectId']
-            df_data.loc[i, 'student_idx'] = trial['studentIndex']
+            df_data.loc[i, 'island_idx'] = trial['studentIndex']
             df_data.loc[i, 'block_type'] = trial['condition']
-            df_data.loc[i, 'true_theta'] = trial['trueTheta']
-            df_data.loc[i, 'trial_num'] = 0 if trial['exampleSet'] == 'first' else 1
+            df_data.loc[i, 'theta'] = trial['trueTheta']
+            df_data.loc[i, 'trial_num'] = 0 if trial['responseSet'] == 'first' else 1
             df_data.loc[i, 'student_a'] = trial['studentTrueHypers']['a']
             df_data.loc[i, 'student_b'] = trial['studentTrueHypers']['b']
-            df_data.loc[i, 'teacher'] = trial['teacher']
-            df_data.loc[i, 'student_class'] = trial['studentTrueClassroom']
-            df_data.loc[i, 'student_guess'] = trial['studentGuess']
-            df_data.loc[i, 'error'] = trial['delta']
 
-            try:
-                df_data.loc[i, 'bonus'] = trial['bonus']
-            except:
-                df_data.loc[i, 'bonus'] = np.nan
+            if trial['responseSet'] == 'first':
+                df_data.loc[i, 'first_examples_a'] = trial['firstExamples']['a']
+                df_data.loc[i, 'first_examples_b'] = trial['firstExamples']['b']
+                df_data.loc[i, 'first_guess'] = trial['firstGuess']
+                df_data.loc[i, 'teacher_knowledge'] = trial['teacherKnowledge']
+                df_data.loc[i, 'feedback_choice'] = trial['feedbackChoice']
 
-            if trial['exampleSet'] == 'first':
-                df_data.loc[i, 'heads'] = trial['heads']
-                df_data.loc[i, 'tails'] = trial['tails']
-
-        # get rid of student guess in sequential no feedback case
-        df_data.loc[(df_data['block_type'] == "seqNoFeedback") & (
-            df_data['trial_num'] == 0), ['student_guess', 'error']] = np.nan
-
-        # get rid of delta in sequential feedback case (cause first guess doesn't matter)
-        df_data.loc[(df_data['block_type'] == "seqFeedback") & (
-            df_data['trial_num'] == 0), ['error']] = np.nan
+            if trial['responseSet'] == 'final':
+                df_data.loc[i, 'second_examples_a'] = trial['secondExamples']['a']
+                df_data.loc[i, 'second_examples_b'] = trial['secondExamples']['b']
+                df_data.loc[i, 'final_guess'] = trial['finalGuess']
 
         # Add bonus info and understood instructions (for exclusion criteria)
         df_data['total_bonus'] = demographics['totalBonus']
         df_data['understood'] = demographics['response']['understood']
-        # df_data['pass_attention'] = demographics['passAllAttentionChecks']
-        df_data['n_attention_passed'] = demographics['nAttentionChecksPassed']
+        df_data['n_attention_passed'] = demographics['nAttentionPassed']
 
-        # Drop trials with no responses, timeout, more than max
-        df_data.drop(df_data[(df_data['heads'] == 0) & (
-            df_data['tails'] == 0)].index, inplace=True)
-        df_data.drop(df_data[df_data['heads'] +
-                     df_data['tails'] > 70].index, inplace=True)
-
-        # TODO: check that it is dropping the right stuff — there shouldn't be more than 2 observations per thing
-
-        df_data['total_ex'] = df_data['heads'] + df_data['tails']
-        df_data['mean'] = df_data['heads'] / (df_data['total_ex'])
-        df_data.rename(columns={"true_theta": "theta"}, inplace=True)
-
-        # Make separate csv of bonuses, to upload to cloudREsearch
+        # Make separate csv of bonuses, to upload to cloudResearch
         df_bonus = pd.DataFrame(data={
             'subject_id': demographics['subjectId'],
             'total_bonus': demographics['totalBonus']
@@ -139,16 +119,6 @@ if __name__ == "__main__":
     df_demographics_all = pd.concat(dfs_demographics, ignore_index=True)
     df_data_all = pd.concat(dfs_data, ignore_index=True)
     df_bonuses_all = pd.concat(dfs_bonuses, ignore_index=True)
-
-    # Calculate normalized stuff for df data
-    df_data_all.loc[df_data_all['student_class'] == 'B',
-                    'normalized_mean'] = 1 - df_data_all['mean']
-    df_data_all.loc[df_data_all['student_class'] == 'B', 'normalized_theta'] = round(
-        1 - df_data_all['theta'].astype(float), 1)
-    df_data_all.loc[df_data_all['student_class'] ==
-                    'A', 'normalized_mean'] = df_data_all['mean']
-    df_data_all.loc[df_data_all['student_class'] ==
-                    'A', 'eta'] = df_data_all['theta']
 
     df_demographics_all.to_csv(os.path.join(
         out_dir, f"{expt_label}_demographics.csv"))

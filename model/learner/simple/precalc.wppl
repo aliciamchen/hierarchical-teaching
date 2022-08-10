@@ -89,14 +89,11 @@ var updateSpeakerPosterior = cache(function (examples, classroomOptions, guess) 
     })
 });
 
-var simulate = cache(function (guess, firstExamples, classroomOptions, theta, nExamples) 
-{
-	var posterior = updateSpeakerPosterior(firstExamples, classroomOptions, guess);
-//     print(posterior)
-	var SMean = round(expectation(marginalize
-						(S_second_ex(firstExamples, theta, posterior, nExamples), 'a')), 0);
-	return {a: SMean, b: nExamples - SMean}
-})
+var teacherKnowledgeProb = function (teacherExamples, learnerHypers) {
+    var score = updateLearnerPosterior(teacherExamples, learnerHypers, params.nExamples).score('full')
+    print(score)
+    return round(100 * Math.pow(Math.E, score), 0)
+};
 
 simulate({a: 55, b: 45}, {a: 5, b: 5}, params.learners, 0.4, 10);
 
@@ -108,7 +105,7 @@ var guessesA = _.range(0, 101);
 var guesses = map(function (guessA) 
 				{ return {a: guessA, b: 100 - guessA} }, 
 				guessesA);
-var firstExamplesA = _.range(0, 10);
+var firstExamplesA = _.range(0, 11);
 var firstExamples = map(function (firstExampleA) 
 				{ return {a: firstExampleA, b: 10 - firstExampleA} }, 
 				firstExamplesA);

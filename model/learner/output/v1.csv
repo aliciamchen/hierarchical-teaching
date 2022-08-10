@@ -1,0 +1,11 @@
+block_type, theta, student_a, student_b, first_examples_a, first_examples_b, teacher_knowledge, feedback_choice
+full,0.7,1,9,10,0,67,yes
+full,0.7,9,1,5,5,50,no
+full,0.3,1,9,5,5,50,no
+full,0.3,9,1,0,10,67,yes
+partial,0.7,1,9,7,3,60,yes
+partial,0.7,9,1,7,3,33,no
+partial,0.3,1,9,3,7,33,no
+partial,0.3,9,1,3,7,60,yes
+partial,0.3,1,9,0,10,0,no
+partial,0.7,9,1,10,0,0,no
