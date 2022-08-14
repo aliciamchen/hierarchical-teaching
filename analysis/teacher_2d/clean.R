@@ -69,6 +69,7 @@ d.long <- d %>%
     subject_id,
     sequential,
     feedback,
+    trial_num,
     teacher_knowledge,
     student_idx,
     concept_size,

@@ -121,6 +121,88 @@ ggplot(d.nonseq.distances, aes(x = teacher_knowledge, y = empirical_stat, color 
 
 # Sequential conditions? 
 
+Start by visualizing by 1d concept size
+
+```{r}
+d.seq.corners <- d.seq %>% 
+  group_by(trial_num, feedback, concept_size, known) %>% 
+  tidyboot_mean(
+    corner, na.rm = T
+  )
+
+d.seq.distances <- d.seq %>% 
+  group_by(trial_num, feedback, concept_size, known) %>% 
+  tidyboot_mean(
+    dist, na.rm = T
+  )
+
+d.seq.corners
+d.seq.distances
+```
+
+```{r}
+ggplot(d.seq.distances, aes(x = trial_num, y = empirical_stat, color = known)) + 
+    geom_point(size = 2, position = position_dodge(width = 0.1)) + 
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.15)) + 
+    theme(aspect.ratio = 1.2) + 
+    scale_color_discrete(labels = c("known boundary", "unknown boundary")) +
+    labs(x = "lesson", y = "distance to boundary", title = "different 1d concept sizes", col = "student knowledge") +
+     facet_grid(feedback ~ concept_size)
+```
+```{r}
+ggplot(d.seq.corners, aes(x = trial_num, y = empirical_stat, color = known)) + 
+    geom_point(size = 2, position = position_dodge(width = 0.1)) + 
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.15)) + 
+    theme(aspect.ratio = 1.2) + 
+    scale_color_discrete(labels = c("known boundary", "unknown boundary")) +
+    labs(x = "lesson", y = "proportion corners", title = "corners", col = "student knowledge") +
+     facet_grid(feedback ~ concept_size)
+```
+Recalculate for all true hypotheses
+
+```{r}
+d.seq.corners <- d.seq %>% 
+  group_by(trial_num, feedback, known_concept_size, unknown_concept_size, known) %>% 
+  tidyboot_mean(
+    corner, na.rm = T
+  )
+
+d.seq.distances <- d.seq %>% 
+  group_by(trial_num, feedback, known_concept_size, unknown_concept_size, known) %>% 
+  tidyboot_mean(
+    dist, na.rm = T
+  )
+
+d.seq.corners
+d.seq.distances
+```
+
+
+```{r}
+known_concept_size.labs <- c("known: 2", "known: 4", "known: 6")
+names(known_concept_size.labs) <- c(2, 4, 6)
+
+unknown_concept_size.labs <- c("unknown: 2", "unknown: 4", "unknown: 6")
+names(unknown_concept_size.labs) <- c(2, 4, 6)
+
+ggplot(d.seq.distances %>% filter(feedback == "feedback"), aes(x = trial_num, y = empirical_stat, color = known)) + 
+    geom_point(size = 1.5, position = position_dodge(width = 0.15)) + 
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.15)) + 
+    theme(aspect.ratio = 1) + 
+    scale_color_discrete(labels = c("known boundary", "unknown boundary")) +
+    labs(x = "teacher knowledge", y = "distance to boundary", title = "feedback", col = "student knowledge") +
+     facet_grid(known_concept_size ~ unknown_concept_size, labeller = labeller(known_concept_size = known_concept_size.labs, unknown_concept_size = unknown_concept_size.labs)) + 
+  theme_few(base_size = 14)
+
+ggplot(d.seq.distances %>% filter(feedback == "no_feedback"), aes(x = trial_num, y = empirical_stat, color = known)) + 
+    geom_point(size = 1.5, position = position_dodge(width = 0.15)) + 
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.15)) + 
+    theme(aspect.ratio = 1) + 
+    scale_color_discrete(labels = c("known boundary", "unknown boundary")) +
+    labs(x = "teacher knowledge", y = "distance to boundary", title = "no feedback", col = "student knowledge") +
+     facet_grid(known_concept_size ~ unknown_concept_size, labeller = labeller(known_concept_size = known_concept_size.labs, unknown_concept_size = unknown_concept_size.labs)) + 
+  theme_few(base_size = 14)
+```
 
 
 
