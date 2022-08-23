@@ -73,11 +73,10 @@ timeline.push(preload, welcome, consent, comprehensionLoop, beginning, firstIsla
 /* Main logic of trials */
 
 // makes combinations of possible nonseq trials, randomly orders
-var design = jsPsych.randomization.shuffle
-                        (jsPsych.randomization.factorial(factors, 1).concat(extremeFactors));
+var design = jsPsych.randomization.factorial(factors, 1);
 
 // makes nonseq attention checks
-var attention_locations = [2, 6], attention_trials = [];
+var attention_locations = [3, 8], attention_trials = [];
 var attention_params = [{knowledge: "full", feedback: "no"}, 
                         {knowledge: "partial", feedback: "yes"}];
 

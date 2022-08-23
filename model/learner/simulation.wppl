@@ -2,16 +2,12 @@
 
 var params = {
     alpha: 4,
-    costWeight: 0.2,
+    costWeight: 0.01,
     trueThetas: [.7, 0.3], // true coin flip weight
     trueTheta: 0.7,
-    nExamples: 10,
+    nExamples: 5,
     nTeachers: 2,
 	teachers: ['A', 'B'],
-    teacherExamples: {
-		'A': {a: 7, b: 3},
-		'B': {a: 1, b: 9}
-	},
     teacherKnowledgeLevels: ['full', 'partial'],
 	learners: [0, 1],
     learnerHypers: [
@@ -46,13 +42,28 @@ var L0Mean = cache(function (examples, hypers) {
 var islandPrior = Categorical({vs: params.trueThetas})
 
 
+// var L0 = cache(function (examplesArray, learnerHypers) {
+//   var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
+//   var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
+//   return Beta_disc({
+//     a: _.toNumber(learnerHypers.a + heads),
+//     b: _.toNumber(learnerHypers.b + tails)
+//   });
+// });
+
 var L0 = cache(function (examplesArray, learnerHypers) {
-  var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
-  var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
-  return Beta_disc({
-    a: _.toNumber(learnerHypers.a + heads),
-    b: _.toNumber(learnerHypers.b + tails)
-  });
+    return Infer ({ method: 'enumerate' }, function () {
+        var theta = sample(islandPrior);
+        var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
+        var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
+        var learnerDist = Beta({
+            a: _.toNumber(learnerHypers.a + heads) == 0 ? 1 : _.toNumber(learnerHypers.a + heads),
+            b: _.toNumber(learnerHypers.b + tails) == 0 ? 1 : _.toNumber(learnerHypers.b + tails)
+        });
+        
+        observe(learnerDist, theta);
+        return theta;
+    })
 });
 
 
@@ -138,15 +149,29 @@ var L = cache(function (hypers, examplesArray, nExamples) {
 
 
 // after speaker sees learner's feedback after step 1, update speaker posterior over class membership
-var updateSpeakerPosterior = cache(function (examples, learnerGuess) {
-    return Infer({method: 'enumerate'}, function () {
+var updateSpeakerPosterior = cache(function (examples, guess) {
+    return Infer({ method: 'enumerate' }, function () {
         var learnerClass = uniformDraw(params.learners);
         var learnerHypers = params.learnerHypers[learnerClass];
 
-//         observes learner feedback and adjusts posterior as follows
+        // Point estimate
+        var learnerEstimate = L0Mean(examples, learnerHypers);
+		var guessTheta = guess.a / (guess.a + guess.b);
+        var learnerGuessDist = Categorical({
+            vs: params.trueThetas,
+            ps: [guessTheta, 1 - guessTheta]
+          });
         var learnerDist = L0(examples, learnerHypers);
-        observe(learnerDist, learnerGuess);
-
+        // Option 1: 'hard' condition on posterior mean (no partial credit)
+        //condition(learnerEstimate === trueLearnerEstimate)
+        // Option 2: 'soft' condition on posterior mean (credit for being closer)
+        // observe(Gaussian({mu: learnerEstimate, sigma: 1}), reportedMean)
+        // Option 3: 'soft' condition on reported mean being high-probability under imagined L0
+        // (not as 'strong' as if you know the L0 is deterministically reporting posterior mean)
+        // observe(L0(data, learnerHypers), reportedMean)
+//         condition(learnerEstimate === guessTheta);
+		// factor(10 * Gaussian({mu: learnerEstimate, sigma: 1}).score(guessTheta));
+        observe(learnerDist, sample(learnerGuessDist))
         return learnerClass;
     })
 });
@@ -213,10 +238,11 @@ var teacherKnowledgeProb = function (teacherExamples, learnerHypers) {
     return round(100 * Math.pow(Math.E, score), 0)
 };
 
-var f = csv.open('../../data/learner/model/v1.csv');
-csv.writeLine('block_type,theta,student_a,student_b,first_examples_a,first_examples_b,teacher_knowledge,feedback_choice', f)
+var f = csv.open('../../data/learner/model/v2.csv');
+csv.writeLine('block_type,theta,student_a,student_b,first_examples_a,first_examples_b,teacher_knowledge,feedback_choice', f);
 
 var trials = json.read('./factors.json');
+var second_examples = []
 
 map(function (trial) {
 	console.log('running');
@@ -236,3 +262,32 @@ map(function (trial) {
 }, trials);
 
 csv.close(f);
+
+var guessesA = _.range(0, 101);
+var guesses = map(function (guessA) 
+				{ return {a: guessA, b: 100 - guessA} }, 
+				guessesA);
+
+
+var simulate = cache(function (guess, firstExamples, theta, nExamples) 
+{   
+    var posterior = updateSpeakerPosterior([firstExamples], guess);
+    var examplesA = round(expectation(marginalize(S_second_ex(firstExamples, theta, posterior, nExamples), 'a')), 0);
+    return {a: examplesA, b: nExamples - examplesA};
+});
+
+var output = _.flattenDeep( 
+    map ( function (trial) {
+      return map ( function (guess) {
+          return { 
+              theta: trial.theta,
+              firstExample: trial.examples,
+              guess: guess,
+              secondExample: simulate(guess, trial.examples, trial.theta, params.nExamples)
+          }
+      }, guesses)
+    }, trials)
+  );
+
+json.write('../../experiments/learner/json/precalc.json', output);
+console.log('success! :)');

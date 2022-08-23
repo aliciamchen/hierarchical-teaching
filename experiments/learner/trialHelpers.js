@@ -46,8 +46,8 @@ function responsiveIslandGuess () {
 function fetchFirstExamples (currTrial, stage = 'first') 
 {
     $.get('./json/firstExamples.json', function(data) {
-		if (currTrial.firstExamples) {
-			var firstExamples = currTrial.firstExamples;
+		if (currTrial.firstExample) {
+			var firstExamples = currTrial.firstExample;
 		}
 		else {
 			var firstExamples = data.filter(x => x.theta == currTrial.coinWeight && 

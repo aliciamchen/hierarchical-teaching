@@ -1,11 +1,11 @@
 const params = {
-    nTrials: 10,
+    nTrials: 12,
     maxExamples: 100,
     completionMinutes: 20,
     basePay: 3,
-    maxBonus: 5,
+    maxBonus: 6,
     perTrialBonus: 0.50,
-    feedbackCost: 0.20
+    feedbackCost: 0.10
 };
 
 const hyperParams = {
@@ -18,23 +18,18 @@ const hyperPairings = [['A', 'B']];
 const coinWeights = [0.3, 0.7];
 
 const trueHypers = hyperPairings.flat();
+const firstExamples = [
+    {a: 0, b: 5},
+    {a: 1, b: 4},
+    {a: 2, b: 3},
+    {a: 3, b: 2},
+    {a: 4, b: 1},
+    {a: 5, b: 0},
+];
 
 const factors = {
-    condition: conditions,
-    coinWeight: coinWeights,
+    condition: ["partial"],
     trueHyper: trueHypers,
-    hyperPairing: hyperPairings
+    hyperPairing: hyperPairings,
+    firstExample: firstExamples
 };
-
-const extremeFactors = [
-    {condition: 'partial',
-    coinWeight: 0.7,
-    trueHyper: 'B',
-    hyperPairing: ['A', 'B'],
-    firstExamples: {a: 10, b: 0}},
-    {condition: 'partial',
-    coinWeight: 0.3,
-    trueHyper: 'A',
-    hyperPairing: ['A', 'B'],
-    firstExamples: {a: 0, b: 10}}
-];
