@@ -30,7 +30,7 @@ function makeExamplePreamble(trial) {
             trial.stemThreshold,
             trial.stemDirection,
             gridhtml,
-            "1.5vw"
+            "2vw"
           ),
           trial.studentIdx + 1
         )
@@ -46,7 +46,7 @@ function makeExamplePreamble(trial) {
             trial.stemThreshold,
             trial.stemDirection,
             gridhtml,
-            "1.5vw"
+            "2vw"
           ),
           trial.studentIdx + 1
         );
@@ -63,7 +63,7 @@ function makeExamplePreamble(trial) {
         trial.stemThreshold,
         trial.stemDirection,
         gridhtml,
-        "1.5vw"
+        "2vw"
       ),
       trial.studentIdx + 1
     );
@@ -187,7 +187,7 @@ function makeTwoMushrooms(trial) {
     </div>
     `;
 
-  return [stemBoundaryHTML, capBoundaryHTML];
+  return [stemBoundaryHTML, 'not sure', capBoundaryHTML];
 }
 
 function getJSON(path) {

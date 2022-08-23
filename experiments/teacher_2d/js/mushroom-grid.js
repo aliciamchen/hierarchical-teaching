@@ -19,7 +19,7 @@ function makeGrid(capThreshold, capDirection, stemThreshold, stemDirection) {
     stems.forEach((stemVal) => {
         caps.forEach((capVal) => {
             $(`#s${stemVal}c${capVal}`).css({
-                "background-color": "#648FFF"
+                "background-color": "#b3c8ff"
             });
         })
     })
@@ -39,8 +39,8 @@ function makeGridFromHTML(capThreshold, capDirection, stemThreshold, stemDirecti
     var caps = capDirection === 'less' ? _.filter(values, function(i) {return i < capThreshold}) : _.filter(values, function(i) {return i > capThreshold})
 
     $html.find(`#mushroomContainer`).css({
-        "grid-template-columns": `repeat(9, ${size})`,
-        "grid-template-rows": `repeat(9, ${size})`
+        "grid-template-columns": `repeat(10, ${size})`,
+        "grid-template-rows": `repeat(10, ${size})`
     })
     // clear old coloring
     // (there's probably a better way to do this w/ css children but this suffices)
@@ -56,7 +56,7 @@ function makeGridFromHTML(capThreshold, capDirection, stemThreshold, stemDirecti
     stems.forEach((stemVal) => {
         caps.forEach((capVal) => {
             $html.find(`#s${stemVal}c${capVal}`).css({
-                "background-color": "#648FFF"
+                "background-color": "#b3c8ff"
             });
         })
     })

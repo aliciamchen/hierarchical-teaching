@@ -119,7 +119,7 @@ function instructionsFeedbackDetails(instructionsParams) {
         You will teach each student <b>over either one or two lessons</b>. During each lesson, you will send the student one example of a tasty mushroom.
         </p>
         <p>
-        On some of the lessons, you will select the mushroom's exact stem height and cap width. On some of the lessons, you will be given two mushrooms and will choose which mushroom to send.
+        On some of the lessons, you will <b>select the mushroom's exact stem height and cap width</b>. On some of the lessons, you will <b>be given two mushrooms and will choose which mushroom to send.</b>
         </p>
         <h4>Two-lesson students</h4>
         <p>
@@ -156,7 +156,7 @@ function instructionsPriors() {
     <p>
     For some of the students, we will tell you which classroom they belonged to.
     </p>
-    <p>
+    <p style="color: red;">
     So to teach effectively, you will want to consider what the students already know about the island.
     </p>
     `
