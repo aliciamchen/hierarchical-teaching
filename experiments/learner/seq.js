@@ -1,5 +1,6 @@
 function sequentialTrial (i) {
 	var currTrial = design[i];
+    currTrial.coinWeight = currTrial.firstExample.a > 2 ? coinWeights[1] : coinWeights[0];
 
     var priorLoop = makeLoop('prior', [makePriorBlock(i, currTrial)]);
 

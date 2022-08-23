@@ -139,7 +139,7 @@ function fixationBlock (i)
 		timeline:
 			[{
 				type: jsPsychHtmlKeyboardResponse,
-				stimulus: '<div style="font-size:60px;">Next student</div>',
+				stimulus: '<div style="font-size:60px;">Next island</div>',
 				choices: "NO_KEYS",
 				trial_duration: function () {
 					return jsPsych.randomization.
