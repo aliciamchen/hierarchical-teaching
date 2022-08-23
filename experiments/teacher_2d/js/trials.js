@@ -101,10 +101,10 @@ function makeAttentionTrials(attentionParams, jsPsych) {
 function makeTrialsForScenario(instructionsParams, trial, design, jsPsych) {
     // TODO: if statements that return a specific timeline based on the trial type
     const trialsInScenario = {
-        'nonSeqFull': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
-        'nonSeqPartial': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
-        'seqNoFeedback': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), secondExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
-        'seqFeedback': [classroomInfo(trial), firstExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), feedback(trial, jsPsych), secondExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)]
+        'nonSeqFull': [classroomInfo(trial), firstExampleTwoMushrooms(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
+        'nonSeqPartial': [classroomInfo(trial), firstExampleTwoMushrooms(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
+        'seqNoFeedback': [classroomInfo(trial), firstExampleFreeResponse(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), secondExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)],
+        'seqFeedback': [classroomInfo(trial), firstExampleFreeResponse(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), feedback(trial, jsPsych), secondExample(instructionsParams, trial, jsPsych), sending(jsPsych), sent(jsPsych), finish(), fixation(trial, design, jsPsych)]
     }
 
     return trialsInScenario[trial.scenario]
@@ -125,8 +125,36 @@ function classroomInfo(trial) {
     }
 }
 
+function firstExampleTwoMushrooms(instructionsParams, trial, jsPsych) {
+    var gridhtml = $('#mushroomGrid').html()
+    return {
+        type: jsPsychHtmlSliderResponse,
+        stimulus: makeExamplePreamble(trial) + `<p style="margin-bottom: 2cm; text-align: center;">Which <b style="color: #648fff">tasty</b> mushroom would you like to send to your student?</p>`,
+        require_movement: true,
+        slider_width: 500,
+        labels: makeTwoMushrooms(trial),
+        trial_duration: instructionsParams.timeout * 100000,
+        data: {
+            type: 'response',
+            scenario: trial.scenario,
+            prior: trial.prior,
+            stemThreshold: trial.stemThreshold,
+            capThreshold: trial.capThreshold,
+            stemDirection: trial.stemDirection,
+            capDirection: trial.capDirection,
+            studentIndex: trial.studentIdx,
+            leftMushroomHTML: makeTwoMushrooms(trial)[0],
+            rightMushroomHTML: makeTwoMushrooms(trial)[1],
+            exampleSet: 'first'
+        },
+        on_finish: function(data) {
+            data.mushroomSelected = data.response < 50 ? 'stemBoundary' : 'capBoundary'
+        },
+        button_label: ['Send mushroom to student']
+    }
+}
 
-function firstExample(instructionsParams, trial, jsPsych) {
+function firstExampleFreeResponse(instructionsParams, trial, jsPsych) {
     return {
         type: jsPsychDoubleSliderReconstruction,
         require_movement: true,
@@ -207,12 +235,11 @@ function sending(jsPsych) {
 }
 
 function secondExample(instructionsParams, trial, jsPsych) {
-    var preamblesHTML = $('#preambles').html()
     var gridhtml = $('#mushroomGrid').html()
+    var myhtml = $('#templates').html()
     return {
-        type: jsPsychDoubleSliderReconstruction,
-        require_movement: true,
-        stim: function () {
+        type: jsPsychHtmlSliderResponse,
+        stimulus: function () {
             var dataSoFar = jsPsych.data.get()
             var firstResponse = dataSoFar.filter({ studentIndex: trial.studentIdx, exampleSet: 'first' }).values()[0]
             var stemResponse = firstResponse.response1
@@ -221,34 +248,20 @@ function secondExample(instructionsParams, trial, jsPsych) {
             var grid = makeGridFromHTML(learnerFeedback.capThreshold, learnerFeedback.capDirection, learnerFeedback.stemThreshold, learnerFeedback.stemDirection, gridhtml, '1.1vw') // testing; change later
 
             return trial.scenario === 'seqFeedback' ?
-                (makeExamplePreambleFromHTML(trial, preamblesHTML)
+                (makeExamplePreambleFromHTML(trial, myhtml)
                     + `<h4>Your student guessed that the shaded mushrooms below are tasty:</h4>`
                     +   grid
                     + `<br>`
-                    + `<p style="text-align: center;">Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</p>`)
+                    + `<p style="text-align: center;">Now, which <b style="color: #648fff">tasty</b> mushroom would you like to send to your student?</p>`)
                 : (
-                    makeExamplePreambleFromHTML(trial, preamblesHTML)
+                    makeExamplePreambleFromHTML(trial, myhtml)
                     + `<br>`
-                    + `<p style="text-align: center;">Select a second <b style="color: #648fff">tasty</b> mushroom to send to your student.</p>`
+                    + `<p style="text-align: center;">Now, which <b style="color: #648fff">tasty</b> mushroom would you like to send to your student?</p>`
                 )
         },
-        stim_function: function (stemVal, capVal) {
-            return `
-            <div>
-            <img src='img/mushroom_s${stemVal}c${capVal}.png' width="200"></img>
-            </div>
-            `
-        },
-        labels_1: makeLabels(trial.stemThreshold, trial.stemDirection, 8),
-        labels_2: makeLabels(trial.capThreshold, trial.capDirection, 8),
-        allowed1vals: trial.stemDirection === 'less' ? _.filter(_.range(1, 9), function (i) { return i < trial.stemThreshold }) : _.filter(_.range(1, 9), function (i) { return i > trial.stemThreshold }),
-        allowed2vals: trial.capDirection === 'less' ? _.filter(_.range(1, 9), function (i) { return i < trial.capThreshold }) : _.filter(_.range(1, 9), function (i) { return i > trial.capThreshold }),
-        min: 1,
-        max: 8,
-        prompt1: 'Stem height',
-        prompt2: 'Cap width',
+        require_movement: true,
         slider_width: 500,
-        button_label: 'Send mushroom to student',
+        labels: makeTwoMushrooms(trial),
         trial_duration: instructionsParams.timeout * 1000,
         data: {
             type: 'response',
@@ -259,7 +272,12 @@ function secondExample(instructionsParams, trial, jsPsych) {
             stemDirection: trial.stemDirection,
             capDirection: trial.capDirection,
             studentIndex: trial.studentIdx,
+            leftMushroomHTML: makeTwoMushrooms(trial)[0],
+            rightMushroomHTML: makeTwoMushrooms(trial)[1],
             exampleSet: 'second'
+        },
+        on_finish: function(data) {
+            data.mushroomSelected = data.response < 50 ? 'stemBoundary' : 'capBoundary'
         }
     }
 }
