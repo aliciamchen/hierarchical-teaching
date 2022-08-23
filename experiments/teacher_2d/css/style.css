@@ -19,7 +19,7 @@ h3 {
 }
 
 #studentWarning {
-  color: #aa59d9;
+  color: red;
   text-align: center
 }
 
@@ -55,3 +55,7 @@ h3 {
   height: auto;
   /* border: 0.01px solid green; */
 }
+
+/* #jspsych-html-slider-response-wrapper {
+  margin: 200px 0px !important;
+} */

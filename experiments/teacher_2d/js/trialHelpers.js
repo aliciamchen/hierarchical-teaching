@@ -200,7 +200,7 @@ function fetchLearnerFeedback(currTrial, stemResponse, capResponse) {
   $.ajax({
     async: false,
     global: false,
-    url: "./precalc_2d.json",
+    url: "./precalc_2d_new.json",
     dataType: "json",
     success: function (data) {
       thisTrial = data.filter(

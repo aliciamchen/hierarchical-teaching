@@ -133,7 +133,7 @@ function firstExampleTwoMushrooms(instructionsParams, trial, jsPsych) {
         require_movement: true,
         slider_width: 500,
         labels: makeTwoMushrooms(trial),
-        trial_duration: instructionsParams.timeout * 100000,
+        trial_duration: instructionsParams.timeout * 1000,
         data: {
             type: 'response',
             scenario: trial.scenario,
@@ -148,6 +148,7 @@ function firstExampleTwoMushrooms(instructionsParams, trial, jsPsych) {
             exampleSet: 'first'
         },
         on_finish: function(data) {
+            console.log(data)
             data.mushroomSelected = data.response < 50 ? 'stemBoundary' : 'capBoundary'
         },
         button_label: ['Send mushroom to student']
@@ -252,11 +253,11 @@ function secondExample(instructionsParams, trial, jsPsych) {
                     + `<h4>Your student guessed that the shaded mushrooms below are tasty:</h4>`
                     +   grid
                     + `<br>`
-                    + `<p style="text-align: center;">Now, which <b style="color: #648fff">tasty</b> mushroom would you like to send to your student?</p>`)
+                    + `<p style="text-align: center;">Select another <b style="color: #648fff">tasty</b> mushroom to send to your student.</p>`)
                 : (
                     makeExamplePreambleFromHTML(trial, myhtml)
                     + `<br>`
-                    + `<p style="text-align: center;">Now, which <b style="color: #648fff">tasty</b> mushroom would you like to send to your student?</p>`
+                    + `<p style="text-align: center;">Select another <b style="color: #648fff">tasty</b> mushroom to send to your student.</p>`
                 )
         },
         require_movement: true,
