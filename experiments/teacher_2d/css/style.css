@@ -41,7 +41,7 @@ h3 {
 #label {
   /* position: absolute; */
   font-size: 10px;
-  float: bottom;
+  float: top;
   bottom: 0px;
   /* justify-content: ; */
 }

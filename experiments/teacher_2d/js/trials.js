@@ -178,7 +178,7 @@ function firstExampleTwoMushrooms(instructionsParams, trial, jsPsych) {
             exampleSet: 'first'
         },
         on_finish: function(data) {
-            console.log(data)
+            // console.log(data)
             data.mushroomSelected = data.response < 50 ? 'stemBoundary' : 'capBoundary'
         },
         button_label: ['Send mushroom to student']
@@ -236,7 +236,7 @@ function feedback(trial, jsPsych) {
             var stemResponse = firstResponse.response1
             var capResponse = firstResponse.response2
             var learnerFeedback = fetchLearnerFeedback(trial, stemResponse, capResponse)
-            console.log(learnerFeedback)
+            // console.log(learnerFeedback)
 
             var grid = makeGridFromHTML(learnerFeedback.capThreshold, learnerFeedback.capDirection, learnerFeedback.stemThreshold, learnerFeedback.stemDirection, gridhtml, '3vw') // testing; change later
 
