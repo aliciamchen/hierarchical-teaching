@@ -116,7 +116,10 @@ function instructionsFeedbackDetails(instructionsParams) {
         return `
         <h2>🍄 How to teach 🍄</h2>
         <p>
-        You will teach each student <b>over either one or two lessons</b>. During each lesson, you will send the student one example of a tasty mushroom. You will be able to use sliders to select the mushroom's stem height and cap width.
+        You will teach each student <b>over either one or two lessons</b>. During each lesson, you will send the student one example of a tasty mushroom.
+        </p>
+        <p>
+        On some of the lessons, you will select the mushroom's exact stem height and cap width. On some of the lessons, you will be given two mushrooms and will choose which mushroom to send.
         </p>
         <h4>Two-lesson students</h4>
         <p>
