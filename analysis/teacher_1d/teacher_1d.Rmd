@@ -256,7 +256,7 @@ summary(seq.mod.toolow.bayes)
 
 
 ```{r include=FALSE}
-d.model <- read.csv(here('../../model/teacher_1d/experiment/output/v8_point_alpha0.7_cost0.005_193.csv')) %>% 
+d.model <- read.csv(here('model/teacher_1d/experiment/output/v8_point_alpha1_cost0.01_193.csv')) %>% 
   mutate(
     n_turtles = heads + tails,
     sequential = ifelse(block_type == "nonSeqFull" | block_type == "nonSeqPartial", "non_sequential", "sequential"),

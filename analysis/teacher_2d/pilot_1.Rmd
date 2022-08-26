@@ -24,6 +24,7 @@ theme_set(theme_few(base_size = 15))
 
 ```{r}
 d <- read.csv(here('data/teacher_2d/pilot1/cleaned_long.csv'))
+d.seq.flat <- read.csv(here('data/teacher_2d/pilot1/cleaned_seq_flat.csv'))
 
 d.seq <- d %>% filter(sequential == "sequential")
 d.nonseq <- d %>% filter(sequential == "non_sequential")
@@ -44,7 +45,6 @@ summary(nonseq.mod)
 ```
 
 - Do people produce more corners based on the condition? 
-- 
 
 
 ```{r}
@@ -190,7 +190,7 @@ ggplot(d.seq.distances %>% filter(feedback == "feedback"), aes(x = trial_num, y 
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.15)) + 
     theme(aspect.ratio = 1) + 
     scale_color_discrete(labels = c("known boundary", "unknown boundary")) +
-    labs(x = "teacher knowledge", y = "distance to boundary", title = "feedback", col = "student knowledge") +
+    labs(x = "lesson", y = "distance to boundary", title = "feedback", col = "student knowledge") +
      facet_grid(known_concept_size ~ unknown_concept_size, labeller = labeller(known_concept_size = known_concept_size.labs, unknown_concept_size = unknown_concept_size.labs)) + 
   theme_few(base_size = 14)
 
@@ -199,10 +199,53 @@ ggplot(d.seq.distances %>% filter(feedback == "no_feedback"), aes(x = trial_num,
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.15)) + 
     theme(aspect.ratio = 1) + 
     scale_color_discrete(labels = c("known boundary", "unknown boundary")) +
-    labs(x = "teacher knowledge", y = "distance to boundary", title = "no feedback", col = "student knowledge") +
+    labs(x = "lesson", y = "distance to boundary", title = "no feedback", col = "student knowledge") +
      facet_grid(known_concept_size ~ unknown_concept_size, labeller = labeller(known_concept_size = known_concept_size.labs, unknown_concept_size = unknown_concept_size.labs)) + 
   theme_few(base_size = 14)
 ```
+Look at change between lesson 1 and lesson 2
+
+```{r}
+d.seq.long <- d.seq.flat %>% 
+  mutate(change_known = abs(dist_from_known_lesson1 - dist_from_known_lesson2), 
+         change_unknown = abs(dist_from_unknown_lesson1 - dist_from_unknown_lesson2)) %>% 
+  pivot_longer(
+    cols = c(change_known, change_unknown),
+    names_to = "known",
+    names_prefix = "change_", 
+    values_to = "change"
+  ) %>% 
+  mutate(concept_size = ifelse(known == "known", known_concept_size, unknown_concept_size)) %>%
+  select(subject_id, feedback, known_concept_size, unknown_concept_size, concept_size, known, change)
 
 
+d.seq.long.dists <- d.seq.long %>% 
+  group_by(feedback, known_concept_size, unknown_concept_size, known) %>% 
+  tidyboot_mean(
+    change, na.rm = T
+  )
+
+d.seq.long.dists
+```
+
+```{r}
+ggplot(d.seq.long.dists, aes(x = feedback, y = empirical_stat, color = known)) + 
+    geom_point(size = 1.5, position = position_dodge(width = 0.15)) + 
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), size = 1, width = 0, position = position_dodge(width = 0.15)) + 
+    theme(aspect.ratio = 1) + 
+    scale_color_discrete(labels = c("known boundary", "unknown boundary")) +
+    labs(x = "feedback", y = "change", title = "change between first and second lesson", col = "student knowledge") +
+     facet_grid(known_concept_size ~ unknown_concept_size, labeller = labeller(known_concept_size = known_concept_size.labs, unknown_concept_size = unknown_concept_size.labs)) + 
+  theme_few(base_size = 12)
+```
+
+
+Other plots
+
+```{r}
+ggplot(d.seq %>% filter(feedback == "feedback"), aes(x = trial_num, y = dist, color = known)) + 
+  # geom_line(aes(group = subject_id), color = "grey", size=0.5, alpha=0.5) +
+  geom_point(position = "jitter", alpha = 0.7) +
+  facet_grid(known_concept_size ~ unknown_concept_size, labeller = labeller(known_concept_size = known_concept_size.labs, unknown_concept_size = unknown_concept_size.labs))
+```
 

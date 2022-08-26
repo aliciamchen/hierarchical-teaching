@@ -52,7 +52,9 @@ d.seq.flat <- d %>%
     id_cols = c("subject_id",
                 "student_idx",
                 "prior",
-                "feedback")
+                "feedback", 
+                "known_concept_size",
+                "unknown_concept_size")
   )
 
 
