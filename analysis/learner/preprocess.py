@@ -1,5 +1,5 @@
 # Preprocess raw `.json` data from experiment
-# python preprocess.py --in_dir pilot_1a_data --out_dir pilot_1a --expt_label pilot_1a
+# python preprocess.py --in_dir pilot_2a_data --out_dir pilot_2a --expt_label pilot_2a
 
 import glob
 import json
