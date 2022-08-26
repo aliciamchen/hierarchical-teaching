@@ -60,7 +60,7 @@ d <- d.raw %>%
       subject_id,
       student_idx,
       trial_num,
-      sequential, 
+      sequential,
       feedback,
       teacher_knowledge,
       known_concept_size,
@@ -96,12 +96,12 @@ cat("Total participants after exclusions: ", length(unique(d$subject_id)))
 d.long <- d %>%
   pivot_longer(
     cols = starts_with("dist_from"),
-    names_to = "known",
+    names_to = "boundary_type",
     names_prefix = "dist_from_",
-    values_to = "dist"
+    values_to = "dist_to_boundary"
   ) %>%
-  mutate(concept_size = ifelse(known == "known", known_concept_size, unknown_concept_size), 
-         selected_on_boundary = ifelse(choiceMushroomBoundary == known, TRUE, FALSE)) %>% 
+  mutate(concept_size = ifelse(boundary_type == "known", known_concept_size, unknown_concept_size), 
+         selected_on_boundary = ifelse(choiceMushroomBoundary == boundary_type, TRUE, FALSE)) %>% 
   select(
     subject_id,
     student_idx,
@@ -109,14 +109,18 @@ d.long <- d %>%
     sequential,
     feedback,
     teacher_knowledge,
+    known_concept_size, 
+    unknown_concept_size,
     concept_size,
-    known,
-    dist, 
+    boundary_type,
+    dist_to_boundary,
     corner,
-    selected_on_boundary
+    selected_on_boundary,
+    confidence
   )
 
 
 
-write.csv(d, here('data/teacher_2d/pilot_2/cleaned_all.csv'))
-write.csv(d.long, here('data/teacher_2d/pilot_2/cleaned_long.csv'))
+write.csv(d, here('data/teacher_2d/pilot_2/cleaned_all.csv'), row.names = FALSE)
+write.csv(d.long, here('data/teacher_2d/pilot_2/cleaned_long.csv'), row.names = FALSE)
+
