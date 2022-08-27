@@ -7,15 +7,6 @@ function ex_to_text(examples)
 				purple turtle${examples.b === 1 ? '' : 's'}`
 };
 
-// calculates which teacher is expected here
-function calc_teacher (hypers, trueTheta, teachers) {
-	var aTheta = (teachers['A'].a + hypers.a) / 
-				(teachers['A'].a + hypers.a + teachers['A'].b + hypers.b)
-	var bTheta = (teachers['B'].a + hypers.a) / 
-				(teachers['B'].a + hypers.a + teachers['B'].b + hypers.b)
-	return Math.abs(aTheta - trueTheta) < Math.abs(bTheta - trueTheta) ? 'A' : 'B'
-};
-
 // allows numbers to sum to 100 when student makes their guess
 function responsiveIslandGuess () {
 	function islandGuess(state)
@@ -167,6 +158,7 @@ function saveData (stage, data, currTrial, i)
 	return {data: data, currTrial: currTrial};
 };
 
+// calls functions needed to load first or final example blocks
 function loadFunction(stage, currTrial)
 {
 	var start_time = performance.now();

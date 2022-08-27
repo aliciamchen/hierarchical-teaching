@@ -1,3 +1,4 @@
+// see trialBlocks.js and trialHelpers.js for all methods called below
 function sequentialTrial (i) {
 	var currTrial = design[i];
     currTrial.coinWeight = currTrial.firstExample.a > 2 ? coinWeights[1] : coinWeights[0];
