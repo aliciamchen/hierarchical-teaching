@@ -235,53 +235,33 @@ var sequentialModel = cache(function (trueTheta, trueLearnerHypers, teacherExamp
 });
 
 
-var teacherKnowledgeProb = function (teacherExamples, learnerHypers) {
-    var score = marginalize(updateLearnerPosterior(teacherExamples, learnerHypers, params.nExamples), 'teacherKnowledge').score('full');
-    return round(100 * Math.pow(Math.E, score), 0)
-};
 
-var learnerThetaGuess = function (teacherExamples, learnerHypers) {
-    var score = marginalize(updateLearnerPosterior(teacherExamples, learnerHypers, params.nExamples), 'theta').score(0.7);
-    return round(100 * Math.pow(Math.E, score), 0)
-};
 
-var sendGuessScore = function (teacherKnowledgeEstimate) {
-    var dist = Infer({method: 'enumerate'}, function () {
-        var feedback = uniformDraw(['yes', 'no'])
-        var utility =  feedback == 'yes' ? -5 * ((teacherKnowledgeEstimate / 100) + params.guessCost) : -1
-        factor(utility)
-        return feedback
-    })
+var guessesA = _.range(0, 101);
+var guesses = map(function (guessA)
+				{ return {a: guessA, b: 100 - guessA} },
+				guessesA);
 
-    var score = dist.score('yes')
 
-    console.log(Math.pow(Math.E, score))
-    return round(100 * Math.pow(Math.E, score), 0)
-}
+var simulate = cache(function (guess, firstExamples, theta, nExamples)
+{
+    var posterior = updateSpeakerPosterior([firstExamples], guess);
+    var examplesA = round(expectation(marginalize(S_second_ex(firstExamples, theta, posterior, nExamples), 'a')), 0);
+    return {a: examplesA, b: nExamples - examplesA};
+});
 
-var f = csv.open('../../data/learner/model/v3.csv');
-csv.writeLine('block_type,theta,student_a,student_b,first_examples_a,first_examples_b,teacher_knowledge,feedback_choice,first_guess', f);
+var output = _.flattenDeep(
+    map ( function (trial) {
+      return map ( function (guess) {
+          return {
+              theta: trial.theta,
+              firstExample: trial.examples,
+              guess: guess,
+              secondExample: simulate(guess, trial.examples, trial.theta, params.nExamples)
+          }
+      }, guesses)
+    }, trials)
+  );
 
-var trials = json.read('./factors.json');
-var second_examples = []
-
-map(function (trial) {
-	console.log('running');
-    var posterior = teacherKnowledgeProb([trial.examples], trial.hypers);
-    var islandGuess = learnerThetaGuess([trial.examples], trial.hypers);
-
-	csv.writeLine([
-		trial.condition,
-		trial.theta,
-		trial.hypers.a,
-		trial.hypers.b,
-		trial.examples.a,
-		trial.examples.b,
-		posterior,
-		sendGuessScore(posterior),
-        islandGuess
-	].join(','), f);
-
-}, trials);
-
-csv.close(f);
+json.write('../../experiments/learner/json/precalc.json', output);
+console.log('success! :)');
