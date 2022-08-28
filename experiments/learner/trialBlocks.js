@@ -10,6 +10,7 @@ function makeFirstExamples (currTrial) {
 	</div>`
 };
 
+// makes html slider for student to decide full vs partial knowledge (output 0 to 100)
 function makeKnowledgeSlider () {
 	return `
 	<div class="jspysch-html-slider-response-container"
@@ -36,6 +37,7 @@ function makeKnowledgeSlider () {
 	`
 };
 
+// makes slider for student to decide which island they are on (note: some parts hardcoded)
 function makeIslandSlider (stage) {
 	return `
 	<div class="jspysch-html-slider-response-container"
@@ -71,6 +73,7 @@ function makeIslandSlider (stage) {
 	`
 };
 
+// only to be used for attention checks
 function attentionExamples(currTrial)
 {
 	return `
@@ -92,6 +95,7 @@ function attentionExamples(currTrial)
 	</p>`
 }
 
+// yes/no html buttons for student to decide whether or not to provide feedback
 function feedbackChoice () {
 	return `
 	<div>
@@ -106,6 +110,7 @@ function feedbackChoice () {
 	<div id="islandGuess"></div>`
 };
 
+// makes entire block for first examples, see trialHelpers.js for functions called
 function makeFirstExampleBlock (i, currTrial)
 {
 	return {
@@ -154,6 +159,7 @@ function fixationBlock (i)
 	}
 };
 
+// makes various types of loops to ensure student interacts with page correctly
 function makeLoop(stage, timelineArr)
 {
 	return {
@@ -187,8 +193,6 @@ function makeSecondExamples (currTrial) {
 		<p class="secondExamples" style="padding-top:0.5em;"></p>
 	</div>`
 };
-
-// ${ex_to_text(currTrial.firstExamples)}
 
 function makeFinalDecisionBlock (i, currTrial)
 {
@@ -224,6 +228,7 @@ function makeAttentionBlock (i, currTrial)
     }
 };
 
+// first block that student sees (island turtle composition)
 function makePriorBlock (i, currTrial)
 {
 	return {
