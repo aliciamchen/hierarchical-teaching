@@ -1,10 +1,10 @@
-// webppl teacher_1d.wppl --require ../../tools/ --require webppl-csv --random-seed 20
+// webppl teacher_1d.wppl --require ../../tools/ --require webppl-csv --random-seed 88
 
 var params = {
     type: 'point',
     participants: 193,
-    alpha: 1,
-    costWeight: 0.01,
+    alpha: 8,
+    costWeight: 0.001,
     coinWeights: [0.3, 0.7], // true coin flip weight
     maxFlips: 70,
     scenarios: ['seqFeedback', 'nonSeqFull', 'nonSeqPartial', 'seqNoFeedback'],
@@ -16,7 +16,7 @@ var params = {
 };
 
 
-var f = csv.open('./output/' + 'v8' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
+var f = csv.open('./output/' + 'v10' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
 csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_class,heads,tails', f)
 
 var makeTrials = function () {
@@ -60,7 +60,8 @@ var S1 = cache(function (theta, learnerHypers) {
         var nExamples = uniformDraw(_.range(1, params.maxFlips + 1));
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var examples = { n: nExamples, heads: nHeads };
-        factor(params.alpha * (L0([examples], learnerHypers).score(theta)
+        factor(params.alpha
+            * ((1 - params.costWeight) * L0([examples], learnerHypers).score(theta)
             - params.costWeight * examples.n));
         return examples;
     });
@@ -84,7 +85,9 @@ var S_second_ex = cache(function (first_ex, theta, posterior) {
         var nHeads = uniformDraw(_.range(0, nExamples + 1));
         var second_ex = { n: nExamples, heads: nHeads };
 
-        factor(params.alpha * (L0([first_ex, second_ex], learnerHypers).score(theta) - params.costWeight * (first_ex.n + second_ex.n)));
+        factor(params.alpha
+            * ((1 - params.costWeight) * L0([first_ex, second_ex], learnerHypers).score(theta)
+            - params.costWeight * (second_ex.n)));
 
         return second_ex;
     })
@@ -95,25 +98,14 @@ var L0Mean = function (examples, learnerHypers) {
 }
 
 // after speaker sees learner's feedback after step 1, update speaker posterior over class membership
-var updateSpeakerPosterior = cache(function (data, classroom) {
+var updateSpeakerPosterior = cache(function (examples, learnerFeedback) {
     return Infer({ method: 'enumerate'}, function () {
         var learnerClass = sample(classroomPrior);
         var learnerHypers = params.classHypers[learnerClass];
 
-        // var learnerEstimate = expectation(L0(data, learnerHypers))
-        // var reportedMean = expectation(L0([data], params.classHypers[classroom]))
+        var learnerEstimate = L0Mean(examples, learnerHypers)
 
-        // TODO: check L0Mean is same as expectation?
-        // console.log(L0Mean(data, params.classHypers[classroom]))
-        // console.log(expectation(L0([data], params.classHypers[classroom])))
-
-        var learnerEstimate = L0Mean(data, learnerHypers)
-        var reportedMean = L0Mean(data, params.classHypers[classroom])
-
-        // observe(Gaussian({mu: learnerEstimate, sigma: 1}), reportedMean)
-
-        // observe(L0([data], learnerHypers), reportedMean) // (enumerate doesn't work for this)
-        condition(learnerEstimate === reportedMean)
+        condition(learnerEstimate === learnerFeedback)
 
         return learnerClass;
     })
@@ -122,8 +114,9 @@ var updateSpeakerPosterior = cache(function (data, classroom) {
 var sequential = cache(function (scenario, coinWeight, classroom) {
     return Infer({ method: 'enumerate' }, function () {
         var step1examples = sample(S(coinWeight, params.classrooms))
+        var learnerFeedback = L0Mean(step1examples, params.classHypers[classroom])
         var speakerPosterior = (scenario === 'seqFeedback' ?
-            updateSpeakerPosterior(step1examples, classroom) :
+            updateSpeakerPosterior(step1examples, learnerFeedback) :
             classroomPrior)
         var step2examples = sample(S_second_ex(step1examples, coinWeight, speakerPosterior));
         return {
@@ -148,8 +141,6 @@ var simulate = cache(function (classroomOptions, scenario, coinWeight, classroom
 //// Simulate
 
 var trials = makeTrials();
-// console.log(trials);
-
 
 map(function (trial) {
     console.log('participant ' + trial.participantID)
