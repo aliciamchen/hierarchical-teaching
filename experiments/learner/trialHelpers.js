@@ -2,7 +2,7 @@
 function ex_to_text(examples)
 {
     return ` <b style="color:Orange;">${examples.a}</b>
-				orange turtle${examples.a === 1 ? '' : 's'} and 
+				orange turtle${examples.a === 1 ? '' : 's'} and
 				<b style="color:Purple;">${examples.b}</b>
 				purple turtle${examples.b === 1 ? '' : 's'}`
 };
@@ -17,7 +17,7 @@ function responsiveIslandGuess () {
 		{
 			islandGuess.innerHTML = makeIslandSlider('first');
 		}
-		else 
+		else
 		{
 			islandGuess.innerHTML = ``;
 		}
@@ -34,14 +34,14 @@ function responsiveIslandGuess () {
 
 
 // adds text based on the new teacher's examples
-function fetchFirstExamples (currTrial, stage = 'first') 
+function fetchFirstExamples (currTrial, stage = 'first')
 {
     $.get('./json/firstExamples.json', function(data) {
 		if (currTrial.firstExample) {
 			var firstExamples = currTrial.firstExample;
 		}
 		else {
-			var firstExamples = data.filter(x => x.theta == currTrial.coinWeight && 
+			var firstExamples = data.filter(x => x.theta == currTrial.coinWeight &&
 											x.condition == currTrial.condition &&
 											x.hypers.a == hyperParams[currTrial.trueHyper].a
 											)[0].examples;
@@ -55,38 +55,48 @@ function fetchFirstExamples (currTrial, stage = 'first')
 };
 
 // adds text based on the new teacher's examples
-function fetchSecondExamples (currTrial) 
+function fetchSecondExamples (currTrial)
 {
-	$.get('./json/precalc.json', function(data) {
+	$.get('./json/precalc_v3.json', function(data) {
 		fetchFirstExamples(currTrial, 'final');
-		var secondExamples = data.filter(x => x.theta == currTrial.coinWeight 
-											&& x.firstExample.a == currTrial.firstExamples.a 
-											// needs fixing, not accurate second examples
-											&& x.guess.a == currTrial.coinWeight * 100
-											)[0].secondExample;
+		// console.log(currTrial)
+		var secondExamples = currTrial.studentGuess != null ?
+											data.filter(x => x.theta == currTrial.coinWeight
+											&& x.learnerHypers.a == hyperParams[currTrial.trueHyper].a
+											&& x.teacherKnowledgeLevel == currTrial.condition
+											&& x.firstExample.a == currTrial.firstExamples.a
+											&& x.guess.a == currTrial.studentGuess
+											)[0].secondExample :
+											data.filter(x => x.theta == currTrial.coinWeight
+												&& x.learnerHypers.a == hyperParams[currTrial.trueHyper].a
+												&& x.teacherKnowledgeLevel == currTrial.condition
+												&& x.firstExample.a == currTrial.firstExamples.a
+												&& x.guess == "none"
+												)[0].secondExample
+
         $(".secondExamples")
-			.html(`<p>Your teacher shows you an additional ${ex_to_text(secondExamples)}</p>`);
+			.html(`<p>Your teacher shows you an additional ${ex_to_text(secondExamples)}.</p>`);
 		$(".secondExA").val(secondExamples.a);
 		$(".secondExB").val(secondExamples.b);
     })
 };
 
 // handles timeouts dependent on whether firstExample or finalDecision
-function handleTimeouts (stage, data) 
+function handleTimeouts (stage, data)
 {
 	jsPsych.pluginAPI.clearAllTimeouts();
 	var teacherKnowledge, feedbackChoice, studentGuess;
 
 	// checks there has been no timeout
-    if (data.response != null) 
+    if (data.response != null)
 	{
-        if (stage !== 'final') 
+        if (stage !== 'final')
         {
             teacherKnowledge = data.response.teacherKnowledge;
 			feedbackChoice = data.response.feedbackChoice;
 			studentGuess = feedbackChoice == 'yes' ? data.response.studentGuess : null;
-			return {teacherKnowledge: teacherKnowledge, 
-				feedbackChoice: feedbackChoice, 
+			return {teacherKnowledge: teacherKnowledge,
+				feedbackChoice: feedbackChoice,
 				studentGuess: studentGuess}
         }
         else
@@ -94,12 +104,12 @@ function handleTimeouts (stage, data)
 			studentGuess = data.response.studentGuess;
 			return {studentGuess: studentGuess}
 		}
-    } 
-	else 
+    }
+	else
 	{
 			teacherKnowledge = feedbackChoice = studentGuess = null;
-			return {teacherKnowledge: teacherKnowledge, 
-				feedbackChoice: feedbackChoice, 
+			return {teacherKnowledge: teacherKnowledge,
+				feedbackChoice: feedbackChoice,
 				studentGuess: studentGuess}
     }
 };
@@ -131,13 +141,13 @@ function saveData (stage, data, currTrial, i)
 		if (stage == 'first')
 		{
 			data.firstGuess = currTrial.studentGuess = info.studentGuess;
-			data.firstExamples = currTrial.firstExamples = 
+			data.firstExamples = currTrial.firstExamples =
 					{a: parseInt(data.response.examplesA), b: parseInt(data.response.examplesB)};
 		}
 		else
 		{
 			data.attentionParams = currTrial.attentionParams;
-			data.attentionPassed = (currTrial.attentionParams.knowledge == 'full' 
+			data.attentionPassed = (currTrial.attentionParams.knowledge == 'full'
 									? data.teacherKnowledge > 50
 									: data.teacherKnowledge < 50) &&
 									currTrial.attentionParams.feedback == data.feedbackChoice;
@@ -146,10 +156,10 @@ function saveData (stage, data, currTrial, i)
 	else
 	{
 		data.finalGuess = info.studentGuess;
-		data.secondExamples = currTrial.secondExamples = 
+		data.secondExamples = currTrial.secondExamples =
 				{a: parseInt(data.response.secondExA), b: parseInt(data.response.secondExB)};
-		data.bonus = data.trueTheta == 0.7 ? 
-						data.finalGuess > 50 ? params.perTrialBonus : 0 
+		data.bonus = data.trueTheta == 0.7 ?
+						data.finalGuess > 50 ? params.perTrialBonus : 0
 						: data.finalGuess < 50 ? params.perTrialBonus : 0;
 		data.bonus -= currTrial.feedbackChoice == 'yes' ? params.feedbackCost : 0;
 		data.bonusSoFar = Number(jsPsych.data.get().select('bonus').sum().toFixed(2));
@@ -167,7 +177,7 @@ function loadFunction(stage, currTrial)
 		var elapsed_time = end_time - start_time;
 		jsPsych.finishTrial({ status: 'timeout' });
 	}, 90000);
-	if (stage == 'first') 
+	if (stage == 'first')
 	{
 		fetchFirstExamples(currTrial);
 		responsiveIslandGuess();
@@ -179,19 +189,19 @@ function loadFunction(stage, currTrial)
 	};
 };
 
-function pushAttentionChecks (i) 
+function pushAttentionChecks (i)
 {
 	if (attention_locations.includes(i)) {
         timeline.push(jsPsych.randomization.sampleWithoutReplacement(attention_trials, 1)[0]);
     }
 };
 
-function attentionTrial (i) 
+function attentionTrial (i)
 {
 	// randomly sample from design params for attention check
     var currTrial = jsPsych.randomization.sampleWithoutReplacement(design, 1)[0];
-	currTrial.attentionParams = 
+	currTrial.attentionParams =
 						jsPsych.randomization.sampleWithoutReplacement(attention_params, 1)[0];
-	attention_trials.push([makeAttentionBlock(i, currTrial), 
+	attention_trials.push([makeAttentionBlock(i, currTrial),
 							makeIntermediateBlock('final'), fixationBlock(i)]);
 };

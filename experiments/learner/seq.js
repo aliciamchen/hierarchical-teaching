@@ -1,7 +1,7 @@
 // see trialBlocks.js and trialHelpers.js for all methods called below
 function sequentialTrial (i) {
 	var currTrial = design[i];
-    currTrial.coinWeight = currTrial.firstExample.a > 2 ? coinWeights[1] : coinWeights[0];
+    // currTrial.coinWeight = currTrial.firstExample.a > 2 ? coinWeights[1] : coinWeights[0];
 
     var priorLoop = makeLoop('prior', [makePriorBlock(i, currTrial)]);
 
@@ -15,7 +15,7 @@ function sequentialTrial (i) {
 
     var fixation = fixationBlock(i);
 
-    timeline.push(priorLoop, firstExampleLoop, intermediate, 
+    timeline.push(priorLoop, firstExampleLoop, intermediate,
                 finalDecisionLoop, finalFeedback, fixation);
     pushAttentionChecks(i);
 }

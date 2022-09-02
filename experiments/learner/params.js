@@ -28,8 +28,9 @@ const firstExamples = [
 ];
 
 const factors = {
-    condition: ["partial"],
+    condition: conditions,
     trueHyper: trueHypers,
     hyperPairing: hyperPairings,
-    firstExample: firstExamples
+    firstExample: firstExamples,
+    coinWeight: coinWeights
 };
