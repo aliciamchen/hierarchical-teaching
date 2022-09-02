@@ -137,6 +137,9 @@ var instructions = {
         <ul>
             <li>You will come across some turtles, then see additional example
             turtles from a teacher</li>
+            <li>
+            The teacher always knows the island type
+            </li>
             <li>After seeing the examples, you will guess whether the teacher
             knew which turtles you saw at first</li>
             <li>You will decide whether or not to send a guess to the teacher</li>
@@ -203,6 +206,15 @@ var comprehensionCheck = {
                 `All of the islands have a turtle composition of 7 out of 10 orange turtles.`
             ],
             required: true
+        },
+        {
+            prompt: `What do my teachers know about the islands they are trying to teach me?`,
+            options: [
+                `They always know the true turtle composition of the island.`,
+                `They sometimes know the true turtle composition of the island and sometimes only know what turtles I have seen.`,
+                `They never know the true turtle composition of the island and only know what turtles I have seen.`
+            ],
+            required: true
         }
     ],
     randomize_question_order: true,
@@ -212,7 +224,8 @@ var comprehensionCheck = {
                     data.response.Q1.includes('familiar'),
                     data.response.Q2.includes('Some turtles.'),
                     data.response.Q3.includes('final'),
-                    data.response.Q4.includes('another')].every(Boolean)
+                    data.response.Q4.includes('another'),
+                    data.response.Q5.includes('always')].every(Boolean)
     }
 };
 
