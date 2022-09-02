@@ -64,13 +64,13 @@ function fetchSecondExamples (currTrial)
 											data.filter(x => x.theta == currTrial.coinWeight
 											&& x.learnerHypers.a == hyperParams[currTrial.trueHyper].a
 											&& x.teacherKnowledgeLevel == currTrial.condition
-											&& x.firstExample.a == currTrial.firstExamples.a
+											&& x.firstExample.a == currTrial.firstExample.a
 											&& x.guess.a == currTrial.studentGuess
 											)[0].secondExample :
 											data.filter(x => x.theta == currTrial.coinWeight
 												&& x.learnerHypers.a == hyperParams[currTrial.trueHyper].a
 												&& x.teacherKnowledgeLevel == currTrial.condition
-												&& x.firstExample.a == currTrial.firstExamples.a
+												&& x.firstExample.a == currTrial.firstExample.a
 												&& x.guess == "none"
 												)[0].secondExample
 
@@ -142,7 +142,7 @@ function saveData (stage, data, currTrial, i)
 		{
 			data.firstGuess = currTrial.studentGuess = info.studentGuess;
 			data.firstExamples = currTrial.firstExamples =
-					{a: parseInt(data.response.examplesA), b: parseInt(data.response.examplesB)};
+					data.response != null ? {a: parseInt(data.response.examplesA), b: parseInt(data.response.examplesB)} : null;
 		}
 		else
 		{
@@ -157,7 +157,7 @@ function saveData (stage, data, currTrial, i)
 	{
 		data.finalGuess = info.studentGuess;
 		data.secondExamples = currTrial.secondExamples =
-				{a: parseInt(data.response.secondExA), b: parseInt(data.response.secondExB)};
+				data.response != null ? {a: parseInt(data.response.secondExA), b: parseInt(data.response.secondExB)} : null;
 		data.bonus = data.trueTheta == 0.7 ?
 						data.finalGuess > 50 ? params.perTrialBonus : 0
 						: data.finalGuess < 50 ? params.perTrialBonus : 0;

@@ -48,9 +48,9 @@ const save_data = {
     type: jsPsychCallFunction,
     func: function () {
         save_data_json(subjectId + "_output_all", jsPsych.data.get().json());
-        save_data_json(subjectId + "_output_responsesOnly", 
+        save_data_json(subjectId + "_output_responsesOnly",
                     jsPsych.data.get().filter({ type: 'response' }).json());
-        save_data_json(subjectId + "_output_attention", 
+        save_data_json(subjectId + "_output_attention",
                     jsPsych.data.get().filter({ type: 'attention' }).json());
     },
     timing_post_trial: 0
@@ -77,7 +77,7 @@ var design = jsPsych.randomization.factorial(factors, 1);
 
 // makes nonseq attention checks
 var attention_locations = [3, 8], attention_trials = [];
-var attention_params = [{knowledge: "full", feedback: "no"}, 
+var attention_params = [{knowledge: "full", feedback: "no"},
                         {knowledge: "partial", feedback: "yes"}];
 
 for (let i = 0; i < attention_locations.length; i++) {
@@ -90,7 +90,7 @@ for (let i = 0; i < design.length; i++) {
 };
 
 
-timeline.push(survey); 
+timeline.push(survey);
 
 if (!local_testing) { timeline.push(save_data) };
 

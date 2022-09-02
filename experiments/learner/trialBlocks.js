@@ -120,9 +120,10 @@ function makeFirstExampleBlock (i, currTrial)
         button_label: 'Submit information',
         data: makeInitialData ('first', currTrial),
         on_load: function () { loadFunction('first', currTrial) },
-        on_finish: function (data) { 
+        on_finish: function (data) {
 			newData = saveData('first', data, currTrial, i);
-			data = newData.data; 
+			data = newData.data;
+			// console.log(data)
 			currTrial = newData.currTrial;
 		}
     }
@@ -203,10 +204,11 @@ function makeFinalDecisionBlock (i, currTrial)
         button_label: 'Submit information',
         data: makeInitialData('final', currTrial),
         on_load: function () { loadFunction('final', currTrial) },
-        on_finish: function (data) { 
+        on_finish: function (data) {
 			newData = saveData('final', data, currTrial, i);
-			data = newData.data; 
+			data = newData.data;
 			currTrial = newData.currTrial;
+			// console.log(data)
 		}
     }
 };
@@ -220,9 +222,9 @@ function makeAttentionBlock (i, currTrial)
         button_label: 'Send guess to teachers',
         data: makeInitialData ('attention', currTrial),
         on_load: function () { loadFunction('attention', currTrial) },
-        on_finish: function (data) { 
+        on_finish: function (data) {
 			newData = saveData('attention', data, currTrial, i);
-			data = newData.data; 
+			data = newData.data;
 			currTrial = newData.currTrial;
 		}
     }

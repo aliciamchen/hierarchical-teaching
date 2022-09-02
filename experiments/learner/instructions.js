@@ -208,9 +208,9 @@ var comprehensionCheck = {
             required: true
         },
         {
-            prompt: `What do my teachers know about the islands they are trying to teach me?`,
+            prompt: `What do your teachers know about the islands?`,
             options: [
-                `They always know the true turtle composition of the island.`,
+                `They always know the true turtle composition of the island and are trying to lead me to that turtle composition.`,
                 `They sometimes know the true turtle composition of the island and sometimes only know what turtles I have seen.`,
                 `They never know the true turtle composition of the island and only know what turtles I have seen.`
             ],

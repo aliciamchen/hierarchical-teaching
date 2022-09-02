@@ -1,9 +1,9 @@
 const params = {
-    nTrials: 12,
+    nTrials: 24,
     maxExamples: 100,
-    completionMinutes: 20,
-    basePay: 3,
-    maxBonus: 6,
+    completionMinutes: 40,
+    basePay: 6,
+    maxBonus: 12,
     perTrialBonus: 0.50,
     feedbackCost: 0.10
 };
@@ -31,6 +31,7 @@ const factors = {
     condition: conditions,
     trueHyper: trueHypers,
     hyperPairing: hyperPairings,
-    firstExample: firstExamples,
-    coinWeight: coinWeights
+    firstExample: firstExamples
 };
+
+// didn't include coin weight here; that's sampled
