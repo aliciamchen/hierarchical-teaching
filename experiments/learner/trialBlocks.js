@@ -133,7 +133,7 @@ function makeIntermediateBlock (stage)
 {
 	return {
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: `<p>${stage == 'final' ? `Time to move on to the next student! ` : ``}
+        stimulus: `<p>${stage == 'final' ? `Time to move on to the next island! ` : ``}
 						Press any key to continue.</p>`,
         trial_duration: stage == 'int' ? 10000 : 20000
     }
