@@ -1,7 +1,7 @@
 // webppl simulation.wppl --require webppl-csv --require webppl-json
 
 var params = {
-    alpha: 1,
+    alpha: 15,
     costWeight: 0,
     trueThetas: [0.01, 0.3, 0.7, 0.99], // true coin flip weight
     nExamples: 5,
@@ -32,13 +32,9 @@ var Beta_disc = cache(function (hypers) {
 	})
 });
 
-var L0Mean = cache(function (examples, hypers) {
-	var nExamples = examples.a + examples.b + hypers.a + hypers.b;
-	return (examples.a + hypers.a) / nExamples;
-});
-
 
 var islandPrior = Categorical({vs: params.trueThetas})
+var speakerPrior = Categorical({vs: params.learners})
 
 // literal learner
 var L0 = cache(function (examplesArray, learnerHypers) {
@@ -51,7 +47,7 @@ var L0 = cache(function (examplesArray, learnerHypers) {
             b: _.toNumber(learnerHypers.b + tails) == 0 ? 1 : _.toNumber(learnerHypers.b + tails)
         });
 
-        observe(learnerDist, theta);
+        factor(params.alpha * learnerDist.score(theta));
         return theta;
     })
 });
@@ -68,7 +64,7 @@ var S1 = cache(function (theta, hypers, nExamples) {
         var alternativesScore = reduce(function(x, acc) {return L0([sampledExamples], hypers).score(x) + acc}, 0, alternatives)
         var targetScore = L0([sampledExamples], hypers).score(theta)
 
-        return params.alpha * (targetScore - alternativesScore)
+        return params.alpha * (targetScore)
       }
 
       factor(getUtility(theta))
@@ -86,6 +82,46 @@ var S = cache(function (theta, nExamples) {
     })
 });
 
+// second example in sequential case
+var S_second_ex_partial = cache(function (first_ex, theta, posterior, nExamples) {
+    return Infer({ method: 'enumerate' }, function () {
+        var learnerClass = sample(posterior);
+        var learnerHypers = params.learnerHypers[learnerClass];
+        var nHeads = uniformDraw(_.range(0, nExamples + 1));
+        var second_ex = { a: nHeads, b: nExamples - nHeads };
+
+        factor(params.alpha * ((1 - params.costWeight) * L0([first_ex, second_ex], learnerHypers).score(theta)
+			- params.costWeight * (second_ex.a + second_ex.b)));
+
+        return second_ex;
+    })
+});
+
+var S_second_ex_full = cache(function (first_ex, theta, hypers, nExamples) {
+    return Infer({ method: 'enumerate' }, function () {
+        var learnerHypers = hypers;
+        var nHeads = uniformDraw(_.range(0, nExamples + 1));
+        var second_ex = { a: nHeads, b: nExamples - nHeads };
+
+        factor(params.alpha * ((1 - params.costWeight) * L0([first_ex, second_ex], learnerHypers).score(theta)
+			- params.costWeight * (second_ex.a + second_ex.b)));
+
+        return second_ex;
+    })
+});
+
+var updateSpeakerPosterior = cache(function (examples, guess) {
+    return Infer({ method: 'enumerate' }, function () {
+        var learnerClass = sample(speakerPrior);
+        var learnerHypers = params.learnerHypers[learnerClass];
+
+        var learnerDist = L0(examples, learnerHypers);
+
+        factor(params.alpha * learnerDist.score(guess))
+        return learnerClass;
+    })
+});
+
 // learner reasons about speaker and true hypothesis after seeing the speaker's exampels
 var updateLearnerPosterior = cache(function (examplesArray, trueLearnerHypers, nExamples) {
     return Infer({method: 'enumerate'}, function () {
@@ -100,7 +136,7 @@ var updateLearnerPosterior = cache(function (examplesArray, trueLearnerHypers, n
         var theta = uniformDraw(params.trueThetas);
         var teacherDist = S1(theta, teacherAssumedHypers, nExamples);
 
-        observe(teacherDist, examples);
+        factor(params.alpha * teacherDist.score(examples))
         return {teacherKnowledge: teacherKnowledge,
             theta: theta};
     })
@@ -112,17 +148,26 @@ var teacherKnowledgeProb = function (teacherExamples, learnerHypers) {
     return round(100 * Math.pow(Math.E, score), 0)
 };
 
-var learnerThetaGuess = function (teacherExamples, learnerHypers) {
+var learnerThetaGuess = function (teacherExamples, learnerHypers, concept) {
     var thetaGuessDist = marginalize(updateLearnerPosterior(teacherExamples, learnerHypers, params.nExamples), 'theta')
-    var score = thetaGuessDist.score(0.7)
+    var score = thetaGuessDist.score(concept)
     return round(100 * Math.pow(Math.E, score), 0)
 };
 
-var sendGuessScore = function (teacherKnowledgeEstimate) {
+var sendGuessScore = function (firstExamples, learnerHypers, teacherKnowledgeEstimate) {
     var dist = Infer({method: 'enumerate'}, function () {
         var feedback = uniformDraw(['yes', 'no'])
-        var utility =  feedback == 'yes' ? -5 * ((teacherKnowledgeEstimate / 100) + params.guessCost) : -1
-        factor(utility)
+        var theta = uniformDraw(params.trueThetas)
+        var teacherKnowledge = categorical({vs: params.teacherKnowledgeLevels, ps: [teacherKnowledgeEstimate / 100, 1 - (teacherKnowledgeEstimate / 100)]})
+        var studentGuess = MAP(L0([firstExamples], learnerHypers)).val
+        var speakerPosterior = feedback == 'yes' ? updateSpeakerPosterior([firstExamples], studentGuess) : speakerPrior
+
+        var secondExamples = teacherKnowledge === 'partial' ? sample(S_second_ex_partial(firstExamples, theta, speakerPosterior, 5)) : sample(S_second_ex_full(firstExamples, theta, learnerHypers, 5))
+
+        // console.log(secondExamples)
+        var learnerPosteriorTheta = marginalize(updateLearnerPosterior([firstExamples, secondExamples], learnerHypers, 10), 'theta')
+
+        factor(params.alpha * learnerPosteriorTheta.score(theta))
         return feedback
     })
 
@@ -131,7 +176,7 @@ var sendGuessScore = function (teacherKnowledgeEstimate) {
     return round(100 * Math.pow(Math.E, score), 0)
 }
 
-var f = csv.open('../../data/learner/model/v6.csv');
+var f = csv.open('../../data/learner/model/v7.csv');
 csv.writeLine('block_type,theta,student_a,student_b,first_examples_a,first_examples_b,teacher_knowledge,feedback_choice,first_guess', f);
 
 var trials = _.flattenDeep(
@@ -157,7 +202,7 @@ var second_examples = []
 map(function (trial) {
 	console.log('running');
     var posterior = teacherKnowledgeProb([trial.examples], trial.hypers);
-    var islandGuess = learnerThetaGuess([trial.examples], trial.hypers); // TODO: fix this.. why does it change
+    var islandGuess = learnerThetaGuess([trial.examples], trial.hypers, trial.theta); // TODO: fix this.. why does it change
 
 	csv.writeLine([
 		trial.condition,
@@ -167,10 +212,12 @@ map(function (trial) {
 		trial.examples.a,
 		trial.examples.b,
 		posterior,
-		sendGuessScore(posterior),
+		sendGuessScore(trial.examples, trial.hypers, posterior), // posterior is teacherKnowledgeEstimate; change later
         islandGuess
 	].join(','), f);
 
 }, trials);
 
+// console.log(teacherKnowledgeProb([{a: 1, b: 9}], {a: 1, b: 9}))
+// console.log(teacherKnowledgeProb([{a: 9, b: 1}], {a: 9, b: 1}))
 csv.close(f);
