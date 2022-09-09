@@ -1,10 +1,10 @@
-// webppl precalc.wppl --require webppl-csv --require webppl-json
+// webppl precalc.wppl --require webppl-json
 // Calculate teacher feedback for experiment 2
 
 var params = {
     alpha: 8,
     costWeight: 0,
-    trueThetas: [0.7, 0.3], // true coin flip weight
+    trueThetas: [0.01, 0.3, 0.7, 0.99], // true coin flip weight
     nExamples: 5,
     nTeachers: 2,
 	teachers: ['A', 'B'],
@@ -40,12 +40,6 @@ var Beta_disc = cache(function (hypers) {
         return round(n, 2);
 	})
 });
-
-var L0Mean = cache(function (examples, hypers) {
-	var nExamples = examples.a + examples.b + hypers.a + hypers.b;
-	return (examples.a + hypers.a) / nExamples;
-});
-
 
 var islandPrior = Categorical({vs: params.trueThetas})
 var speakerPrior = Categorical({vs: params.learners})
@@ -120,35 +114,22 @@ var updateSpeakerPosterior = cache(function (examples, guess) {
         var learnerClass = sample(speakerPrior);
         var learnerHypers = params.learnerHypers[learnerClass];
 
-		var guessTheta = guess.a / (guess.a + guess.b);
-        var learnerGuessDist = Categorical({
-            vs: params.trueThetas,
-            ps: [guessTheta, 1 - guessTheta]
-          });
-
         var learnerDist = L0(examples, learnerHypers);
-        var learnerGuess = sample(learnerGuessDist) // MAP(learnerGuessDist).val if we just wanna consider 'which one' the participant chose
 
-        observe(learnerDist, learnerGuess)
+        observe(learnerDist, guess)
         return learnerClass;
     })
 });
-
-
-var guessesA = _.range(0, 101);
-var guesses = _.concat(map(function (guessA)
-				{ return {a: guessA, b: 100 - guessA} },
-				guessesA), 'none');
 
 
 var simulate = cache(function (teacherKnowledgeLevel, learnerClass, guess, firstExamples, theta, nExamples)
 {
     if (teacherKnowledgeLevel === 'partial') {
         var posterior = guess == 'none' ? speakerPrior : updateSpeakerPosterior([firstExamples], guess);
-        var examplesA = round(MAP(marginalize(S_second_ex_partial(firstExamples, theta, posterior, nExamples), 'a').val), 0);
+        var examplesA = round(MAP(marginalize(S_second_ex_partial(firstExamples, theta, posterior, nExamples), 'a')).val, 0);
         return {a: examplesA, b: nExamples - examplesA};
     } else if (teacherKnowledgeLevel === 'full') {
-        var examplesA = round(MAP(marginalize(S_second_ex_full(firstExamples, theta, params.learnerHypers[learnerClass], nExamples), 'a'.val)), 0);
+        var examplesA = round(MAP(marginalize(S_second_ex_full(firstExamples, theta, params.learnerHypers[learnerClass], nExamples), 'a')).val, 0);
         return {a: examplesA, b: nExamples - examplesA};
     }
 });
@@ -162,17 +143,17 @@ var output = _.flattenDeep(
                       return {
                             learnerHypers: params.learnerHypers[learnerClass],
                           teacherKnowledgeLevel: teacherKnowledgeLevel,
-                          theta: theta,
+                          theta: round(theta, 1),
                           firstExample: firstExamples,
-                          guess: guess,
+                          guess: guess == 'none' ? guess : round(guess, 1),
                           secondExample: simulate(teacherKnowledgeLevel, learnerClass, guess, firstExamples, theta, params.nExamples)
                       }
                   }, params.teacherKnowledgeLevels)
-                }, guesses)
+                }, _.concat(params.trueThetas, 'none'))
             }, params.firstExamples)
         }, params.learners)
     }, params.trueThetas)
   );
 
-json.write('../../experiments/learner/json/precalc_v3.json', output);
+json.write('../../experiments/learner/json/precalc_v4.json', output);
 console.log('success! :)');
