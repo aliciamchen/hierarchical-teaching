@@ -64,10 +64,10 @@ var timeline = [];
 
 var preload = {
     type: jsPsychPreload,
-    images: ['img/archipelago.png', 'img/9orange1purple.png', 'img/1orange9purple.png']
+    images: ['img/archipelago.png', 'img/9orange1purple.png', 'img/1orange9purple.png', 'img/0o1p.png', 'img/0.3o0.7p.png', 'img/0.7o0.3p.png', 'img/1o0p.png']
 };
 
-timeline.push(preload, welcome, consent, comprehensionLoop, beginning, firstIslandWarning);
+// timeline.push(preload, welcome, consent, comprehensionLoop, beginning, firstIslandWarning);
 
 
 /* Main logic of trials */
@@ -76,7 +76,7 @@ timeline.push(preload, welcome, consent, comprehensionLoop, beginning, firstIsla
 var design = jsPsych.randomization.factorial(factors, 1);
 
 // makes nonseq attention checks
-var attention_locations = [3, 8], attention_trials = [];
+var attention_locations = [6, 18], attention_trials = [];
 var attention_params = [{knowledge: "full", feedback: "no"},
                         {knowledge: "partial", feedback: "yes"}];
 

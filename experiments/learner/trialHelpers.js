@@ -79,6 +79,7 @@ function fetchSecondExamples (currTrial)
 		$(".secondExA").val(secondExamples.a);
 		$(".secondExB").val(secondExamples.b);
     })
+	// console.log('here')
 };
 
 // handles timeouts dependent on whether firstExample or finalDecision

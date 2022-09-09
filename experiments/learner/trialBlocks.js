@@ -40,33 +40,63 @@ function makeKnowledgeSlider () {
 // makes slider for student to decide which island they are on (note: some parts hardcoded)
 function makeIslandSlider (stage) {
 	return `
-	<div class="jspysch-html-slider-response-container"
-	style="position:relative; margin: 1em auto 3em auto; width=auto">
-		<p>Out of every 10 turtles on the island, how many orange and purple
-		turtles do you ${stage == 'final' ? `now ` : ``}expect to see?</p>
-		<div class="islandSliderContainer" id="sliderContainer">
-			<input type="range" class="jspsych-slider" value="50" min="0" max="100" +
-			id="jspsych-html-slider-response-response2" name="studentGuess"></input>
-			<div class="islandSliderLabels">
-				<div style="border: 1px solid transparent; display: inline-block;
-				position: absolute; left:calc(-18.75% + 7.5px); text-align: center; width: 50%;">
-					<span style="text-align: center; font-size: 90%;">
-						<b style="color:Orange">3</b><b> : </b><b style="color:Purple">7</b>
-					</span>
-				</div>
-				<div style="border: 1px solid transparent; display: inline-block;
-				position: absolute; left:calc(25%); text-align: center; width: 50%;">
-					<span style="text-align: center; font-size: 90%;">Unsure</span>
-				</div>
-				<div style="border: 1px solid transparent; display: inline-block;
-				position: absolute; left:calc(68.75% - 7.5px); text-align: center; width: 50%;">
-					<span style="text-align: center; font-size: 90%;">
-						<b style="color:Orange">7</b><b> : </b><b style="color:Purple">3</b>
-					</span>
-				</div>
-			</div>
+	<style id="jspsych-survey-multi-choice-css">
+      .jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: center; }
+      .jspsych-survey-multi-choice-text span.required {color: darkred;}
+      .jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}
+      .jspsych-survey-multi-choice-option { line-height: 2; }
+      .jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}
+      label.jspsych-survey-multi-choice-text input[type='radio'] {margin-right: 1em;}
+	</style>
+
+
+	<div id="jspsych-survey-multi-choice" class="jspsych-survey-multi-choice-question jspsych-survey-multi-choice-horizontal" data-name="studentGuess">
+		<strong><p class="jspsych-survey-multi-choice-text survey-multi-choice">
+			Out of every 10 turtles on the island, how many orange and purple
+			turtles do you ${stage == 'final' ? `now ` : ``}expect to see?
+		</p></strong>
+		<br>
+		<div id="island" class="jspsych-survey-multi-choice-option">
+			<label class="jspsych-survey-multi-choice-text" for="0o1p">
+				<input type="radio" name="islandGuess" id="0" value="0">
+					0 orange, 10 purple
+					<br>
+					<img src='img/0o1p.png' width="300"></img>
+				</input>
+			</label>
+		</div>
+
+		<div id="island" class="jspsych-survey-multi-choice-option">
+			<label class="jspsych-survey-multi-choice-text" for="0o1p">
+				<input type="radio" name="islandGuess" id="0.3" value="0.3">
+					3 orange, 7 purple
+					<br>
+					<img src='img/0.3o0.7p.png' width="300"></img>
+				</input>
+			</label>
+		</div>
+
+		<div id="island" class="jspsych-survey-multi-choice-option">
+			<label class="jspsych-survey-multi-choice-text" for="0o1p">
+				<input type="radio" name="islandGuess" id="0.7" value="0.7">
+					7 orange, 3 purple
+					<br>
+					<img src='img/0.7o0.3p.png' width="300"></img>
+				</input>
+			</label>
+		</div>
+
+		<div id="island" class="jspsych-survey-multi-choice-option">
+			<label class="jspsych-survey-multi-choice-text" for="0o1p">
+				<input type="radio" name="islandGuess" id="1" value="1">
+					10 orange, 0 purple
+					<br>
+					<img src='img/1o0p.png' width="300"></img>
+				</input>
+			</label>
 		</div>
 	</div>
+
 
 	<input class="secondExA" style="display:none" type="number" name="secondExA">
 	<input class="secondExB" style="display:none" type="number" name="secondExB">
@@ -123,7 +153,7 @@ function makeFirstExampleBlock (i, currTrial)
         on_finish: function (data) {
 			newData = saveData('first', data, currTrial, i);
 			data = newData.data;
-			// console.log(data)
+			console.log(data)
 			currTrial = newData.currTrial;
 		}
     }
@@ -166,6 +196,7 @@ function makeLoop(stage, timelineArr)
 	return {
 		timeline: timelineArr,
 		loop_function: function (data) {
+			// console.log('here')
 			if (stage == 'comprehension')
 			{
 				return !data.select("pass").values[0];
@@ -201,12 +232,14 @@ function makeFinalDecisionBlock (i, currTrial)
         type: jsPsychSurveyHtmlForm,
         preamble: makeSecondExamples(currTrial),
         html: makeIslandSlider('final'),
-        button_label: 'Submit information',
+        button_label: 'Submit',
         data: makeInitialData('final', currTrial),
         on_load: function () { loadFunction('final', currTrial) },
         on_finish: function (data) {
+			console.log("here")
 			newData = saveData('final', data, currTrial, i);
 			data = newData.data;
+			console.log(data)
 			currTrial = newData.currTrial;
 			// console.log(data)
 		}
