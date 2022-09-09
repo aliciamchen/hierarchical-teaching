@@ -2,6 +2,8 @@
 function sequentialTrial (i) {
 	var currTrial = design[i];
     currTrial.coinWeight = jsPsych.randomization.sampleWithoutReplacement(coinWeights, 1)[0]
+    currTrial.condition = jsPsych.randomization.sampleWithoutReplacement(conditions, 1)[0]
+
 
     var priorLoop = makeLoop('prior', [makePriorBlock(i, currTrial)]);
 

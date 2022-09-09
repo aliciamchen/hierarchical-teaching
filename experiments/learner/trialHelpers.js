@@ -57,7 +57,7 @@ function fetchFirstExamples (currTrial, stage = 'first')
 // adds text based on the new teacher's examples
 function fetchSecondExamples (currTrial)
 {
-	$.get('./json/precalc_v3.json', function(data) {
+	$.get('./json/precalc_v4.json', function(data) {
 		fetchFirstExamples(currTrial, 'final');
 		// console.log(currTrial)
 		var secondExamples = currTrial.studentGuess != null ?
@@ -65,7 +65,7 @@ function fetchSecondExamples (currTrial)
 											&& x.learnerHypers.a == hyperParams[currTrial.trueHyper].a
 											&& x.teacherKnowledgeLevel == currTrial.condition
 											&& x.firstExample.a == currTrial.firstExample.a
-											&& x.guess.a == currTrial.studentGuess
+											&& x.guess == currTrial.studentGuess
 											)[0].secondExample :
 											data.filter(x => x.theta == currTrial.coinWeight
 												&& x.learnerHypers.a == hyperParams[currTrial.trueHyper].a
@@ -95,14 +95,14 @@ function handleTimeouts (stage, data)
         {
             teacherKnowledge = data.response.teacherKnowledge;
 			feedbackChoice = data.response.feedbackChoice;
-			studentGuess = feedbackChoice == 'yes' ? data.response.studentGuess : null;
+			studentGuess = feedbackChoice == 'yes' ? Number(data.response.studentGuess) : null;
 			return {teacherKnowledge: teacherKnowledge,
 				feedbackChoice: feedbackChoice,
 				studentGuess: studentGuess}
         }
         else
 		{
-			studentGuess = data.response.studentGuess;
+			studentGuess = Number(data.response.studentGuess);
 			return {studentGuess: studentGuess}
 		}
     }

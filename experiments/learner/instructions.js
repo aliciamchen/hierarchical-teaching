@@ -18,28 +18,17 @@ var instructions = {
         </p>`,
 
         `
-        <h2>Two types of islands</h2>
+        <h2>Different islands</h2>
         <p class="instruction">
-        Interestingly enough, all the islands have 7 out of every 10 turtles in the <b>majority color</b>
-        and 3 out of every 10 turtles in the <b>minority color</b>. However, you don't know what
-        the majority and minority colors are on each island!
-        </p>
-        <p class="instruction">
-        So, each island is either:
+            Interestingly enough, there are <strong>four</strong> different types of islands in the archipelago:
         </p>
         <ul>
-            <li>majority-<b style="color:purple;">purple</b>, with 7 out of 10 purple turtles and 3 out
-            of 10 orange turtles, or</li>
-            <li>majority-<b style="color:orange;">orange</b>, with 3 out of 10 purple turtles and 7 out of
-            10 orange turtles.</li>
+            <li>Completely purple (100% purple)</li>
+            <li>Mostly purple (30% orange, 70% purple)</li>
+            <li>Mostly orange (70% orange, 30% purple)</li>
+            <li>Completely orange (100% orange)</li>
         </ul>
-        <div class="center" style="margin-bottom:0.5em;">
-            <img src='img/archipelago.png' width="600"></img>
-        </div>
-        <p class="instruction">
-            Your goal is to <b>determine whether each island is
-            majority-purple or majority-orange.</b>
-        </p>`,
+        `,
 
         `<h2>How will I learn about each island?</h2>
         <p class="instruction">
@@ -54,14 +43,12 @@ var instructions = {
         distinct regions of the island</b> to help you learn.
         </p>
         <p class="instruction">
-        So the teacher will give you information to <b>help you figure out whether each
-        island is majority-purple or majority-orange.</b> Each teacher will show you <b>two
+        So the teacher will give you information to <b>help you figure out the composition of each island</b> Each teacher will show you <b>two
         sets</b> of orange and purple turtles from the island.
         </p>
         <p class="instruction">
-        At the end of each block, you will guess whether the island is
-        majority-purple or majority-orange. You will receive a bonus each time you
-        successfully guess the island type!
+        At the end of each block, you will guess the composition of the island. You will receive a bonus each time you
+        successfully guess the island composition!
         </p>`,
 
         `
@@ -91,7 +78,7 @@ var instructions = {
         <p class="instruction">
         Based on their knowledge of what you have seen, on the first lesson the teacher will
         show you an additional number of orange and purple turtles from the island to help
-        you learn whether you are on a majority-orange island or a majority-purple island.
+        you learn the island composition.
         </p>
         <p class="instruction">
         Using these examples, you will use a slider to guess whether <b>the teacher
@@ -99,7 +86,7 @@ var instructions = {
         </p>
         <p class="instruction">
         Then, you will have an option to send information to the teacher. You can select
-        whether you would like to <b>enter a guess for the island type</b> and send it
+        whether you would like to <b>enter a guess for the island composition</b> and send it
         to the teacher.
         </p>
         <p class="instruction">
@@ -112,8 +99,7 @@ var instructions = {
         In this lesson, the teacher will <b>send you a second set of example turtles.</b>
         </p>
         <p class="instruction">
-        Then, you will enter your final guess for what type of island you are on
-        (<b>majority-orange</b> or <b>majority-purple</b>).
+        Then, you will enter your final guess for what type of island you are on.
         </p>`,
 
         `<p class="instructions">
@@ -138,7 +124,7 @@ var instructions = {
             <li>You will come across some turtles, then see additional example
             turtles from a teacher</li>
             <li>
-            The teacher always knows the island type
+            The teacher always knows the island composition
             </li>
             <li>After seeing the examples, you will guess whether the teacher
             knew which turtles you saw at first</li>
@@ -147,8 +133,7 @@ var instructions = {
         <h4>Lesson 2</h4>
         <ul>
             <li>The teacher will send you <b>another</b> set of examples</li>
-            <li>Based on all of the turtles you have seen, you will guess what island type
-            you are on (majority-orange or majority-purple)</li>
+            <li>Based on all of the turtles you have seen, you will guess the island composition</li>
             <li>Your bonus will be based on this final guess, minus a cost if you
             previously sent the teacher information</li>
         </ul>`,
@@ -198,16 +183,6 @@ var comprehensionCheck = {
             required: true
         },
         {
-            prompt: `How are different islands different?`,
-            options: [
-                `All the islands have 7 out of 10 of one color of turtle and 3 out of \
-                10 of another color of turtle.`,
-                `All of the islands can have any number of orange and purple turtles.`,
-                `All of the islands have a turtle composition of 7 out of 10 orange turtles.`
-            ],
-            required: true
-        },
-        {
             prompt: `What do your teachers know about the islands?`,
             options: [
                 `They always know the true turtle composition of the island and are trying to lead me to that turtle composition.`,
@@ -224,8 +199,7 @@ var comprehensionCheck = {
                     data.response.Q1.includes('familiar'),
                     data.response.Q2.includes('Some turtles.'),
                     data.response.Q3.includes('final'),
-                    data.response.Q4.includes('another'),
-                    data.response.Q5.includes('always')].every(Boolean)
+                    data.response.Q4.includes('always')].every(Boolean)
     }
 };
 

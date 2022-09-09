@@ -52,46 +52,45 @@ function makeIslandSlider (stage) {
 
 	<div id="jspsych-survey-multi-choice" class="jspsych-survey-multi-choice-question jspsych-survey-multi-choice-horizontal" data-name="studentGuess">
 		<strong><p class="jspsych-survey-multi-choice-text survey-multi-choice">
-			Out of every 10 turtles on the island, how many orange and purple
-			turtles do you ${stage == 'final' ? `now ` : ``}expect to see?
+			Which of these pictures do you think ${stage == 'final' ? `now ` : ``} best describes the turtle population of this island?
 		</p></strong>
 		<br>
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
-				<input type="radio" name="islandGuess" id="0" value="0">
-					0 orange, 10 purple
+				<input type="radio" name="studentGuess" id="0" value="0">
+					Completely purple (100% purple)
 					<br>
-					<img src='img/0o1p.png' width="300"></img>
+					<img src='img/0o1p.png' width="350"></img>
 				</input>
 			</label>
 		</div>
 
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
-				<input type="radio" name="islandGuess" id="0.3" value="0.3">
-					3 orange, 7 purple
+				<input type="radio" name="studentGuess" id="0.3" value="0.3">
+					Mostly purple (30% orange, 70% purple)
 					<br>
-					<img src='img/0.3o0.7p.png' width="300"></img>
+					<img src='img/0.3o0.7p.png' width="350"></img>
 				</input>
 			</label>
 		</div>
 
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
-				<input type="radio" name="islandGuess" id="0.7" value="0.7">
-					7 orange, 3 purple
+				<input type="radio" name="studentGuess" id="0.7" value="0.7">
+					Mostly orange (70% orange, 30% purple)
 					<br>
-					<img src='img/0.7o0.3p.png' width="300"></img>
+					<img src='img/0.7o0.3p.png' width="350"></img>
 				</input>
 			</label>
 		</div>
 
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
-				<input type="radio" name="islandGuess" id="1" value="1">
-					10 orange, 0 purple
+				<input type="radio" name="studentGuess" id="1" value="1">
+					Completely orange (100% orange)
 					<br>
-					<img src='img/1o0p.png' width="300"></img>
+					<img src='img/1o0p.png' width="350"></img>
 				</input>
 			</label>
 		</div>
@@ -153,7 +152,7 @@ function makeFirstExampleBlock (i, currTrial)
         on_finish: function (data) {
 			newData = saveData('first', data, currTrial, i);
 			data = newData.data;
-			console.log(data)
+			// console.log(data)
 			currTrial = newData.currTrial;
 		}
     }
@@ -236,10 +235,10 @@ function makeFinalDecisionBlock (i, currTrial)
         data: makeInitialData('final', currTrial),
         on_load: function () { loadFunction('final', currTrial) },
         on_finish: function (data) {
-			console.log("here")
+			// console.log("here")
 			newData = saveData('final', data, currTrial, i);
 			data = newData.data;
-			console.log(data)
+			// console.log(data)
 			currTrial = newData.currTrial;
 			// console.log(data)
 		}

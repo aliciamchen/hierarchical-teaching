@@ -1,9 +1,9 @@
 const params = {
-    nTrials: 24,
+    nTrials: 12,
     maxExamples: 100,
-    completionMinutes: 40,
-    basePay: 6,
-    maxBonus: 12,
+    completionMinutes: 20,
+    basePay: 3,
+    maxBonus: 6,
     perTrialBonus: 0.50,
     feedbackCost: 0.10
 };
@@ -15,7 +15,7 @@ const hyperParams = {
 
 const conditions = ['full', 'partial'];
 const hyperPairings = [['A', 'B']];
-const coinWeights = [0.3, 0.7];
+const coinWeights = [0, 0.3, 0.7, 1];
 
 const trueHypers = hyperPairings.flat();
 const firstExamples = [
@@ -28,10 +28,7 @@ const firstExamples = [
 ];
 
 const factors = {
-    condition: conditions,
     trueHyper: trueHypers,
     hyperPairing: hyperPairings,
     firstExample: firstExamples
 };
-
-// didn't include coin weight here; that's sampled
