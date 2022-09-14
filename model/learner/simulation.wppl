@@ -1,7 +1,7 @@
 // webppl simulation.wppl --require webppl-csv --require webppl-json
 
 var params = {
-    alpha: 15,
+    alpha: 5,
     costWeight: 0,
     trueThetas: [0.01, 0.3, 0.7, 0.99], // true coin flip weight
     nExamples: 5,
@@ -47,23 +47,20 @@ var L0 = cache(function (examplesArray, learnerHypers) {
             b: _.toNumber(learnerHypers.b + tails) == 0 ? 1 : _.toNumber(learnerHypers.b + tails)
         });
 
-        factor(params.alpha * learnerDist.score(theta));
+        observe(learnerDist, theta)
         return theta;
     })
 });
 
 
-// pragmatic speaker reasons about a learner who decides between the alternatives
+// pragmatic speaker
 var S1 = cache(function (theta, hypers, nExamples) {
     return Infer({ method: 'enumerate' }, function () {
       var nHeads = uniformDraw(_.range(0, nExamples + 1));
       var sampledExamples = {a: nHeads, b: nExamples - nHeads};
 
       var getUtility = function(theta) {
-        var alternatives = filter(function(x) {return x != theta}, params.trueThetas)
-        var alternativesScore = reduce(function(x, acc) {return L0([sampledExamples], hypers).score(x) + acc}, 0, alternatives)
         var targetScore = L0([sampledExamples], hypers).score(theta)
-
         return params.alpha * (targetScore)
       }
 
@@ -73,7 +70,7 @@ var S1 = cache(function (theta, hypers, nExamples) {
     });
 });
 
-// uncertain pragmatic speaker
+// pragmatic speaker equally uncertain about student's classroom
 var S = cache(function (theta, nExamples) {
     return Mixture({
         dists: [S1(theta, params.learnerHypers[0], nExamples),
@@ -82,7 +79,7 @@ var S = cache(function (theta, nExamples) {
     })
 });
 
-// second example in sequential case
+// second examples in sequential case
 var S_second_ex_partial = cache(function (first_ex, theta, posterior, nExamples) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = sample(posterior);
@@ -110,6 +107,7 @@ var S_second_ex_full = cache(function (first_ex, theta, hypers, nExamples) {
     })
 });
 
+// speaker updates belief in learner hypers based on guess from learner
 var updateSpeakerPosterior = cache(function (examples, guess) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerClass = sample(speakerPrior);
@@ -143,28 +141,33 @@ var updateLearnerPosterior = cache(function (examplesArray, trueLearnerHypers, n
 });
 
 
+// learner's evaluation of how much the teacher knows after observing first set of examples
 var teacherKnowledgeProb = function (teacherExamples, learnerHypers) {
     var score = marginalize(updateLearnerPosterior(teacherExamples, learnerHypers, params.nExamples), 'teacherKnowledge').score('full');
-    return round(100 * Math.pow(Math.E, score), 0)
+    return round(100 * Math.pow(Math.E, score), 0) // 100 == 'full'; 0 == 'partial'
 };
 
+// learner's guess for true hypothesis after observing first set of examples
 var learnerThetaGuess = function (teacherExamples, learnerHypers, concept) {
     var thetaGuessDist = marginalize(updateLearnerPosterior(teacherExamples, learnerHypers, params.nExamples), 'theta')
     var score = thetaGuessDist.score(concept)
-    return round(100 * Math.pow(Math.E, score), 0)
+    return round(100 * Math.pow(Math.E, score), 0) //
 };
 
-var sendGuessScore = function (firstExamples, learnerHypers, teacherKnowledgeEstimate) {
+
+// does the learner send a guess?
+var sendGuessScore = function (firstExamples, learnerHypers, teacherKnowledgeEval) {
     var dist = Infer({method: 'enumerate'}, function () {
         var feedback = uniformDraw(['yes', 'no'])
         var theta = uniformDraw(params.trueThetas)
-        var teacherKnowledge = categorical({vs: params.teacherKnowledgeLevels, ps: [teacherKnowledgeEstimate / 100, 1 - (teacherKnowledgeEstimate / 100)]})
+
+        // sample teacher knowledge ('full' or 'partial') based on
+        var teacherKnowledge = categorical({vs: params.teacherKnowledgeLevels, ps: [teacherKnowledgeEval / 100, 1 - (teacherKnowledgeEval / 100)]})
         var studentGuess = MAP(L0([firstExamples], learnerHypers)).val
         var speakerPosterior = feedback == 'yes' ? updateSpeakerPosterior([firstExamples], studentGuess) : speakerPrior
 
         var secondExamples = teacherKnowledge === 'partial' ? sample(S_second_ex_partial(firstExamples, theta, speakerPosterior, 5)) : sample(S_second_ex_full(firstExamples, theta, learnerHypers, 5))
 
-        // console.log(secondExamples)
         var learnerPosteriorTheta = marginalize(updateLearnerPosterior([firstExamples, secondExamples], learnerHypers, 10), 'theta')
 
         factor(params.alpha * learnerPosteriorTheta.score(theta))
@@ -218,6 +221,4 @@ map(function (trial) {
 
 }, trials);
 
-// console.log(teacherKnowledgeProb([{a: 1, b: 9}], {a: 1, b: 9}))
-// console.log(teacherKnowledgeProb([{a: 9, b: 1}], {a: 9, b: 1}))
 csv.close(f);

@@ -2,7 +2,7 @@
 // Calculate teacher feedback for experiment 2
 
 var params = {
-    alpha: 8,
+    alpha: 2,
     costWeight: 0,
     trueThetas: [0.01, 0.3, 0.7, 0.99], // true coin flip weight
     nExamples: 5,
