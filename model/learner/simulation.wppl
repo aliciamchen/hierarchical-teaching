@@ -140,9 +140,36 @@ var updateLearnerPosterior = cache(function (examplesArray, trueLearnerHypers, n
     })
 });
 
+// does the learner send a guess?
+var sendGuess = cache(function (firstExamples, learnerHypers) {
+    return Infer({method: 'enumerate'}, function () {
+        var feedback = uniformDraw(['yes', 'no'])
+        var theta = uniformDraw(params.trueThetas)
+
+        // learner uses first set of examples to reason about whether speaker knows about them
+        var teacherKnowledge = sample(marginalize(updateLearnerPosterior(firstExamples, learnerHypers, params.nExamples), 'teacherKnowledge'))
+        var studentGuess = MAP(L0([firstExamples], learnerHypers)).val
+
+        // if learner provides feedback, then speaker has more info about learner classroom for providing second set of examples — but only if speaker is partial
+        var speakerPosterior = feedback == 'yes' ? updateSpeakerPosterior([firstExamples], studentGuess) : speakerPrior
+        var secondExamples = teacherKnowledge === 'partial' ? sample(S_second_ex_partial(firstExamples, theta, speakerPosterior, 5)) : sample(S_second_ex_full(firstExamples, theta, learnerHypers, 5))
+
+        // after the speaker provides second set of examples, learner reasons about what the true concept is
+        var learnerPosteriorTheta = marginalize(updateLearnerPosterior([firstExamples, secondExamples], learnerHypers, 10), 'theta')
+
+        // did the learner get the 'right answer'?
+        factor(params.alpha * learnerPosteriorTheta.score(theta))
+        return feedback
+    })
+})
+
+var sendGuessScore = function(firstExamples, learnerHypers) {
+    var score = sendGuess(firstExamples, learnerHypers).score('yes')
+    return round(100 * Math.pow(Math.E, score), 0)
+}
 
 // learner's evaluation of how much the teacher knows after observing first set of examples
-var teacherKnowledgeProb = function (teacherExamples, learnerHypers) {
+var teacherKnowledgeEval = function (teacherExamples, learnerHypers) {
     var score = marginalize(updateLearnerPosterior(teacherExamples, learnerHypers, params.nExamples), 'teacherKnowledge').score('full');
     return round(100 * Math.pow(Math.E, score), 0) // 100 == 'full'; 0 == 'partial'
 };
@@ -155,33 +182,6 @@ var learnerThetaGuess = function (teacherExamples, learnerHypers, concept) {
 };
 
 
-// does the learner send a guess?
-var sendGuessScore = function (firstExamples, learnerHypers) {
-    var dist = Infer({method: 'enumerate'}, function () {
-        var feedback = uniformDraw(['yes', 'no'])
-        var theta = uniformDraw(params.trueThetas)
-
-        // learner uses first set of examples to reason about whether speaker knows about them
-        var teacherKnowledge = sample(marginalize(updateLearnerPosterior(firstExamples, learnerHypers, params.nExamples), 'teacherKnowledge'))
-        var studentGuess = MAP(L0([firstExamples], learnerHypers)).val
-
-        // if learner provides feedback, then speaker has more info about learner classroom for providing second set of examples — but only if speaker is partial
-        // TODO: fix
-        var speakerPosterior = feedback == 'yes' ? updateSpeakerPosterior([firstExamples], studentGuess) : speakerPrior
-        var secondExamples = teacherKnowledge === 'partial' ? sample(S_second_ex_partial(firstExamples, theta, speakerPosterior, 5)) : sample(S_second_ex_full(firstExamples, theta, learnerHypers, 5))
-
-        // after the speaker provides second set of examples, learner reasons about what the true concept is
-        var learnerPosteriorTheta = marginalize(updateLearnerPosterior([firstExamples, secondExamples], learnerHypers, 10), 'theta')
-
-        // did the learner get the 'right answer'?
-        factor(params.alpha * learnerPosteriorTheta.score(theta))
-        return feedback
-    })
-
-    var score = dist.score('yes')
-
-    return round(100 * Math.pow(Math.E, score), 0)
-}
 
 var f = csv.open('../../data/learner/model/v8.csv');
 csv.writeLine('block_type,theta,student_a,student_b,first_examples_a,first_examples_b,teacher_knowledge,feedback_choice,first_guess', f);
@@ -207,7 +207,7 @@ var trials = _.flattenDeep(
 var second_examples = []
 
 map(function (trial) {
-	console.log('running');
+	console.log(trial);
 
 	csv.writeLine([
 		trial.condition,
@@ -216,7 +216,7 @@ map(function (trial) {
 		trial.hypers.b,
 		trial.examples.a,
 		trial.examples.b,
-		teacherKnowledgeProb([trial.examples], trial.hypers),
+		teacherKnowledgeEval([trial.examples], trial.hypers),
 		sendGuessScore(trial.examples, trial.hypers),
         learnerThetaGuess([trial.examples], trial.hypers, trial.theta)
 	].join(','), f);
