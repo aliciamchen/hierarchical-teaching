@@ -156,20 +156,24 @@ var learnerThetaGuess = function (teacherExamples, learnerHypers, concept) {
 
 
 // does the learner send a guess?
-var sendGuessScore = function (firstExamples, learnerHypers, teacherKnowledgeEval) {
+var sendGuessScore = function (firstExamples, learnerHypers) {
     var dist = Infer({method: 'enumerate'}, function () {
         var feedback = uniformDraw(['yes', 'no'])
         var theta = uniformDraw(params.trueThetas)
 
-        // sample teacher knowledge ('full' or 'partial') based on
-        var teacherKnowledge = categorical({vs: params.teacherKnowledgeLevels, ps: [teacherKnowledgeEval / 100, 1 - (teacherKnowledgeEval / 100)]})
+        // learner uses first set of examples to reason about whether speaker knows about them
+        var teacherKnowledge = sample(marginalize(updateLearnerPosterior(firstExamples, learnerHypers, params.nExamples), 'teacherKnowledge'))
         var studentGuess = MAP(L0([firstExamples], learnerHypers)).val
-        var speakerPosterior = feedback == 'yes' ? updateSpeakerPosterior([firstExamples], studentGuess) : speakerPrior
 
+        // if learner provides feedback, then speaker has more info about learner classroom for providing second set of examples — but only if speaker is partial
+        // TODO: fix
+        var speakerPosterior = feedback == 'yes' ? updateSpeakerPosterior([firstExamples], studentGuess) : speakerPrior
         var secondExamples = teacherKnowledge === 'partial' ? sample(S_second_ex_partial(firstExamples, theta, speakerPosterior, 5)) : sample(S_second_ex_full(firstExamples, theta, learnerHypers, 5))
 
+        // after the speaker provides second set of examples, learner reasons about what the true concept is
         var learnerPosteriorTheta = marginalize(updateLearnerPosterior([firstExamples, secondExamples], learnerHypers, 10), 'theta')
 
+        // did the learner get the 'right answer'?
         factor(params.alpha * learnerPosteriorTheta.score(theta))
         return feedback
     })
@@ -179,7 +183,7 @@ var sendGuessScore = function (firstExamples, learnerHypers, teacherKnowledgeEva
     return round(100 * Math.pow(Math.E, score), 0)
 }
 
-var f = csv.open('../../data/learner/model/v7.csv');
+var f = csv.open('../../data/learner/model/v8.csv');
 csv.writeLine('block_type,theta,student_a,student_b,first_examples_a,first_examples_b,teacher_knowledge,feedback_choice,first_guess', f);
 
 var trials = _.flattenDeep(
@@ -204,8 +208,6 @@ var second_examples = []
 
 map(function (trial) {
 	console.log('running');
-    var posterior = teacherKnowledgeProb([trial.examples], trial.hypers);
-    var islandGuess = learnerThetaGuess([trial.examples], trial.hypers, trial.theta); // TODO: fix this.. why does it change
 
 	csv.writeLine([
 		trial.condition,
@@ -214,9 +216,9 @@ map(function (trial) {
 		trial.hypers.b,
 		trial.examples.a,
 		trial.examples.b,
-		posterior,
-		sendGuessScore(trial.examples, trial.hypers, posterior), // posterior is teacherKnowledgeEstimate; change later
-        islandGuess
+		teacherKnowledgeProb([trial.examples], trial.hypers),
+		sendGuessScore(trial.examples, trial.hypers),
+        learnerThetaGuess([trial.examples], trial.hypers, trial.theta)
 	].join(','), f);
 
 }, trials);
