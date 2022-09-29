@@ -131,23 +131,23 @@ var sendGuess = cache(function (firstExamples, learnerHypers) {
 
 var sendGuessScore = function(firstExamples, learnerHypers) {
     var score = sendGuess(firstExamples, learnerHypers).score('yes')
-    return round(100 * Math.pow(Math.E, score), 0)
+    return Math.exp(score)
 }
 
 // learner's evaluation of how much the teacher knows after observing first set of examples
 var teacherKnowledgeEval = function (teacherExamples, learnerHypers) {
     var score = marginalize(updateLearnerPosterior(teacherExamples, learnerHypers, params.nInitialExamples), 'teacherKnowledge').score('full');
-    return round(100 * Math.pow(Math.E, score), 0) // 100 == 'full'; 0 == 'partial'
+    return Math.exp(score)
 };
 
 // learner's guess for true hypothesis after observing first set of examples
 var learnerThetaGuess = function (teacherExamples, learnerHypers, concept) {
     var thetaGuessDist = marginalize(updateLearnerPosterior(teacherExamples, learnerHypers, params.nInitialExamples), 'theta')
     var score = thetaGuessDist.score(concept)
-    return round(100 * Math.pow(Math.E, score), 0) //
+    return Math.exp(score)
 };
 
-var f = csv.open('output/' + 'sa' + params.speakerAlpha + '_la' + params.listenerAlpha + '_gc' + params.guessCost + '.csv');
+var f = csv.open('output/indiv/' + 'sa' + params.speakerAlpha + '_la' + params.listenerAlpha + '_gc' + params.guessCost + '.csv');
 csv.writeLine('speaker_alpha,listener_alpha,guess_cost,block_type,theta,student_a,student_b,first_examples_a,first_examples_b,teacher_knowledge,feedback_choice,first_guess', f);
 
 var trials = _.flattenDeep(
