@@ -1,8 +1,9 @@
-// webppl simulation.wppl --require webppl-csv
+// webppl simulation.wppl --require webppl-csv -- --speakerAlpha 3 --listenerAlpha 3 --guessCost 0.1
 
 var params = {
-    speakerAlpha: 8,
-    listenerAlpha: 8,
+    speakerAlpha: argv.speakerAlpha,
+    listenerAlpha: argv.listenerAlpha,
+    guessCost: argv.guessCost,
     trueThetas: [0.01, 0.3, 0.7, 0.99], // true coin flip weight
     nInitialExamples: 5,
     nSecondExamples: 5,
@@ -10,9 +11,10 @@ var params = {
     learnerHypers: [
 		{heads: 9, tails: 1},
         {heads: 1, tails: 9}
-	],
-    guessCost: 0.1
+	]
 };
+
+// console.log("speakerAlpha " + params.speakerAlpha + " listenerAlpha " + params.listenerAlpha + " guessCost " + params.guessCost)
 
 var round = function (num, precision) {
 	Number.parseFloat(num.toFixed(precision));
@@ -76,7 +78,7 @@ var updateSpeakerPosterior = cache(function (examples, guess) {
     })
 });
 
-// learner reasons about speaker and true hypothesis after seeing the speaker's exampels
+// learner reasons about speaker and true hypothesis after seeing the speaker's examples
 var updateLearnerPosterior = cache(function (examples, trueLearnerHypers, nExamples) {
     var combined = {
         heads: _.toNumber(sum(_.map(examples, 'heads'))),
@@ -166,7 +168,6 @@ var trials = _.flattenDeep(
 )
 
 map(function (trial) {
-	console.log(trial);
 
 	csv.writeLine([
         params.speakerAlpha,
