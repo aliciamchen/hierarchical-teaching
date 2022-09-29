@@ -162,7 +162,7 @@ var trials = _.flattenDeep(
                             tails: params.nInitialExamples - examples_a
                         }]
                     }
-            }, params.nInitialExamples)
+            }, params.nInitialExamples + 1)
         }, params.learnerHypers)
     }, params.trueThetas)
 )
