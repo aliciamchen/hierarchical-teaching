@@ -57,10 +57,10 @@ function makeIslandSlider (stage) {
 		<br>
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
-				<input type="radio" name="studentGuess" id="0" value="0">
-					Completely purple (100% purple)
+				<input type="radio" name="studentGuess" id="0.1" value="0.1">
+					10% orange, 90% purple
 					<br>
-					<img src='img/0o1p.png' width="350"></img>
+					<img src='img/0.1o0.9p.png' width="350"></img>
 				</input>
 			</label>
 		</div>
@@ -68,7 +68,7 @@ function makeIslandSlider (stage) {
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
 				<input type="radio" name="studentGuess" id="0.3" value="0.3">
-					Mostly purple (30% orange, 70% purple)
+					30% orange, 70% purple
 					<br>
 					<img src='img/0.3o0.7p.png' width="350"></img>
 				</input>
@@ -78,7 +78,7 @@ function makeIslandSlider (stage) {
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
 				<input type="radio" name="studentGuess" id="0.7" value="0.7">
-					Mostly orange (70% orange, 30% purple)
+					70% orange, 30% purple
 					<br>
 					<img src='img/0.7o0.3p.png' width="350"></img>
 				</input>
@@ -87,10 +87,10 @@ function makeIslandSlider (stage) {
 
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
-				<input type="radio" name="studentGuess" id="1" value="1">
-					Completely orange (100% orange)
+				<input type="radio" name="studentGuess" id="0.9" value="0.9">
+					90% orange, 10% purple
 					<br>
-					<img src='img/1o0p.png' width="350"></img>
+					<img src='img/0.9o0.1p.png' width="350"></img>
 				</input>
 			</label>
 		</div>

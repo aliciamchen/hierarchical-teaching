@@ -23,10 +23,10 @@ var instructions = {
             Interestingly enough, there are <strong>four</strong> different types of islands in the archipelago:
         </p>
         <ul>
-            <li>Completely purple (100% purple)</li>
-            <li>Mostly purple (30% orange, 70% purple)</li>
-            <li>Mostly orange (70% orange, 30% purple)</li>
-            <li>Completely orange (100% orange)</li>
+            <li>10% orange, 90% purple</li>
+            <li>30% orange, 70% purple</li>
+            <li>70% orange, 30% purple</li>
+            <li>90% orange, 10% purple</li>
         </ul>
         `,
 

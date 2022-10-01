@@ -15,7 +15,7 @@ const hyperParams = {
 
 const conditions = ['full', 'partial'];
 const hyperPairings = [['A', 'B']];
-const coinWeights = [0, 0.3, 0.7, 1];
+const coinWeights = [0.1, 0.3, 0.7, 0.9];
 
 const trueHypers = hyperPairings.flat();
 const firstExamples = [

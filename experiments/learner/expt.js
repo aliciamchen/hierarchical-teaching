@@ -64,7 +64,7 @@ var timeline = [];
 
 var preload = {
     type: jsPsychPreload,
-    images: ['img/archipelago.png', 'img/9orange1purple.png', 'img/1orange9purple.png', 'img/0o1p.png', 'img/0.3o0.7p.png', 'img/0.7o0.3p.png', 'img/1o0p.png']
+    images: ['img/archipelago.png', 'img/9orange1purple.png', 'img/1orange9purple.png', 'img/0.1o0.9p.png', 'img/0.3o0.7p.png', 'img/0.7o0.3p.png', 'img/0.9o0.1p.png']
 };
 
 timeline.push(preload, welcome, consent, comprehensionLoop, beginning, firstIslandWarning);

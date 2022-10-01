@@ -2,9 +2,9 @@
 // Calculate teacher feedback for experiment 2
 
 var params = {
-    alpha: 2,
+    alpha: 4,
     costWeight: 0,
-    trueThetas: [0.01, 0.3, 0.7, 0.99], // true coin flip weight
+    trueThetas: [0.1, 0.3, 0.7, 0.9], // true coin flip weight
     nExamples: 5,
     nTeachers: 2,
 	teachers: ['A', 'B'],
@@ -155,5 +155,5 @@ var output = _.flattenDeep(
     }, params.trueThetas)
   );
 
-json.write('../../experiments/learner/json/precalc_v4.json', output);
+json.write('../../experiments/learner/json/precalc_v5.json', output);
 console.log('success! :)');
