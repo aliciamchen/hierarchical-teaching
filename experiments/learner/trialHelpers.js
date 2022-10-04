@@ -57,7 +57,7 @@ function fetchFirstExamples (currTrial, stage = 'first')
 // adds text based on the new teacher's examples
 function fetchSecondExamples (currTrial)
 {
-	$.get('./json/precalc_v5.json', function(data) {
+	$.get('./json/precalc_v7_alpha4.json', function(data) {
 		fetchFirstExamples(currTrial, 'final');
 		// console.log(currTrial)
 		var secondExamples = currTrial.studentGuess != null ?

@@ -1,10 +1,10 @@
-// webppl precalc.wppl --require webppl-json
+// webppl precalc.wppl --require webppl-json --random-seed 11
 // Calculate teacher feedback for experiment 2
 
 var params = {
     alpha: 4,
     costWeight: 0,
-    trueThetas: [0.1, 0.3, 0.7, 0.9], // true coin flip weight
+    trueThetas: [0.3, 0.7], // true coin flip weight
     nExamples: 5,
     nTeachers: 2,
 	teachers: ['A', 'B'],
@@ -126,10 +126,10 @@ var simulate = cache(function (teacherKnowledgeLevel, learnerClass, guess, first
 {
     if (teacherKnowledgeLevel === 'partial') {
         var posterior = guess == 'none' ? speakerPrior : updateSpeakerPosterior([firstExamples], guess);
-        var examplesA = round(MAP(marginalize(S_second_ex_partial(firstExamples, theta, posterior, nExamples), 'a')).val, 0);
+        var examplesA = round(sample(marginalize(S_second_ex_partial(firstExamples, theta, posterior, nExamples), 'a')), 0);
         return {a: examplesA, b: nExamples - examplesA};
     } else if (teacherKnowledgeLevel === 'full') {
-        var examplesA = round(MAP(marginalize(S_second_ex_full(firstExamples, theta, params.learnerHypers[learnerClass], nExamples), 'a')).val, 0);
+        var examplesA = round(sample(marginalize(S_second_ex_full(firstExamples, theta, params.learnerHypers[learnerClass], nExamples), 'a')), 0);
         return {a: examplesA, b: nExamples - examplesA};
     }
 });
@@ -155,5 +155,5 @@ var output = _.flattenDeep(
     }, params.trueThetas)
   );
 
-json.write('../../experiments/learner/json/precalc_v5.json', output);
+json.write('../../experiments/learner/json/precalc_v7_alpha4.json', output);
 console.log('success! :)');

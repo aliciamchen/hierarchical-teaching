@@ -20,13 +20,11 @@ var instructions = {
         `
         <h2>Different islands</h2>
         <p class="instruction">
-            Interestingly enough, there are <strong>four</strong> different types of islands in the archipelago:
+            Interestingly enough, there are <strong>two</strong> different types of islands in the archipelago:
         </p>
         <ul>
-            <li>10% orange, 90% purple</li>
             <li>30% orange, 70% purple</li>
             <li>70% orange, 30% purple</li>
-            <li>90% orange, 10% purple</li>
         </ul>
         `,
 
@@ -86,7 +84,7 @@ var instructions = {
         </p>
         <p class="instruction">
         Then, you will have an option to send information to the teacher. You can select
-        whether you would like to <b>enter a guess for the island composition</b> and send it
+        whether you would like to <b>guess the island composition</b> and send it
         to the teacher.
         </p>
         <p class="instruction">

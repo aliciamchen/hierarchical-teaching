@@ -4,7 +4,7 @@ var params = {
     speakerAlpha: argv.speakerAlpha,
     listenerAlpha: argv.listenerAlpha,
     guessCost: argv.guessCost,
-    trueThetas: [0.01, 0.3, 0.7, 0.99], // true coin flip weight
+    trueThetas: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], // true coin flip weight
     nInitialExamples: 5,
     nSecondExamples: 5,
     teacherKnowledgeLevels: ['full', 'partial'],

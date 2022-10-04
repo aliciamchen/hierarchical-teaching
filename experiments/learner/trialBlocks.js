@@ -55,15 +55,6 @@ function makeIslandSlider (stage) {
 			Which of these pictures do you think ${stage == 'final' ? `now ` : ``} best describes the turtle population of this island?
 		</p></strong>
 		<br>
-		<div id="island" class="jspsych-survey-multi-choice-option">
-			<label class="jspsych-survey-multi-choice-text" for="0o1p">
-				<input type="radio" name="studentGuess" id="0.1" value="0.1">
-					10% orange, 90% purple
-					<br>
-					<img src='img/0.1o0.9p.png' width="350"></img>
-				</input>
-			</label>
-		</div>
 
 		<div id="island" class="jspsych-survey-multi-choice-option">
 			<label class="jspsych-survey-multi-choice-text" for="0o1p">
@@ -85,15 +76,6 @@ function makeIslandSlider (stage) {
 			</label>
 		</div>
 
-		<div id="island" class="jspsych-survey-multi-choice-option">
-			<label class="jspsych-survey-multi-choice-text" for="0o1p">
-				<input type="radio" name="studentGuess" id="0.9" value="0.9">
-					90% orange, 10% purple
-					<br>
-					<img src='img/0.9o0.1p.png' width="350"></img>
-				</input>
-			</label>
-		</div>
 	</div>
 
 
