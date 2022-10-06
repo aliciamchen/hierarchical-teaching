@@ -6,7 +6,7 @@ theme_set(theme_few(base_size = 15))
 
 n.ex.teacher = 5
 
-d.model <- read.csv(here("model/learner/output/combined_0.3_0.7_observe.csv")) %>% 
+d.model <- read.csv(here("model/learner/output/combined_0.3_0.7_no_MAP.csv")) %>% 
   filter(student_a == 9) %>% 
   mutate(
     examples_a = ifelse(student_a == 9, first_examples_a, n.ex.teacher - first_examples_a), 
