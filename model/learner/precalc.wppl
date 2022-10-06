@@ -2,158 +2,146 @@
 // Calculate teacher feedback for experiment 2
 
 var params = {
-    alpha: 4,
-    costWeight: 0,
-    trueThetas: [0.3, 0.7], // true coin flip weight
-    nExamples: 5,
-    nTeachers: 2,
-	teachers: ['A', 'B'],
-    teacherKnowledgeLevels: ['full', 'partial'],
-	learners: [0, 1],
-    learnerHypers: [
-		{a: 9, b: 1},
-        {a: 1, b: 9}
-	],
-    firstExamples: [
-        {a: 0, b: 5},
-        {a: 1, b: 4},
-        {a: 2, b: 3},
-        {a: 3, b: 2},
-        {a: 4, b: 1},
-        {a: 5, b: 0},
-    ],
-    guessCost: 0.1
+  speakerAlpha: 8,
+  trueThetas: [0.3, 0.7], // true coin flip weight
+  nExamples: 5,
+  nTeachers: 2,
+  teacherKnowledgeLevels: ["full", "partial"],
+  learnerHypers: [
+    { heads: 9, tails: 1 },
+    { heads: 1, tails: 9 },
+  ],
+  firstExamples: [
+    { heads: 0, tails: 5 },
+    { heads: 1, tails: 4 },
+    { heads: 2, tails: 3 },
+    { heads: 3, tails: 2 },
+    { heads: 4, tails: 1 },
+    { heads: 5, tails: 0 },
+  ],
 };
 
+// console.log("speakerAlpha " + params.speakerAlpha + " listenerAlpha " + params.listenerAlpha + " guessCost " + params.guessCost)
+
 var round = function (num, precision) {
-	Number.parseFloat(num.toFixed(precision));
-  } ;
+  Number.parseFloat(num.toFixed(precision));
+};
 
+// define priors for teacher and learner
+var islandPrior = Categorical({ vs: params.trueThetas });
+var speakerPrior = Categorical({ vs: params.learnerHypers });
 
-// discretizes a beta distribution over hypers (allows dp)
-var Beta_disc = cache(function (hypers) {
-	return Infer({method: 'enumerate'}, function() {
-		var n = uniformDraw(_.range(0.01, 1, 0.01));
-        var bta = Beta({ a: hypers.a == 0 ? 1 : hypers.a,
-                        b: hypers.b == 0 ? 1 : hypers.b});
-		factor(bta.score(n));
-        return round(n, 2);
-	})
-});
+// literal learner using conjugate prior
+var L0 = cache(function (examples) {
+  return Infer({ method: "enumerate" }, function () {
+    var theta = sample(islandPrior);
 
-var islandPrior = Categorical({vs: params.trueThetas})
-var speakerPrior = Categorical({vs: params.learners})
-
-// literal learner
-var L0 = cache(function (examplesArray, learnerHypers) {
-    return Infer ({ method: 'enumerate' }, function () {
-        var theta = sample(islandPrior);
-        var heads = reduce(function (example, acc) { return example.a + acc }, 0, examplesArray);
-        var tails = reduce(function (example, acc) { return example.b + acc }, 0, examplesArray);
-        var learnerDist = Beta({
-            a: _.toNumber(learnerHypers.a + heads) == 0 ? 1 : _.toNumber(learnerHypers.a + heads),
-            b: _.toNumber(learnerHypers.b + tails) == 0 ? 1 : _.toNumber(learnerHypers.b + tails)
-        });
-        observe(learnerDist, theta);
-        return theta;
-    })
-});
-
-
-// pragmatic speaker
-var S1 = cache(function (theta, hypers, nExamples) {
-    return Infer({ method: 'enumerate' }, function () {
-      var nHeads = uniformDraw(_.range(0, nExamples + 1));
-      var sampledExamples = {a: nHeads, b: nExamples - nHeads};
-      factor(params.alpha * ((1 - params.costWeight) * L0([sampledExamples], hypers).score(theta)
-                            - params.costWeight * nExamples));
-      return {a: sampledExamples.a, b: sampledExamples.b};
+    // conjugate prior is just Beta(a_p + a_new, b_p + b_new)
+    // (accumulate heads/tails across examples)
+    var learnerPosterior = Beta({
+      a: _.toNumber(sum(_.map(examples, "heads"))),
+      b: _.toNumber(sum(_.map(examples, "tails"))),
     });
+
+    // score theta hypotheses under this posterior
+    observe(learnerPosterior, theta);
+    return theta;
+  });
 });
 
-// uncertain pragmatic speaker
-var S = cache(function (theta, nExamples) {
-    return Mixture({
-        dists: [S1(theta, params.learnerHypers[0], nExamples),
-        S1(theta, params.learnerHypers[1], nExamples)],
-        ps: [0.5, 0.5]
-    })
+// pragmatic speaker with fixed beliefs about what listener has seen
+var S_fixed = cache(function (previousData, trueTheta, nExamples) {
+  return Infer({ method: "enumerate" }, function () {
+    // sample how many heads to show
+    var nHeads = uniformDraw(_.range(nExamples + 1));
+    var examples = { heads: nHeads, tails: nExamples - nHeads };
+
+    // utility based on resulting beliefs, ln L0(t | u))
+    var speakerUtility = L0(previousData.concat([examples])).score(trueTheta);
+    factor(params.speakerAlpha * speakerUtility);
+    return examples;
+  });
 });
 
-// second example in sequential case
-var S_second_ex_partial = cache(function (first_ex, theta, posterior, nExamples) {
-    return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = sample(posterior);
-        var learnerHypers = params.learnerHypers[learnerClass];
-        var nHeads = uniformDraw(_.range(0, nExamples + 1));
-        var second_ex = { a: nHeads, b: nExamples - nHeads };
-
-        factor(params.alpha * ((1 - params.costWeight) * L0([first_ex, second_ex], learnerHypers).score(theta)
-			- params.costWeight * (second_ex.a + second_ex.b)));
-
-        return second_ex;
-    })
+// pragmatic speaker equally uncertain about student's classroom
+var S_uncertain = cache(function (beliefs, previousData, theta, nExamples) {
+  var dists_scores = _.unzip(
+    map(function (hyper) {
+      return [
+        S_fixed(previousData.concat(hyper), theta, nExamples),
+        Math.exp(beliefs.score(hyper)),
+      ];
+    }, beliefs.support())
+  );
+  return Mixture({ dists: dists_scores[0], ps: dists_scores[1] });
 });
 
-var S_second_ex_full = cache(function (first_ex, theta, hypers, nExamples) {
-    return Infer({ method: 'enumerate' }, function () {
-        var learnerHypers = hypers;
-        var nHeads = uniformDraw(_.range(0, nExamples + 1));
-        var second_ex = { a: nHeads, b: nExamples - nHeads };
-
-        factor(params.alpha * ((1 - params.costWeight) * L0([first_ex, second_ex], learnerHypers).score(theta)
-			- params.costWeight * (second_ex.a + second_ex.b)));
-
-        return second_ex;
-    })
-});
-
-// after speaker sees learner's feedback after step 1, update speaker posterior over class membership
+// speaker updates belief in learner hypers based on guess from learner
 var updateSpeakerPosterior = cache(function (examples, guess) {
-    return Infer({ method: 'enumerate' }, function () {
-        var learnerClass = sample(speakerPrior);
-        var learnerHypers = params.learnerHypers[learnerClass];
+  return Infer({ method: "enumerate" }, function () {
+    var learnerHypers = sample(speakerPrior);
+    var learnerDist = L0(examples.concat(learnerHypers));
 
-        var learnerDist = L0(examples, learnerHypers);
-
-        observe(learnerDist, guess)
-        return learnerClass;
-    })
+    observe(learnerDist, guess);
+    return learnerHypers;
+  });
 });
 
+var simulate = cache(function (
+  teacherKnowledgeLevel,
+  learnerHypers,
+  guess,
+  firstExamples,
+  theta,
+  nExamples
+) {
+  var speakerPosterior =
+    guess == "none"
+      ? speakerPrior
+      : teacherKnowledgeLevel === "partial"
+      ? updateSpeakerPosterior(firstExamples, guess)
+      : Delta({ v: learnerHypers });
 
-var simulate = cache(function (teacherKnowledgeLevel, learnerClass, guess, firstExamples, theta, nExamples)
-{
-    if (teacherKnowledgeLevel === 'partial') {
-        var posterior = guess == 'none' ? speakerPrior : updateSpeakerPosterior([firstExamples], guess);
-        var examplesA = round(sample(marginalize(S_second_ex_partial(firstExamples, theta, posterior, nExamples), 'a')), 0);
-        return {a: examplesA, b: nExamples - examplesA};
-    } else if (teacherKnowledgeLevel === 'full') {
-        var examplesA = round(sample(marginalize(S_second_ex_full(firstExamples, theta, params.learnerHypers[learnerClass], nExamples), 'a')), 0);
-        return {a: examplesA, b: nExamples - examplesA};
-    }
+  var example_dist = S_uncertain(
+    speakerPosterior,
+    firstExamples,
+    theta,
+    nExamples
+  );
+  var examplesA = round(sample(marginalize(example_dist, "heads")), 0);
+  return {
+    a: examplesA,
+    b: nExamples - examplesA,
+  };
 });
 
 var output = _.flattenDeep(
-    map ( function (theta) {
-        return map(function(learnerClass) {
-            return map(function(firstExamples) {
-                return map ( function (guess) {
-                  return map(function(teacherKnowledgeLevel) {
-                      return {
-                            learnerHypers: params.learnerHypers[learnerClass],
-                          teacherKnowledgeLevel: teacherKnowledgeLevel,
-                          theta: round(theta, 1),
-                          firstExample: firstExamples,
-                          guess: guess == 'none' ? guess : round(guess, 1),
-                          secondExample: simulate(teacherKnowledgeLevel, learnerClass, guess, firstExamples, theta, params.nExamples)
-                      }
-                  }, params.teacherKnowledgeLevels)
-                }, _.concat(params.trueThetas, 'none'))
-            }, params.firstExamples)
-        }, params.learners)
-    }, params.trueThetas)
-  );
+  map(function (theta) {
+    return map(function (learnerHypers) {
+      return map(function (firstExamples) {
+        return map(function (guess) {
+          return map(function (teacherKnowledgeLevel) {
+            return {
+              learnerHypers: { a: learnerHypers.heads, b: learnerHypers.tails },
+              teacherKnowledgeLevel: teacherKnowledgeLevel,
+              theta: round(theta, 1),
+              firstExample: { a: firstExamples.heads, b: firstExamples.tails },
+              guess: guess == "none" ? guess : round(guess, 1),
+              secondExample: simulate(
+                teacherKnowledgeLevel,
+                learnerHypers,
+                guess,
+                [firstExamples],
+                theta,
+                params.nExamples
+              ),
+            };
+          }, params.teacherKnowledgeLevels);
+        }, _.concat(params.trueThetas, "none"));
+      }, params.firstExamples);
+    }, params.learnerHypers);
+  }, params.trueThetas)
+);
 
-json.write('../../experiments/learner/json/precalc_v7_alpha4.json', output);
-console.log('success! :)');
+json.write("../../experiments/learner/json/precalc_new_alpha8.json", output);
+console.log("success! :)");
