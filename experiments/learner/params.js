@@ -5,7 +5,7 @@ const params = {
     basePay: 3,
     maxBonus: 6,
     perTrialBonus: 0.50,
-    feedbackCost: 0.10
+    feedbackCost: 0.05
 };
 
 const hyperParams = {

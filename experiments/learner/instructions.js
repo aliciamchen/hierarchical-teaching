@@ -108,11 +108,10 @@ var instructions = {
         `<h3>How to earn a bonus</h3>
         <p class="instruction">
         Every time you select the correct island <b>during the final lesson</b>, you will
-        earn a bonus of $${params.perTrialBonus.toFixed(2)}.
+        earn a bonus of $${params.perTrialBonus.toFixed(2)}!
         </p>
         <p class="instruction">
-        Sending feedback to the teacher costs money: every time you send feedback
-        to the teacher, $${params.feedbackCost.toFixed(2)} will be subtracted from your bonus.
+        However, sending feedback to the teacher costs $${params.feedbackCost.toFixed(2)}.
         </p>`,
 
         `<h2>Review</h2>
@@ -132,8 +131,7 @@ var instructions = {
         <ul>
             <li>The teacher will send you <b>another</b> set of examples</li>
             <li>Based on all of the turtles you have seen, you will guess the island composition</li>
-            <li>Your bonus will be based on this final guess, minus a cost if you
-            previously sent the teacher information</li>
+            <li>Your bonus will be based on this final guess and your decision to send a guess to the teacher.</li>
         </ul>`,
     ],
     show_clickable_nav: true,
