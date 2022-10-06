@@ -57,9 +57,8 @@ function fetchFirstExamples (currTrial, stage = 'first')
 // adds text based on the new teacher's examples
 function fetchSecondExamples (currTrial)
 {
-	$.get('./json/precalc_new_alpha8.json', function(data) {
+	$.get('./json/precalc_final_alpha8.json', function(data) {
 		fetchFirstExamples(currTrial, 'final');
-		// console.log(currTrial)
 		var secondExamples = currTrial.studentGuess != null ?
 											data.filter(x => x.theta == currTrial.coinWeight
 											&& x.learnerHypers.a == hyperParams[currTrial.trueHyper].a
