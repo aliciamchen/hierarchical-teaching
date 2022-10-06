@@ -71,10 +71,8 @@ var updateSpeakerPosterior = cache(function (examples, guess) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerHypers = sample(speakerPrior);
         var learnerDist = L0(examples.concat(learnerHypers));
-        // var learnerEstimate = MAP(learnerDist).val
 
         observe(learnerDist, guess)
-        // condition(learnerEstimate === guess)
         return learnerHypers;
     })
 });
@@ -109,7 +107,7 @@ var sendGuess = cache(function (firstExamples, learnerHypers) {
         var teacherKnowledge = sample(marginalize(updateLearnerPosterior(firstExamples, learnerHypers, params.nInitialExamples), 'teacherKnowledge'))
 
         // if learner provides feedback, then speaker has more info about learner classroom for providing second set of examples — but only if speaker is partial
-        var studentGuess = MAP(L0(firstExamples.concat(learnerHypers))).val
+        var studentGuess = sample(L0(firstExamples.concat(learnerHypers)))
         var speakerPosterior = (feedback == 'no' ? speakerPrior :
                                 teacherKnowledge === 'partial' ? updateSpeakerPosterior(firstExamples, studentGuess) :
                                 Delta({v : learnerHypers}))
