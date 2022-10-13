@@ -14,8 +14,6 @@ var params = {
 	]
 };
 
-// console.log("speakerAlpha " + params.speakerAlpha + " listenerAlpha " + params.listenerAlpha + " guessCost " + params.guessCost)
-
 var round = function (num, precision) {
 	Number.parseFloat(num.toFixed(precision));
 };

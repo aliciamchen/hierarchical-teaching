@@ -1,10 +1,9 @@
-// webppl teacher_1d.wppl --require ../../tools/ --require webppl-csv --random-seed 88
+// webppl teacher_1d.wppl --require webppl-csv --random-seed 88 -- --speakerAlpha 8 --costWeight 0.001
 
 var params = {
-    type: 'point',
-    participants: 193,
-    alpha: 8,
-    costWeight: 0.001,
+    participants: 120,
+    alpha: argv.speakerAlpha,
+    costWeight: argv.costWeight,
     coinWeights: [0.3, 0.7], // true coin flip weight
     maxFlips: 70,
     scenarios: ['seqFeedback', 'nonSeqFull', 'nonSeqPartial', 'seqNoFeedback'],
@@ -16,7 +15,7 @@ var params = {
 };
 
 
-var f = csv.open('./output/' + 'v10' + '_' + params.type + '_alpha' + params.alpha + '_cost' + params.costWeight + '_' + params.participants + '.csv')
+var f = csv.open('./output/indiv/' + 'sa' + params.alpha + '_cw' + params.costWeight + '.csv')
 csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_class,heads,tails', f)
 
 var makeTrials = function () {
@@ -39,6 +38,21 @@ var makeTrials = function () {
     )
 }
 
+var round = function (num, precision) {
+    Number.parseFloat(num.toFixed(precision));
+};
+
+var Beta_disc = cache(function (hypers) {
+    return Infer({ method: 'enumerate' }, function () {
+        var n = uniformDraw(_.range(0, 1, 0.01));
+        var bta = Beta({
+            a: hypers.a == 0 ? 1 : hypers.a,
+            b: hypers.b == 0 ? 1 : hypers.b
+        });
+        factor(bta.score(n));
+        return round(n, 2);
+    })
+});
 
 //// Model
 

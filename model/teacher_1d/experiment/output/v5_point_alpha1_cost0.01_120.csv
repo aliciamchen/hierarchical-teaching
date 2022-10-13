@@ -1,9 +1,0 @@
-subject_id,alpha,costWeight,block_type,trial_num,theta,student_class,heads,tails
-0,1,0.01,nonSeqFull,0,0.3,A,4,5
-0,1,0.01,nonSeqFull,0,0.3,B,1,31
-0,1,0.01,nonSeqFull,0,0.7,A,15,2
-0,1,0.01,nonSeqFull,0,0.7,B,38,14
-0,1,0.01,nonSeqPartial,0,0.3,A,24,41
-0,1,0.01,nonSeqPartial,0,0.3,B,18,45
-0,1,0.01,nonSeqPartial,0,0.7,A,15,4
-0,1,0.01,nonSeqPartial,0,0.7,B,33,21
