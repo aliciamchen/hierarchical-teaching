@@ -12,5 +12,15 @@ model/teacher_2d/rectangleGame.wppl
 .Rproj.user
 .RData
 .Rhistory
-.Rproj
+*.Rproj
 indiv
+data/preprocessed
+data/learner
+data/teacher_1d
+data/teacher_2d
+analysis/learner
+analysis/teacher_1d
+analysis/teacher_2d
+*.key
+experiments/teacher_2d
+model/teacher_2d
