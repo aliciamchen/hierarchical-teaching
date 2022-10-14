@@ -1,0 +1,114 @@
+[
+    {
+        "theta": 0.7,
+        "hypers": 
+        {
+            "a": 1,
+            "b": 9
+        },
+        "condition": "full",
+        "examples": 
+		{
+			"a": 10,
+            "b": 0
+		}
+    },
+	{
+        "theta": 0.7,
+        "hypers": 
+        {
+            "a": 9,
+            "b": 1
+        },
+        "condition": "full",
+        "examples": 
+		{
+			"a": 5,
+            "b": 5
+		}
+    },
+	{
+        "theta": 0.3,
+        "hypers": 
+        {
+            "a": 1,
+            "b": 9
+        },
+        "condition": "full",
+        "examples": 
+		{
+			"a": 5,
+            "b": 5
+		}
+    },
+	{
+        "theta": 0.3,
+        "hypers": 
+        {
+            "a": 9,
+            "b": 1
+        },
+        "condition": "full",
+        "examples": 
+		{
+			"a": 0,
+            "b": 10
+		}
+    },
+	{
+        "theta": 0.7,
+        "hypers": 
+        {
+            "a": 1,
+            "b": 9
+        },
+        "condition": "partial",
+        "examples": 
+		{
+			"a": 7,
+            "b": 3
+		}
+    },
+	{
+        "theta": 0.7,
+        "hypers": 
+        {
+            "a": 9,
+            "b": 1
+        },
+        "condition": "partial",
+        "examples": 
+		{
+			"a": 7,
+            "b": 3
+		}
+    },
+	{
+        "theta": 0.3,
+        "hypers": 
+        {
+            "a": 1,
+            "b": 9
+        },
+        "condition": "partial",
+        "examples": 
+		{
+			"a": 3,
+            "b": 7
+		}
+    },
+	{
+        "theta": 0.3,
+        "hypers": 
+        {
+            "a": 9,
+            "b": 1
+        },
+        "condition": "partial",
+        "examples": 
+		{
+			"a": 3,
+            "b": 7
+		}
+    }
+]

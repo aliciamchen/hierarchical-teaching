@@ -1,0 +1,60 @@
+body {
+    margin: auto
+}
+
+p {
+    width: 100%;
+    margin: auto;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+div {
+    text-align: center
+}
+
+ul {
+    width: 75%;
+    margin: auto;
+    text-align: left
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    margin: auto;
+    width: 100%;
+}
+
+.jspsych-survey-multi-choice-option, .consent {
+    text-align: left;
+}
+
+.instruction, .consent {
+    width: 70%;
+    padding: 0.5em 0em 0.5em 0em;
+}
+
+
+.jspsych-content {
+    width: 65%;
+}
+
+#sliderContainer {
+    margin: auto;
+}
+
+.knowledgeSliderContainer {
+    width: 75%;
+}
+
+.islandSliderContainer {
+    width: 85%;
+}
+
+img {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}

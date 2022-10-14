@@ -1,0 +1,147 @@
+// webppl precalc.wppl --require webppl-json --random-seed 11
+// Calculate teacher feedback for experiment 2
+
+var params = {
+  speakerAlpha: 8,
+  trueThetas: [0.3, 0.7], // true coin flip weight
+  nExamples: 5,
+  nTeachers: 2,
+  teacherKnowledgeLevels: ["full", "partial"],
+  learnerHypers: [
+    { heads: 9, tails: 1 },
+    { heads: 1, tails: 9 },
+  ],
+  firstExamples: [
+    { heads: 0, tails: 5 },
+    { heads: 1, tails: 4 },
+    { heads: 2, tails: 3 },
+    { heads: 3, tails: 2 },
+    { heads: 4, tails: 1 },
+    { heads: 5, tails: 0 },
+  ],
+};
+
+// console.log("speakerAlpha " + params.speakerAlpha + " listenerAlpha " + params.listenerAlpha + " guessCost " + params.guessCost)
+
+var round = function (num, precision) {
+  Number.parseFloat(num.toFixed(precision));
+};
+
+// define priors for teacher and learner
+var islandPrior = Categorical({ vs: params.trueThetas });
+var speakerPrior = Categorical({ vs: params.learnerHypers });
+
+// literal learner using conjugate prior
+var L0 = cache(function (examples) {
+  return Infer({ method: "enumerate" }, function () {
+    var theta = sample(islandPrior);
+
+    // conjugate prior is just Beta(a_p + a_new, b_p + b_new)
+    // (accumulate heads/tails across examples)
+    var learnerPosterior = Beta({
+      a: _.toNumber(sum(_.map(examples, "heads"))),
+      b: _.toNumber(sum(_.map(examples, "tails"))),
+    });
+
+    // score theta hypotheses under this posterior
+    observe(learnerPosterior, theta);
+    return theta;
+  });
+});
+
+// pragmatic speaker with fixed beliefs about what listener has seen
+var S_fixed = cache(function (previousData, trueTheta, nExamples) {
+  return Infer({ method: "enumerate" }, function () {
+    // sample how many heads to show
+    var nHeads = uniformDraw(_.range(nExamples + 1));
+    var examples = { heads: nHeads, tails: nExamples - nHeads };
+
+    // utility based on resulting beliefs, ln L0(t | u))
+    var speakerUtility = L0(previousData.concat([examples])).score(trueTheta);
+    factor(params.speakerAlpha * speakerUtility);
+    return examples;
+  });
+});
+
+// pragmatic speaker equally uncertain about student's classroom
+var S_uncertain = cache(function (beliefs, previousData, theta, nExamples) {
+  var dists_scores = _.unzip(
+    map(function (hyper) {
+      return [
+        S_fixed(previousData.concat(hyper), theta, nExamples),
+        Math.exp(beliefs.score(hyper)),
+      ];
+    }, beliefs.support())
+  );
+  return Mixture({ dists: dists_scores[0], ps: dists_scores[1] });
+});
+
+// speaker updates belief in learner hypers based on guess from learner
+var updateSpeakerPosterior = cache(function (examples, guess) {
+  return Infer({ method: "enumerate" }, function () {
+    var learnerHypers = sample(speakerPrior);
+    var learnerDist = L0(examples.concat(learnerHypers));
+
+    observe(learnerDist, guess);
+    return learnerHypers;
+  });
+});
+
+var simulate = cache(function (
+  teacherKnowledgeLevel,
+  learnerHypers,
+  guess,
+  firstExamples,
+  theta,
+  nExamples
+) {
+  var speakerPosterior =
+    guess == "none"
+      ? speakerPrior
+      : teacherKnowledgeLevel === "partial"
+      ? updateSpeakerPosterior(firstExamples, guess)
+      : Delta({ v: learnerHypers });
+
+  var example_dist = S_uncertain(
+    speakerPosterior,
+    firstExamples,
+    theta,
+    nExamples
+  );
+  var examplesA = round(sample(marginalize(example_dist, "heads")), 0);
+  return {
+    a: examplesA,
+    b: nExamples - examplesA,
+  };
+});
+
+var output = _.flattenDeep(
+  map(function (theta) {
+    return map(function (learnerHypers) {
+      return map(function (firstExamples) {
+        return map(function (guess) {
+          return map(function (teacherKnowledgeLevel) {
+            return {
+              learnerHypers: { a: learnerHypers.heads, b: learnerHypers.tails },
+              teacherKnowledgeLevel: teacherKnowledgeLevel,
+              theta: round(theta, 1),
+              firstExample: { a: firstExamples.heads, b: firstExamples.tails },
+              guess: guess == "none" ? guess : round(guess, 1),
+              secondExample: simulate(
+                teacherKnowledgeLevel,
+                learnerHypers,
+                guess,
+                [firstExamples],
+                theta,
+                params.nExamples
+              ),
+            };
+          }, params.teacherKnowledgeLevels);
+        }, _.concat(params.trueThetas, "none"));
+      }, params.firstExamples);
+    }, params.learnerHypers);
+  }, params.trueThetas)
+);
+
+json.write("../../experiments/learner/json/precalc_new_alpha8.json", output);
+console.log("success! :)");
