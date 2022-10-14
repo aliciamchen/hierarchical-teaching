@@ -1,0 +1,5 @@
+subject_id,trial_num,sequential,feedback,teacher_knowledge,student_prior,n_majority,n_turtles
+0,lesson1,sequential,feedback,partial,too_high,11,19
+0,lesson2,sequential,feedback,partial,too_high,23,37
+0,lesson1,sequential,feedback,partial,too_low,42,51
+0,lesson2,sequential,feedback,partial,too_low,42,61
