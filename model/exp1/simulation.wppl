@@ -1,7 +1,7 @@
-// webppl teacher_1d.wppl --require webppl-csv --random-seed 88 -- --speakerAlpha 8 --costWeight 0.001
+// webppl simulation.wppl --require webppl-csv --random-seed 88 -- --speakerAlpha 8 --costWeight 0.001
 
 var params = {
-    participants: 120,
+    participants: 193,
     alpha: argv.speakerAlpha,
     costWeight: argv.costWeight,
     coinWeights: [0.3, 0.7], // true coin flip weight
@@ -16,7 +16,7 @@ var params = {
 
 
 var f = csv.open('./output/indiv/' + 'sa' + params.alpha + '_cw' + params.costWeight + '.csv')
-csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_class,heads,tails', f)
+csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_a,student_b,heads,tails', f)
 
 var makeTrials = function () {
     return _.flattenDeep(
@@ -55,7 +55,6 @@ var Beta_disc = cache(function (hypers) {
 });
 
 //// Model
-
 var classroomPrior = Categorical({ vs: params.classrooms })
 
 // literal learner
@@ -170,7 +169,8 @@ map(function (trial) {
             trial.scenario,
             0,
             trial.coinWeight,
-            trial.classroom,
+            params.classHypers[trial.classroom].a,
+            params.classHypers[trial.classroom].b,
             response.heads,
             response.n - response.heads
         ].join(','), f)
@@ -184,7 +184,8 @@ map(function (trial) {
             trial.scenario,
             0,
             trial.coinWeight,
-            trial.classroom,
+            params.classHypers[trial.classroom].a,
+            params.classHypers[trial.classroom].b,
             response.step1examples.heads,
             response.step1examples.n - response.step1examples.heads
         ].join(','), f)
@@ -196,7 +197,8 @@ map(function (trial) {
             trial.scenario,
             1,
             trial.coinWeight,
-            trial.classroom,
+            params.classHypers[trial.classroom].a,
+            params.classHypers[trial.classroom].b,
             response.step2examples.heads,
             response.step2examples.n - response.step2examples.heads
         ].join(','), f)
