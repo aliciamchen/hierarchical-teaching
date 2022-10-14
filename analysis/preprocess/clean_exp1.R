@@ -41,8 +41,6 @@ d %>%
       feedback,
       teacher_knowledge,
       student_prior,
-      student_a,
-      student_b,
       n_majority,
       n_turtles
     )
