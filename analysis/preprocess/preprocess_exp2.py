@@ -1,40 +1,12 @@
-# Preprocess raw `.json` data from experiment
-# python preprocess.py --in_dir pilot_2a_data --out_dir pilot_2a --expt_label pilot_2a
-
+import argparse
 import glob
 import json
 import os
-import argparse
 
 import numpy as np
 import pandas as pd
 
-
-if __name__ == "__main__":
-
-    in_base_dir = "../../data/learner/raw"
-    out_base_dir = "../../data/learner"
-
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--in_dir",
-        required=True,
-        help="raw data directory in ../../data/learner/raw"
-    )
-
-    parser.add_argument(
-        "--out_dir",
-        required=True,
-        help="output directory in ../../data/learner"
-    )
-
-    parser.add_argument(
-        "--expt_label",
-        required=True
-    )
-
-    args = parser.parse_args()
+def main(args):
 
     in_dir = os.path.join(in_base_dir, str(args.in_dir))
     out_dir = os.path.join(out_base_dir, str(args.out_dir))
@@ -58,9 +30,7 @@ if __name__ == "__main__":
 
         demographics = raw_json_data[-1]
         data = raw_json_data[:-1]
-        # print(demographics)
-        # Make survey/demographics dataframe
-        # print(demographics)
+
         df_demographics = pd.DataFrame(data={
             'subject_id': demographics['subjectId'],
             'time_elapsed': demographics['time_elapsed'],
@@ -75,12 +45,16 @@ if __name__ == "__main__":
 
         # Make data dataframe
         cols = ['subject_id', 'island_idx', 'block_type', 'trial_num', 'theta',
-                'student_a', 'student_b', 'first_examples_a', 'first_examples_b', 
+                'student_a', 'student_b', 'first_examples_a', 'first_examples_b',
                 'first_guess', 'teacher_knowledge', 'feedback_choice', 'bonus',
                 'second_examples_a', 'second_examples_b', 'final_guess']
         df_data = pd.DataFrame(columns=cols)
 
         for i, trial in enumerate(data):
+            if 'status' in trial:
+                if trial['status'] == 'timeout':
+                    continue
+
             df_data.loc[i, 'subject_id'] = trial['subjectId']
             df_data.loc[i, 'island_idx'] = trial['studentIndex']
             df_data.loc[i, 'block_type'] = trial['condition']
@@ -122,6 +96,35 @@ if __name__ == "__main__":
 
     df_demographics_all.to_csv(os.path.join(
         out_dir, f"{expt_label}_demographics.csv"))
-    df_data_all.to_csv(os.path.join(out_dir, f"{expt_label}_data.csv"))
+    df_data_all.to_csv(os.path.join(out_dir, f"{expt_label}_data.csv"), index=False)
     df_bonuses_all.to_csv(os.path.join(
         out_dir, f"{expt_label}_bonuses.csv"), header=None, index=False)
+
+
+if __name__ == "__main__":
+
+    in_base_dir = "../../"
+    out_base_dir = "../../"
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--in_dir",
+        required=True,
+        help="raw data directory in ../../data/learner/raw"
+    )
+
+    parser.add_argument(
+        "--out_dir",
+        required=True,
+        help="output directory in ../../data"
+    )
+
+    parser.add_argument(
+        "--expt_label",
+        required=True
+    )
+
+    args = parser.parse_args()
+
+    main(args)
