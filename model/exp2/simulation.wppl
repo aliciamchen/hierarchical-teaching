@@ -55,14 +55,30 @@ var S_fixed = cache(function(previousData, trueTheta, nExamples) {
     });
 });
 
-// pragmatic speaker equally uncertain about student's classroom
+// pragmatic speaker uncertain about student's classroom
 var S_uncertain = cache(function(beliefs, previousData, theta, nExamples) {
-    var dists_scores = _.unzip(map(function(hyper) {
-        return [S_fixed(previousData.concat(hyper), theta, nExamples),
-                Math.exp(beliefs.score(hyper))]
-    }, beliefs.support()))
-    return Mixture({dists: dists_scores[0], ps: dists_scores[1]})
+    return Infer({ method: 'enumerate' }, function() {
+
+        // sample how many heads to show
+        var nHeads = uniformDraw(_.range(nExamples + 1));
+        var examples = {heads: nHeads, tails: nExamples - nHeads};
+
+        var dists_scores = _.unzip(map(function(hyper) {
+            return [L0(previousData.concat([hyper, examples])),
+                    Math.exp(beliefs.score(hyper))]
+        }, beliefs.support()))
+
+        var L = Mixture({dists: dists_scores[0], ps: dists_scores[1]})
+
+        // utility based on resulting beliefs
+        var speakerUtility = L.score(theta)
+
+        factor(params.speakerAlpha * speakerUtility)
+
+        return examples
+    })
 });
+
 
 // speaker updates belief in learner hypers based on guess from learner
 var updateSpeakerPosterior = cache(function (examples, guess) {
