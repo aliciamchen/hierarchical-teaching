@@ -70,16 +70,11 @@ var S_uncertain = cache(function(beliefs, previousData, theta) {
         var nHeads = uniformDraw(_.range(nExamples + 1));
         var examples = {heads: nHeads, tails: nExamples - nHeads};
 
-        // marginalize over learner hypers: int_{hypers} L_0(theta | examples, hyper) P(hyper)
-        var dists_scores = _.unzip(map(function(hyper) {
-            return [L0(previousData.concat([hyper, examples])),
-                    Math.exp(beliefs.score(hyper))]
-        }, beliefs.support()))
-
-        var L = Mixture({dists: dists_scores[0], ps: dists_scores[1]})
 
         // utility based on resulting beliefs
-        var speakerUtility = (1 - params.exampleCost) * L.score(theta) - params.exampleCost * nExamples
+        var speakerUtility = expectation(beliefs, function(hyper) {
+            return (1 - params.exampleCost) * L0(previousData.concat([hyper, examples])).score(theta) - params.exampleCost * nExamples
+        })
 
         factor(params.speakerAlpha * speakerUtility)
 
@@ -135,7 +130,7 @@ var simulate = cache(function (scenario, coinWeight, learnerHypers) {
 
 //// Simulate
 
-var f = csv.open('./output/indiv/' + 'sa' + params.speakerAlpha + '_cw' + params.costWeight + '.csv')
+var f = csv.open('./output/indiv/' + 'sa' + params.speakerAlpha + '_cw' + params.exampleCost + '.csv')
 csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_a,student_b,heads,tails', f)
 
 var makeTrials = function () {

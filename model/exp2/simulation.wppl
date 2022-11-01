@@ -1,10 +1,10 @@
-// webppl simulation.wppl --require webppl-csv -- --speakerAlpha 3 --listenerAlpha 3 --guessCost 0.1
+// webppl simulation.wppl --require webppl-csv -- --speakerAlpha 3 --listenerAlpha 3 --guessCost 0.1 --exampleCost 0.001
 
 var params = {
     speakerAlpha: argv.speakerAlpha,
     listenerAlpha: argv.listenerAlpha,
     guessCost: argv.guessCost,
-    exampleCost: params.exampleCost,
+    exampleCost: argv.exampleCost,
     trueThetas: [0.3, 0.7], // true coin flip weight
     nInitialExamples: 5,
     nSecondExamples: 5,
@@ -64,15 +64,10 @@ var S_uncertain = cache(function(beliefs, previousData, theta, nExamples) {
         var nHeads = uniformDraw(_.range(nExamples + 1));
         var examples = {heads: nHeads, tails: nExamples - nHeads};
 
-        var dists_scores = _.unzip(map(function(hyper) {
-            return [L0(previousData.concat([hyper, examples])),
-                    Math.exp(beliefs.score(hyper))]
-        }, beliefs.support()))
-
-        var L = Mixture({dists: dists_scores[0], ps: dists_scores[1]})
-
         // utility based on resulting beliefs
-        var speakerUtility = (1 - params.exampleCost) * L.score(theta) - params.exampleCost * nExamples
+        var speakerUtility = expectation(beliefs, function(hyper) {
+            return (1 - params.exampleCost) * L0(previousData.concat([hyper, examples])).score(theta) - params.exampleCost * nExamples
+        })
 
         factor(params.speakerAlpha * speakerUtility)
 
