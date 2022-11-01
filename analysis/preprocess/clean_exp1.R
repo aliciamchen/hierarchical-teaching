@@ -33,7 +33,7 @@ d <- d.raw %>%
 d$subject_id <- sapply(d$subject_id, digest)
 
 d %>%
-  mutate(theta = 0.7) %>% 
+  mutate(theta = 0.7) %>%
   select(
     c(
       subject_id,
@@ -54,7 +54,7 @@ d %>%
 # Clean exp1 model
 
 d.model <-
-  read.csv(here('model/exp1/output/indiv/sa8_cw0.001.csv')) %>%
+  read.csv(here('model/exp1/output/indiv/sa4_cw0.001.csv')) %>%
   mutate(
     n_turtles = heads + tails,
     sequential = ifelse(
@@ -77,7 +77,7 @@ d.model <-
   )
 
 d.model %>%
-  mutate(theta = 0.7) %>% 
+  mutate(theta = 0.7) %>%
   select(
     c(
       subject_id,
@@ -92,3 +92,4 @@ d.model %>%
     )
   ) %>%
   write_csv(here('model/cleaned_outputs/exp1_simulation_cleaned.csv'))
+

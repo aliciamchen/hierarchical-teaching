@@ -86,7 +86,6 @@ d.model <-
     theta = ifelse(student_a == 9, theta, 1 - theta)
   ) %>%
   rename(guess = feedback_choice) %>%
-  mutate(student_a = 9, student_b = 1) %>%
   select(
     c(
       speaker_alpha,

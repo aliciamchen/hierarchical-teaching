@@ -1,5 +1,5 @@
 #!/bin/bash#
-export NODE_OPTIONS=--max_old_space_size=20000
+export NODE_OPTIONS=--max_old_space_size=30000
 parallel --bar --colsep ',' "sh ./simulation.sh {1} {2}" :::: input/grid.csv
 
 # combine into one big csv

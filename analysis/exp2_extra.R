@@ -8,15 +8,6 @@ library(simr)
 library(ggpubr)
 library(scales)
 
-palette <- c(
-  "#c6484d", "#0088ae","#7c5b7f",  "#a3654d", "#7593b6", "#9bb27e", "#e69d45", "#c06c5e", "#f97a3b", "#ba3f5d", "#0063a2", "#4fa091"
-)
-
-show_col(palette)
-
-n.ex <- 5
-theme_set(theme_few(base_size = 18))
-
 d <- read.csv(here("data/exp2_data_cleaned.csv"))
 d.model <- read.csv(here("model/cleaned_outputs/exp2_simulation_cleaned.csv"))
 
@@ -37,75 +28,7 @@ ggplot(
              linetype = "dashed") +
   labs(x = "# heads from teacher (out of 5)", y = "yes", title = "\"do you think your teacher knows what you have seen?\"")
 
-### Does the student send a guess?
 
-d.per.participant <- d %>% 
-  group_by(subject_id, first_examples_a) %>% 
-  summarize(p = mean(guess))
-
-ggplot(
-  data = d %>%
-    group_by(first_examples_a) %>%
-    tidyboot_mean(guess, na.rm = TRUE),
-  aes(x = first_examples_a, y = empirical_stat)
-) +
-  geom_point(size = 2) +
-  geom_path(data = d.per.participant, aes(x = first_examples_a, y = p, group = subject_id), position = position_jitter(width = 0.07, height = 0.07, seed = 123), alpha = 0.07) +
-  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),
-                size = 1,
-                width = 0) +
-  geom_vline(xintercept = 0.9 * 5,
-             col = "blue",
-             linetype = "dashed") +
-  scale_y_continuous(breaks = c(0, 1), labels = c("no", "yes"))  +
-  labs(x = "# heads from teacher (out of 5)", y = "guess", title = "\"would you like to send your teacher a guess?\"")
-
-ggplot(
-  data = d %>%
-    group_by(first_examples_a) %>%
-    tidyboot_mean(guess, na.rm = TRUE),
-  aes(x = first_examples_a, y = empirical_stat)
-) +
-  geom_point(size = 2) +
-  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),
-                size = 1,
-                width = 0) +
-  geom_vline(xintercept = 0.9 * 5,
-             col = "blue",
-             linetype = "dashed") +
-  labs(x = "# heads from teacher (out of 5)", y = "yes", title = "\"would you like to send your teacher a guess?\"")
-
-
-ggplot(
-  data = d, aes(x = first_examples_a, y = guess)
-) + 
-  geom_jitter(size = 2, height = 0.04, alpha = 0.1) + 
-  geom_smooth(method = "glm", method.args = list(family = "binomial")) +
-  scale_y_continuous(breaks = c(0, 1), labels = c("no", "yes"))  +
-  labs(x = "# heads from teacher (out of 5)", title = "\"would you like to send your teacher a guess?\"")
-
-
-mod <- glmer(
-  guess ~ 1 + poly(first_examples_a, 2) + (1 + poly(first_examples_a, 2) | subject_id),
-  data = d,
-  family = binomial,
-  control = glmerControl(optimizer = "bobyqa"),
-)
-
-plot(mod)
-
-summary(mod)
-
-mod <- glmer(
-  guess ~ 1 + first_examples_a + (1 + first_examples_a | subject_id),
-  data = d,
-  family = binomial,
-  control = glmerControl(optimizer = "bobyqa"),
-)
-
-plot(mod)
-
-summary(mod)
 
 ### Relationship between rating of teacher knowledge and guess decision
 
@@ -115,14 +38,6 @@ ggplot(data = d, aes(x = teacher_knowledge, y = guess)) +
   scale_y_continuous(breaks = c(0, 1), labels = c("no", "yes")) + 
   labs(x = "rating of teacher knowledge", title = "teacher knowledge eval vs. guess decision")
 
-mod <-
-  glmer(
-    guess ~ 1 + first_examples_a + (1 + first_examples_a | subject_id),
-    data = d,
-    family = "binomial"
-  )
-
-summary(mod)
 
 # when participants give a guess, what do they guess? 
 
@@ -285,21 +200,37 @@ ggplot(
   ylim(0, 1) +
   labs(x = "# heads from teacher (out of 5)", y = "yes", title = "\"would you like to send your teacher a guess?\" all")
 
-## Model
-d.model <- read.csv(here("model/exp2/output/combined_0.3_0.7_no_MAP.csv")) %>% 
-  mutate(
-    examples_a = ifelse(student_a == 9, first_examples_a, n.ex.teacher - first_examples_a), 
-    examples_b = ifelse(student_a == 9, first_examples_b, n.ex.teacher - first_examples_b), 
-    theta = ifelse(student_a == 9, theta, 1 - theta) 
-  ) %>% 
-  rename(feedback = feedback_choice) %>% 
-  select(c(speaker_alpha, listener_alpha, guess_cost, theta, examples_a, examples_b, teacher_knowledge, feedback, first_guess))
+d.per.participant <- d.data %>% 
+  group_by(subject_id, first_examples_a) %>% 
+  summarize(p = mean(guess))
 
-ggplot(data = d.model %>% filter(guess_cost == 0), aes(x = examples_a, y = teacher_knowledge)) +
+ggplot(
+  data = d.data %>%
+    group_by(first_examples_a) %>%
+    tidyboot_mean(guess, na.rm = TRUE),
+  aes(x = first_examples_a, y = empirical_stat)
+) +
   geom_point(size = 2) +
-  geom_vline(xintercept = 0.9 * 5, color = 'blue', linetype = "dashed") + 
-  facet_wrap(~speaker_alpha, ncol = length(unique(d.model$speaker_alpha)), labeller = labeller(.rows = label_both)) + 
-  labs(x = "# heads from teacher (out of 5 examples)", y = "yes", title = "\"do you think your teacher knows what you have seen?\" [0.3, 0.7]")
+  geom_path(data = d.per.participant, aes(x = first_examples_a, y = p, group = subject_id), position = position_jitter(width = 0.07, height = 0.07, seed = 123), alpha = 0.07) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper),
+                size = 1,
+                width = 0) +
+  geom_vline(xintercept = 0.9 * 5,
+             col = "blue",
+             linetype = "dashed") +
+  scale_y_continuous(breaks = c(0, 1), labels = c("no", "yes"))  +
+  labs(x = "# heads from teacher (out of 5)", y = "guess", title = "\"would you like to send your teacher a guess?\"")
+
+ggplot(
+  data = d.data, aes(x = first_examples_a, y = guess)
+) + 
+  geom_jitter(size = 2, height = 0.04, alpha = 0.1) + 
+  geom_smooth(method = "glm", method.args = list(family = "binomial")) +
+  scale_y_continuous(breaks = c(0, 1), labels = c("no", "yes"))  +
+  labs(x = "# heads from teacher (out of 5)", title = "\"would you like to send your teacher a guess?\"")
+
+## model
+
 
 ggplot(data = d.model %>% filter(speaker_alpha == listener_alpha) %>% rename(alpha = speaker_alpha), aes(x = examples_a, y = feedback)) +
   geom_point(size = 2) +
@@ -315,6 +246,15 @@ ggplot(data = d.model %>% filter(theta == 0.3), aes(x = examples_a, y = feedback
   facet_grid(speaker_alpha ~ guess_cost, labeller = labeller(.rows = label_both, .cols = label_both)) + 
   labs(x = "# heads from teacher (out of 5 examples)", y = "send guess", title = "\"would you like to send your teacher a guess?\" [0.3, 0.7]")
 
+
+ggplot(data = d.model %>% filter(guess_cost == 0), aes(x = examples_a, y = teacher_knowledge)) +
+  geom_point(size = 2) +
+  geom_vline(xintercept = 0.9 * 5, color = 'blue', linetype = "dashed") + 
+  facet_wrap(~speaker_alpha, ncol = length(unique(d.model$speaker_alpha)), labeller = labeller(.rows = label_both)) + 
+  labs(x = "# heads from teacher (out of 5 examples)", y = "yes", title = "\"do you think your teacher knows what you have seen?\" [0.3, 0.7]")
+
+
+
 ggplot(data = d.model %>% filter(speaker_alpha == listener_alpha, guess_cost == 0) %>% rename(alpha = speaker_alpha), aes(x = examples_a, y = first_guess, col = theta, group = theta)) + 
   geom_point(size = 2, alpha = 0.7) + 
   geom_path(size = 1, alpha = 0.7) + 
@@ -322,3 +262,20 @@ ggplot(data = d.model %>% filter(speaker_alpha == listener_alpha, guess_cost == 
   scale_color_viridis_c(guide = "legend", breaks = c(0.1, 0.3, 0.7, 0.9)) +
   facet_wrap(~alpha, ncol = 1, labeller = labeller(.rows = label_both)) + 
   labs(x = "# heads from teacher", y = "correct guess", title = "Guesses [0.3, 0.7]")
+
+## Model
+
+
+ggplot(data = d.model %>% filter(speaker_alpha == listener_alpha) %>% rename(alpha = speaker_alpha), aes(x = examples_a, y = feedback)) +
+  geom_point(size = 2) +
+  geom_vline(xintercept = 0.9 * 5, color = 'blue', linetype = "dashed") + 
+  facet_grid(alpha ~ guess_cost, labeller = labeller(.rows = label_both, .cols = label_both)) + 
+  labs(x = "# heads from teacher (out of 5 examples)", y = "send guess", title = "\"would you like to send your teacher a guess?\" [0.3, 0.7]")
+
+ggplot(data = d.model %>% filter(theta == 0.3), aes(x = examples_a, y = feedback, col = listener_alpha, group = listener_alpha)) +
+  geom_point(size = 2) +
+  geom_path(size = 1, alpha = 0.7) + 
+  geom_vline(xintercept = 0.9 * 5, color = 'blue', linetype = "dashed") + 
+  scale_color_viridis_c(guide = "legend", breaks = c(1, 2, 4, 8, 16)) +
+  facet_grid(speaker_alpha ~ guess_cost, labeller = labeller(.rows = label_both, .cols = label_both)) + 
+  labs(x = "# heads from teacher (out of 5 examples)", y = "send guess", title = "\"would you like to send your teacher a guess?\" [0.3, 0.7]")

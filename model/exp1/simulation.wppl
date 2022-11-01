@@ -1,4 +1,4 @@
-// webppl simulation.wppl --require webppl-csv --random-seed 88 -- --speakerAlpha 4 --costWeight 0.001
+// webppl simulation.wppl --require webppl-csv --random-seed 89 -- --speakerAlpha 4 --costWeight 0.001
 
 var params = {
     participants: 193,
@@ -162,6 +162,7 @@ var trials = makeTrials();
 
 map(function (trial) {
     console.log('participant ' + trial.participantID)
+    console.log(trial)
 
     var classHypers = {heads: trial.student_a, tails: trial.student_b}
 
