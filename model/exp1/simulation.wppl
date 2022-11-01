@@ -1,9 +1,9 @@
-// webppl simulation.wppl --require webppl-csv --random-seed 89 -- --speakerAlpha 4 --costWeight 0.001
+// webppl simulation.wppl --require webppl-csv --random-seed 89 -- --speakerAlpha 4 --exampleCost 0.001
 
 var params = {
     participants: 193,
     speakerAlpha: argv.speakerAlpha,
-    costWeight: argv.costWeight,
+    exampleCost: argv.exampleCost,
     trueThetas: [0.3, 0.7], // true coin flip weight
     maxFlips: 70,
     scenarios: ['seqFeedback', 'nonSeqFull', 'nonSeqPartial', 'seqNoFeedback'],
@@ -56,7 +56,7 @@ var S_fixed = cache(function(previousData, trueTheta) {
         var examples = {heads: nHeads, tails: nExamples - nHeads};
 
         // utility based on resulting beliefs
-        var speakerUtility = L0(previousData.concat([examples])).score(trueTheta) - params.costWeight * nExamples
+        var speakerUtility = (1 - params.exampleCost) * L0(previousData.concat([examples])).score(trueTheta) - params.exampleCost * nExamples
         factor(params.speakerAlpha * speakerUtility)
         return examples
     });
@@ -79,7 +79,7 @@ var S_uncertain = cache(function(beliefs, previousData, theta) {
         var L = Mixture({dists: dists_scores[0], ps: dists_scores[1]})
 
         // utility based on resulting beliefs
-        var speakerUtility = L.score(theta) - params.costWeight * nExamples
+        var speakerUtility = (1 - params.exampleCost) * L.score(theta) - params.exampleCost * nExamples
 
         factor(params.speakerAlpha * speakerUtility)
 

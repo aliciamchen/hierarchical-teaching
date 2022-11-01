@@ -4,6 +4,7 @@ var params = {
     speakerAlpha: argv.speakerAlpha,
     listenerAlpha: argv.listenerAlpha,
     guessCost: argv.guessCost,
+    exampleCost: params.exampleCost,
     trueThetas: [0.3, 0.7], // true coin flip weight
     nInitialExamples: 5,
     nSecondExamples: 5,
@@ -49,7 +50,7 @@ var S_fixed = cache(function(previousData, trueTheta, nExamples) {
         var examples = {heads: nHeads, tails: nExamples - nHeads};
 
         // utility based on resulting beliefs, ln L0(t | u))
-        var speakerUtility = L0(previousData.concat([examples])).score(trueTheta)
+        var speakerUtility = (1 - params.exampleCost) * L0(previousData.concat([examples])).score(trueTheta) - params.exampleCost * nExamples
         factor(params.speakerAlpha * speakerUtility)
         return examples
     });
@@ -71,7 +72,7 @@ var S_uncertain = cache(function(beliefs, previousData, theta, nExamples) {
         var L = Mixture({dists: dists_scores[0], ps: dists_scores[1]})
 
         // utility based on resulting beliefs
-        var speakerUtility = L.score(theta)
+        var speakerUtility = (1 - params.exampleCost) * L.score(theta) - params.exampleCost * nExamples
 
         factor(params.speakerAlpha * speakerUtility)
 
