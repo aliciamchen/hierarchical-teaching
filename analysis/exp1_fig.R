@@ -144,14 +144,14 @@ fig.nonseq.model <-
 
 d.model.seq.toohigh.means <- d.model %>%
   filter(sequential == "sequential", student_prior == "too_high") %>%
-  group_by(feedback, trial_num) %>%
+  group_by(feedback, lesson_num) %>%
   tidyboot_mean(n_majority / n_turtles, na.rm = T)
 
 fig.toohigh.model <-
   ggplot(
     d.model.seq.toohigh.means,
     aes(
-      x = trial_num,
+      x = lesson_num,
       y = empirical_stat,
       color = feedback,
       group = feedback
@@ -175,14 +175,14 @@ fig.toohigh.model
 
 d.model.seq.toolow.means <- d.model %>%
   filter(sequential == "sequential", student_prior == "too_low") %>%
-  group_by(feedback, trial_num) %>%
+  group_by(feedback, lesson_num) %>%
   tidyboot_mean(n_majority / n_turtles, na.rm = T)
 
 fig.toolow.model <-
   ggplot(
     d.model.seq.toolow.means,
     aes(
-      x = trial_num,
+      x = lesson_num,
       y = empirical_stat,
       color = feedback,
       group = feedback
@@ -202,6 +202,7 @@ fig.toolow.model <-
   scale_color_manual(values = palette[3:4], labels = c("yes", "no")) +
   labs(x = "lesson num", y = "turtles sent", title = "too low (model)")
 
+fig.toolow.model
 #####
 
 
