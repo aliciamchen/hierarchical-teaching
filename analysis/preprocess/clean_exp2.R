@@ -18,9 +18,9 @@ d <- d.raw %>%
     first_guess = ifelse(student_a == 9, round(first_guess, 1), round(1 - first_guess, 1)),
     final_guess = ifelse(student_a == 9, round(final_guess, 1), round(1 - final_guess, 1)),
     guess = ifelse(feedback_choice == 'yes', TRUE, FALSE),
-    teacher_knowledge = teacher_knowledge / 100
+    teacher_knowledge = block_type
   ) %>%
-  group_by(subject_id, island_idx, block_type, theta) %>%
+  group_by(subject_id, island_idx, theta) %>%
   summarize(# right now each lesson has its own row, so this is for combining each trial into a row
     across(
       c(
@@ -52,7 +52,7 @@ d %>%
     c(
       subject_id,
       island_idx,
-      block_type,
+      teacher_knowledge,
       theta,
       student_a,
       student_b,
@@ -60,7 +60,6 @@ d %>%
       first_examples_b,
       guess,
       first_guess,
-      teacher_knowledge,
       second_examples_a,
       second_examples_b,
       final_guess
@@ -71,7 +70,7 @@ d %>%
 
 # Clean exp2 model
 d.model <-
-  read.csv(here("model/exp2/output/combined_0.3_0.7_no_MAP.csv")) %>%
+  read.csv(here("model/exp2/output/combined.csv")) %>%
   mutate(
     examples_a = ifelse(
       student_a == 9,
@@ -96,7 +95,6 @@ d.model <-
       student_b,
       first_examples_a,
       first_examples_b,
-      teacher_knowledge,
       guess,
       first_guess
     )

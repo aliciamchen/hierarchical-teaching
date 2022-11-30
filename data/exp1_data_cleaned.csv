@@ -1,4 +1,4 @@
-subject_id,student_idx,trial_num,sequential,feedback,teacher_knowledge,theta,student_prior,n_majority,n_turtles
+subject_id,trial_num,lesson_num,sequential,feedback,teacher_knowledge,theta,student_prior,n_majority,n_turtles
 1c44a06f10b74d67471ce9fe05cd3b1f,0,lesson1,sequential,feedback,partial,0.7,too_low,4,8
 1c44a06f10b74d67471ce9fe05cd3b1f,0,lesson2,sequential,feedback,partial,0.7,too_low,7,9
 1c44a06f10b74d67471ce9fe05cd3b1f,1,lesson1,sequential,no_feedback,partial,0.7,too_high,9,10

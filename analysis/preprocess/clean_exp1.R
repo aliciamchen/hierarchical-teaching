@@ -25,8 +25,8 @@ d <- d.raw %>%
     ),
     n_majority = ifelse(theta == 0.7, heads, tails),
     n_minority = n_turtles - n_majority,
-    trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2'),
-    student_idx = factor(student_idx)
+    lesson_num = ifelse(trial_num == 0, 'lesson1', 'lesson2'),
+    trial_num = factor(student_idx)
   )
 
 # Anonymize participants
@@ -37,8 +37,8 @@ d %>%
   select(
     c(
       subject_id,
-      student_idx,
       trial_num,
+      lesson_num,
       sequential,
       feedback,
       teacher_knowledge,
@@ -73,7 +73,7 @@ d.model <-
     ),
     n_majority = ifelse(theta == 0.7, heads, tails),
     n_minority = n_turtles - n_majority,
-    trial_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')
+    lesson_num = ifelse(trial_num == 0, 'lesson1', 'lesson2')
   )
 
 d.model %>%
@@ -81,7 +81,7 @@ d.model %>%
   select(
     c(
       subject_id,
-      trial_num,
+      lesson_num,
       sequential,
       feedback,
       teacher_knowledge,
