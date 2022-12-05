@@ -32,7 +32,8 @@ fig.data <- ggplot(
                 width = 0, col = "#0063a2") +
   geom_vline(xintercept = 0.9 * 5,
              linetype = "dashed") +
-  labs(x = "# turtles in majority color of student prior", y = "yes", title = "data")
+  ylim(0.24, 0.57) +
+  labs(x = "# turtles in majority color of student prior", y = "proportion sending a guess", title = "data")
 
 
 fig.model <- ggplot(
@@ -41,18 +42,16 @@ fig.model <- ggplot(
   geom_point(size = 4, col = "#0063a2") +
   geom_vline(xintercept = 0.9 * 5,
              linetype = "dashed") +
-  labs(x = "# turtles in majority color of student prior", y = "yes", title = "model")
+  ylim(0.24, 0.57) +
+  labs(x = "# turtles in majority color of student prior", y = "proportion sending a guess", title = "model")
 
 
 f <- ggarrange(fig.data, fig.model, labels = c("A", "B"), ncol = 1, nrow = 2)
 
 f1 <- (fig.data / fig.model) 
-# + plot_annotation(
-  # title = "does the student send a guess?",
-  # theme = theme(plot.title = element_text(size = 18))
-# )
+
 
 f1
 
-ggsave(here("writing/exp2.pdf"), plot = f1, units = "in", width = 6.6, height = 5)
+ggsave(here("writing/outputs/exp2.pdf"), plot = f1, units = "in", width = 5, height = 5)
 

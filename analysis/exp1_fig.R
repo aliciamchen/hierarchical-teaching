@@ -11,7 +11,7 @@ palette <- c(
   "#cc494e",
   "#0096bf",
   "#a4d964",
-  "#be8974",
+  "#fcbe42",
   "#aa4fff",
   "#fc8e7c",
   "#fa9820",
@@ -28,6 +28,7 @@ show_col(palette)
 d.data <- read.csv(here("data/exp1_data_cleaned.csv"))
 d.model <-
   read.csv(here("model/cleaned_outputs/exp1_simulation_cleaned.csv"))
+
 
 d.nonseq.means <-
   d.data %>% filter(sequential == "non_sequential") %>%
@@ -47,6 +48,7 @@ fig.nonseq.data <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   theme(aspect.ratio = 1) +
   scale_color_manual(values = palette[1:2], labels = c("too high", "too low")) +
+  ylim(0.55, 0.87) +
   labs(x = "teacher knowledge",
        y = "turtles sent",
        col = "student prior",
@@ -58,14 +60,14 @@ fig.nonseq.data
 
 d.seq.toohigh.means <- d.data %>%
   filter(sequential == "sequential", student_prior == "too_high") %>%
-  group_by(feedback, trial_num) %>%
+  group_by(feedback, lesson_num) %>%
   tidyboot_mean(n_majority / n_turtles, na.rm = T)
 
 fig.toohigh.data <-
   ggplot(
     d.seq.toohigh.means,
     aes(
-      x = trial_num,
+      x = lesson_num,
       y = empirical_stat,
       color = feedback,
       group = feedback
@@ -83,19 +85,20 @@ fig.toohigh.data <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   scale_x_discrete(name = "lesson", labels = c("first", "second")) +
   scale_color_manual(values = palette[3:4], labels = c("yes", "no")) +
+  ylim(0.45, 0.75) +
   labs(x = "lesson num", y = "turtles sent", title = "too high (data)")
 
 
 d.seq.toolow.means <- d.data %>%
   filter(sequential == "sequential", student_prior == "too_low") %>%
-  group_by(feedback, trial_num) %>%
+  group_by(feedback, lesson_num) %>%
   tidyboot_mean(n_majority / n_turtles, na.rm = T)
 
 fig.toolow.data <-
   ggplot(
     d.seq.toolow.means,
     aes(
-      x = trial_num,
+      x = lesson_num,
       y = empirical_stat,
       color = feedback,
       group = feedback
@@ -113,9 +116,10 @@ fig.toolow.data <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   scale_x_discrete(name = "lesson", labels = c("first", "second")) +
   scale_color_manual(values = palette[3:4], labels = c("yes", "no")) +
+  ylim(0.65, 0.84) +
   labs(x = "lesson num", y = "turtles sent", title = "too low (data)")
 
-d.model.nonseq <- d.model %>% filter(sequential == "non_sequential")
+d.model.nonseq <- d.model %>% filter(sequential == "non_sequential", alpha == 4)
 
 d.model.nonseq.means <- d.model.nonseq %>%
   group_by(student_prior, teacher_knowledge) %>%
@@ -137,6 +141,7 @@ fig.nonseq.model <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   theme(aspect.ratio = 1) +
   scale_color_manual(values = palette[1:2], labels = c("too high", "too low")) +
+  ylim(0.55, 0.87) +
   labs(x = "teacher knowledge",
        y = "turtles sent",
        col = "student prior",
@@ -169,9 +174,9 @@ fig.toohigh.model <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   scale_x_discrete(name = "lesson", labels = c("first", "second")) +
   scale_color_manual(values = palette[3:4], labels = c("yes", "no")) +
+  ylim(0.45, 0.75) +
   labs(x = "lesson num", y = "turtles sent", title = "too high (model)")
 
-fig.toohigh.model
 
 d.model.seq.toolow.means <- d.model %>%
   filter(sequential == "sequential", student_prior == "too_low") %>%
@@ -200,9 +205,9 @@ fig.toolow.model <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   scale_x_discrete(name = "lesson", labels = c("first", "second")) +
   scale_color_manual(values = palette[3:4], labels = c("yes", "no")) +
+  ylim(0.65, 0.84) +
   labs(x = "lesson num", y = "turtles sent", title = "too low (model)")
 
-fig.toolow.model
 #####
 
 
@@ -235,5 +240,5 @@ f1b <-
 f <- ggarrange(f1b, f1a, widths = c(1, 2))
 f 
 
-ggsave(here("writing/exp1.pdf"), plot = f, units = "in", width = 9.5, height = 6)
+ggsave(here("writing/outputs/exp1.pdf"), plot = f, units = "in", width = 9.5, height = 6)
 
