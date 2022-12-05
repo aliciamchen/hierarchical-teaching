@@ -13,6 +13,8 @@ var params = {
     ]
 };
 
+console.log(params)
+
 var round = function (num, precision) {
     Number.parseFloat(num.toFixed(precision));
 };
@@ -92,12 +94,19 @@ var updateSpeakerPosterior = cache(function (examples, guess) {
     return Infer({ method: 'enumerate' }, function () {
         var learnerHypers = sample(speakerPrior);
 
-        var learnerEstimate = L0Mean(examples[0], learnerHypers)
+        var learnerDist = L0(examples.concat(learnerHypers));
 
-        condition(learnerEstimate == guess)
+        observe(learnerDist, round(guess, 2))
         return learnerHypers;
+
+        // var learnerEstimate = L0Mean(examples[0], learnerHypers)
+
+        // condition(learnerEstimate == guess)
+        // return learnerHypers;
     })
 });
+
+
 
 
 var sequential = cache(function (scenario, coinWeight, learnerHypers) {
@@ -157,19 +166,19 @@ var trials = makeTrials();
 
 map(function (trial) {
     console.log('participant ' + trial.participantID)
-    console.log(trial)
+    // console.log(trial)
 
     var classHypers = {heads: trial.student_a, tails: trial.student_b}
 
     var response = sample(simulate(trial.scenario, trial.coinWeight, classHypers))
-    console.log(response)
+    // console.log(response)
 
     if (trial.scenario === 'nonSeqFull' || trial.scenario === 'nonSeqPartial') {
 
         csv.writeLine([
             trial.participantID,
             params.speakerAlpha,
-            params.costWeight,
+            params.exampleCost,
             trial.scenario,
             0,
             trial.coinWeight,
@@ -184,7 +193,7 @@ map(function (trial) {
         csv.writeLine([
             trial.participantID,
             params.speakerAlpha,
-            params.costWeight,
+            params.exampleCost,
             trial.scenario,
             0,
             trial.coinWeight,
@@ -197,7 +206,7 @@ map(function (trial) {
         csv.writeLine([
             trial.participantID,
             params.speakerAlpha,
-            params.costWeight,
+            params.exampleCost,
             trial.scenario,
             1,
             trial.coinWeight,

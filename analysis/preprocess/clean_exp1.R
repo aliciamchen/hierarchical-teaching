@@ -54,7 +54,7 @@ d %>%
 # Clean exp1 model
 
 d.model <-
-  read.csv(here('model/exp1/output/indiv/sa4_cw0.001.csv')) %>%
+  read.csv(here('model/exp1/output/combined.csv')) %>%
   mutate(
     n_turtles = heads + tails,
     sequential = ifelse(
@@ -81,6 +81,8 @@ d.model %>%
   select(
     c(
       subject_id,
+      alpha,
+      costWeight,
       lesson_num,
       sequential,
       feedback,
