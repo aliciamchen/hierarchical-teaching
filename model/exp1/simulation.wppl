@@ -1,5 +1,3 @@
-// webppl simulation.wppl --require webppl-csv --random-seed 89 -- --speakerAlpha 4 --exampleCost 0.001
-
 var params = {
     participants: 193,
     speakerAlpha: argv.speakerAlpha,
