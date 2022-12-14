@@ -16,3 +16,7 @@ Preregistrations for both experiments can be found at https://osf.io/ubxjr/regis
     - `writing/outputs` contains the plot outputs directly from the analysis scripts
 - `experiments` contains the code for running both experiments
 - `model` contains the WebPPL code for the simulations
+
+## Contact
+
+aliciach@mit.edu
