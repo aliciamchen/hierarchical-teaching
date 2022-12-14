@@ -4,6 +4,8 @@ Learning to teach, teaching to learn
 
 Alicia M. Chen, Andrew Palacci, Natalia Vélez, Robert D. Hawkins*, Samuel J. Gershman*
 
+Preprint: https://psyarxiv.com/4u5g6
+
 ## Preregistrations
 
 Preregistrations for both experiments can be found at https://osf.io/ubxjr/registrations
