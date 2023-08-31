@@ -1,19 +1,22 @@
+import React from "react";
 import {
+  useGame,
   usePlayer,
   usePlayers,
   useRound,
   useStage,
 } from "@empirica/core/player/classic/react";
 import { Loading } from "@empirica/core/player/react";
-import React from "react";
-import { JellyBeans } from "./stages/JellyBeans";
-import { MineSweeper } from "./stages/MineSweeper";
+import { TeacherExample } from "./stages/TeacherExample";
 
 export function Stage() {
+  const game = useGame();
   const player = usePlayer();
   const players = usePlayers();
   const round = useRound();
   const stage = useStage();
+
+  const problems = player.get("problems");
 
   if (player.stage.get("submit")) {
     if (players.length === 1) {
@@ -28,10 +31,9 @@ export function Stage() {
   }
 
   switch (stage.get("name")) {
-    case "jellybeans":
-      return <JellyBeans />;
-    case "minesweeper":
-      return <MineSweeper />;
+    case "TeacherExample":
+      return <TeacherExample hint_state={problems[0]['A']} hypothesis_order={['A', 'B', 'C', 'D']} problem_states={problems[0]}/>;
+      // return <TeacherExample hint_state={} hypothesis_order={} problem_states={}/>;
     default:
       return <div>Loading...</div>;
   }

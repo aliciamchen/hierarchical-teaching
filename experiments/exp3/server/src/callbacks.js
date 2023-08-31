@@ -1,20 +1,26 @@
-import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 import { problems } from "./constants.js";
+import { ClassicListenersCollector } from "@empirica/core/admin/classic";
+
 export const Empirica = new ClassicListenersCollector();
+// console.log(problems)
 
 Empirica.onGameStart(({ game }) => {
-  const round = game.addRound({
-    name: "Round 1 - Jelly Beans",
-    task: "jellybeans",
-  });
-  round.addStage({ name: "Answer", duration: 300 });
-  round.addStage({ name: "Result", duration: 120 });
+  console.log("game started")
+  console.log(problems)
+  // console.log(game.get("problems"))
+  const players = game.players;
+  const roles = ["teacher", "learner"]
 
-  const round2 = game.addRound({
-    name: "Round 2 - Minesweeper",
-    task: "minesweeper",
+  players.forEach((player, i) => {
+    player.set("playerIndex", i);
+    player.set("role", roles[i]);
+    player.set("problems", problems)
+  })
+
+  const round = game.addRound({
+    name: `test round`,
   });
-  round2.addStage({ name: "Play", duration: 300 });
+  round.addStage({ name: "TeacherExample", duration: 10000 });
 });
 
 Empirica.onRoundStart(({ round }) => {});
@@ -33,8 +39,6 @@ Empirica.onRoundEnded(({ round }) => {
 
 Empirica.onGameEnded(({ game }) => {});
 
-// Note: this is not the actual number of beans in the pile, it's a guess...
-const jellyBeansCount = 634;
 
 function calculateJellyBeansScore(stage) {
   if (
