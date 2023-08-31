@@ -1,4 +1,5 @@
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
+import { problems } from "./constants.js";
 export const Empirica = new ClassicListenersCollector();
 
 Empirica.onGameStart(({ game }) => {
