@@ -32,7 +32,7 @@ export function Stage() {
 
   switch (stage.get("name")) {
     case "TeacherExample":
-      return <TeacherExample hint_state={problems[0]['A']} hypothesis_order={['A', 'B', 'C', 'D']} problem_states={problems[0]}/>;
+      return <TeacherExample hint_state={problems[0]['A']} hypothesis_order={['B', 'A', 'C', 'D']} problem_states={problems[0]} selected_cells={[[2, 2], [3, 3]]}/>;
       // return <TeacherExample hint_state={} hypothesis_order={} problem_states={}/>;
     default:
       return <div>Loading...</div>;
