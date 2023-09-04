@@ -31,13 +31,6 @@ export function CanvasClicker({ hypothesis, selected_cells, onCellSelect }) {
             col.classList.add("past");
           }
 
-          // Event listener to toggle selected state
-          // col.addEventListener("click", () => {
-          //   if (!col.classList.contains("past")) {
-          //     col.classList.toggle("selected");
-          //   }
-          // });
-
           col.addEventListener("click", () => {
             if (col.classList.contains("past") || !col.classList.contains("pos")) {
               return; // Do nothing for 'past' or 'pos' cells
@@ -119,9 +112,10 @@ export function CanvasClicker({ hypothesis, selected_cells, onCellSelect }) {
 }
 
 // Display canvas to learner based on the example(s) selected by the teacher
-export function Canvas({ hint_state }) {
+export function Canvas({ selected_cells }) {
   // TODO: maybe change hint_state to selected_cells
   const tableRef = useRef(null);
+  console.log(selected_cells)
 
   useEffect(() => {
     if (tableRef.current) {
@@ -129,11 +123,17 @@ export function Canvas({ hint_state }) {
       rows.forEach((row, rowIndex) => {
         const columns = row.querySelectorAll("td");
         columns.forEach((col, colIndex) => {
-          if (hint_state[rowIndex][colIndex]) {
+
+          if (
+            selected_cells.some(
+              (cell) => cell[0] === rowIndex && cell[1] === colIndex
+            )
+          ) {
             col.classList.add("selected");
-          } else {
-            col.classList.remove("selected");
           }
+
+
+          // TODO: add selected cells so the learner can see what the teacher selected
 
           // col.addEventListener('click', () => {
           //   col.classList.add('selected');
@@ -141,7 +141,7 @@ export function Canvas({ hint_state }) {
         });
       });
     }
-  }, [hint_state]);
+  }, [selected_cells]);
 
   return (
     <div id="canvas-wrapper">

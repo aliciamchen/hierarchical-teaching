@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { usePlayer, usePlayers } from "@empirica/core/player/classic/react";
 import { Button } from "../components/Button";
-import { CanvasClicker } from "../components/Canvas";
+import { CanvasClicker, Canvas } from "../components/Canvas";
 import { Hypotheses } from "../components/Hypotheses";
 
 export function TeacherExample({
@@ -30,9 +30,27 @@ export function TeacherExample({
   // hint_state might have to be passed in as a prop
 
   if (role === "learner") {
-    player.stage.set("submit", true);
+    // player.stage.set("submit", true);
     return (
-        <div id="student-betting" class="slide"></div>
+        <div id="student-betting" class="slide">
+        <h1>Problem %i/%i</h1> {/* Problem number goes here */}
+        <p>Look at hypotheses</p>
+        <Canvas
+          selected_cells={selected_cells} // Change later to blank screen or just examples selected
+        //   selected_cells={selected_cells}
+        />
+        <p>Bet description goes here?</p>
+        <Hypotheses
+          hypothesis_order={hypothesis_order}
+          problem_states={problem_states}
+          role = {role}
+          disabled={true}
+        />
+        <p>Please press Continue when you are ready to see teacher's example </p>
+        <Button className="m-5" handleClick={() => onClick()}>
+            Continue
+          </Button>
+      </div>
     )
   } else if (role === "teacher") {
     return (

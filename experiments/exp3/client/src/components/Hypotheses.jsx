@@ -15,7 +15,7 @@ function Row({ rowData }) {
   );
 }
 
-function HypothesisTable({_key, title, data, role }) {
+function HypothesisTable({_key, title, data, role, disabled }) {
     // draw one hypothesis table
 
   // role is either "learner" or "teacher"
@@ -42,19 +42,19 @@ function HypothesisTable({_key, title, data, role }) {
       </table>
       </div>
       <br></br>
-      <div><SliderComponent enabled={role != "teacher"}/></div>
+      <div><SliderComponent enabled={role != "teacher" && !disabled}/></div>
     </div>
   );
 }
 
-export function Hypotheses({ hypothesis_order, problem_states, role}) {
+export function Hypotheses({ hypothesis_order, problem_states, role, disabled}) {
     // draw all hypothesis tables
     // if role is "teacher", then the true hypothesis (A) is selected
     const labels = ["A", "B", "C", "D"]
   return (
     <div id="hypothesis-space">
       {hypothesis_order.map((key, index) => (
-        <HypothesisTable key={key} _key={key} title={labels[index]} data={problem_states[key]} role={role} />
+        <HypothesisTable key={key} _key={key} title={labels[index]} data={problem_states[key]} role={role} disabled={disabled}/>
       ))}
     </div>
   );

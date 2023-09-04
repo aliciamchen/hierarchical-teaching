@@ -16,6 +16,8 @@ export function Stage() {
   const round = useRound();
   const stage = useStage();
 
+  const teacher = players.find((player) => player.get("role") === "teacher");
+
   const problems = player.get("problems");
 
   if (player.stage.get("submit")) {
@@ -28,6 +30,8 @@ export function Stage() {
         Please wait for other player(s).
       </div>
     );
+
+
   }
 
   // console.log(player.round.get("selectedCellsSoFar"))
@@ -39,7 +43,7 @@ export function Stage() {
           hint_state={problems[0]["A"]}
           hypothesis_order={["B", "A", "C", "D"]}
           problem_states={problems[0]}
-          selected_cells={player.round.get("selectedCellsSoFar")}
+          selected_cells={teacher.round.get("selectedCellsSoFar")}
           role = {player.get("role")}
         />
       );
