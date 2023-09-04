@@ -8,6 +8,8 @@ export function CanvasClicker({ hypothesis, selected_cells }) {
   // selected_cells should also be greyed out
   // Keep a record of clicked cells in [row, col] format
 
+  // TODO: make it that you can only select one cell
+
   const tableRef = useRef(null);
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export function CanvasClicker({ hypothesis, selected_cells }) {
         const columns = row.querySelectorAll("td");
         columns.forEach((col, colIndex) => {
           if (hypothesis[rowIndex][colIndex]) {
-            col.classList.add("past");
+            col.classList.add("pos");
           }
 
           if (
@@ -25,75 +27,73 @@ export function CanvasClicker({ hypothesis, selected_cells }) {
               (cell) => cell[0] === rowIndex && cell[1] === colIndex
             )
           ) {
-            col.classList.add("selected");
-          } else {
-            col.addEventListener("click", () => {
-              col.classList.add("selected");
-
-              // Remove 'selected' when clicked again
-              col.addEventListener("click", () => {
-                if (col.classList.contains("selected")) {
-                  col.classList.remove("selected");
-                }
-              })
-            });
+            col.classList.add("past");
           }
+
+          // Event listener to toggle selected state
+          col.addEventListener("click", () => {
+            if (!col.classList.contains("past")) {
+              col.classList.toggle("selected");
+            }
+          });
         });
       });
     }
-  }, [hypothesis]);
+  }, [hypothesis, selected_cells]);
 
   return (
     <div id="canvas-wrapper">
       <table ref={tableRef} className="canvas">
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );
