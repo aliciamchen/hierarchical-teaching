@@ -31,8 +31,7 @@ function HypothesisTable({_key, title, data, role }) {
 
   return (
     <div className="hypothesis-wrapper">
-        {/* // TODO: add class 'true' for the hypothesis with key 'A' */}
-        <div className={_key === 'A' ? 'true' : ''}>
+        <div className={_key === 'A' && role === 'teacher' ? 'true' : ''}>
       <h2> {title} </h2>
       <table className="hypothesis">
         <tbody>
@@ -43,7 +42,7 @@ function HypothesisTable({_key, title, data, role }) {
       </table>
       </div>
       <br></br>
-      <div><SliderComponent enabled={role === "teacher"}/></div>
+      <div><SliderComponent enabled={role != "teacher"}/></div>
     </div>
   );
 }
@@ -57,7 +56,6 @@ export function Hypotheses({ hypothesis_order, problem_states, role}) {
       {hypothesis_order.map((key, index) => (
         <HypothesisTable key={key} _key={key} title={labels[index]} data={problem_states[key]} role={role} />
       ))}
-      {/* TODO: shuffle hypothesis_order */}
     </div>
   );
 }

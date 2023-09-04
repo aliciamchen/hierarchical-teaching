@@ -253,7 +253,7 @@ input[type=radio] {
   background: #888;
 }
 
-.canvas, .pos, .blue {
+.canvas .pos, .blue {
   background: #75a8ff;
 }
 

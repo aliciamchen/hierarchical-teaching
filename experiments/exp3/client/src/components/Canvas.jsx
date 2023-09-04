@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-export function CanvasClicker({ hypothesis, selected_cells }) {
+export function CanvasClicker({ hypothesis, selected_cells, onCellSelect }) {
   // For the teacher to select cells to show learner
   // Select cells when clicked
   // selected_cells is a list of [row, col] pairs
@@ -39,8 +39,8 @@ export function CanvasClicker({ hypothesis, selected_cells }) {
           // });
 
           col.addEventListener("click", () => {
-            if (col.classList.contains("past")) {
-              return; // Do nothing for 'past' cells
+            if (col.classList.contains("past") || !col.classList.contains("pos")) {
+              return; // Do nothing for 'past' or 'pos' cells
             }
 
             // If another cell was previously selected, deselect it
@@ -51,6 +51,9 @@ export function CanvasClicker({ hypothesis, selected_cells }) {
             // Select the clicked cell and update the lastSelectedCell reference
             col.classList.add("selected");
             lastSelectedCell = col;
+
+            onCellSelect(col, rowIndex, colIndex); // col is the clicked cell
+
           });
         });
       });

@@ -6,8 +6,6 @@ export const Empirica = new ClassicListenersCollector();
 
 Empirica.onGameStart(({ game }) => {
   console.log("game started")
-  console.log(problems)
-  // console.log(game.get("problems"))
   const players = game.players;
   const roles = ["teacher", "learner"]
 
@@ -20,16 +18,40 @@ Empirica.onGameStart(({ game }) => {
   const round = game.addRound({
     name: `test round`,
   });
-  round.addStage({ name: "TeacherExample", duration: 10000 });
+
+  round.addStage({ name: "TeacherExample", duration: 100000 });
+  round.addStage({ name: "TeacherExample", duration: 100000 });
+  round.addStage({ name: "TeacherExample", duration: 100000 });
 });
 
-Empirica.onRoundStart(({ round }) => {});
+Empirica.onRoundStart(({ round }) => {
+  console.log("round started")
+  const players = round.currentGame.players;
+  const teacher = players.find((player) => player.get("role") === "teacher");
+  teacher.round.set("selectedCellsSoFar", []);
+});
 
 Empirica.onStageStart(({ stage }) => {});
 
 Empirica.onStageEnded(({ stage }) => {
   // This is where I log the example(s) the teacher selected
   // or the bets the students made
+  if (stage.get("name") === "TeacherExample") {
+    console.log("teacher example")
+    const players = stage.currentGame.players;
+    const teacher = players.find((player) => player.get("role") === "teacher");
+
+    const selected_cell = teacher.stage.get("selected_cell") || []
+    console.log(selected_cell)
+
+    const selectedCellsSoFar = teacher.round.get("selectedCellsSoFar") || [];
+    console.log(selectedCellsSoFar)
+    // console.log(selectedCellsSoFar.push(selected_cell))
+
+    teacher.round.set("selectedCellsSoFar", pushAndReturn(selectedCellsSoFar, selected_cell));
+
+    console.log(teacher.round.get("selectedCellsSoFar"))
+  }
 });
 
 Empirica.onRoundEnded(({ round }) => {
@@ -64,4 +86,9 @@ function calculateJellyBeansScore(stage) {
     const totalScore = player.get("score") || 0;
     player.set("score", totalScore + roundScore);
   }
+}
+
+function pushAndReturn(arr, value) {
+  arr.push(value);
+  return arr;
 }
