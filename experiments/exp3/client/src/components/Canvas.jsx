@@ -11,6 +11,7 @@ export function CanvasClicker({ hypothesis, selected_cells }) {
   // TODO: make it that you can only select one cell
 
   const tableRef = useRef(null);
+  let lastSelectedCell = null; // To keep track of the last selected cell
 
   useEffect(() => {
     if (tableRef.current) {
@@ -31,10 +32,25 @@ export function CanvasClicker({ hypothesis, selected_cells }) {
           }
 
           // Event listener to toggle selected state
+          // col.addEventListener("click", () => {
+          //   if (!col.classList.contains("past")) {
+          //     col.classList.toggle("selected");
+          //   }
+          // });
+
           col.addEventListener("click", () => {
-            if (!col.classList.contains("past")) {
-              col.classList.toggle("selected");
+            if (col.classList.contains("past")) {
+              return; // Do nothing for 'past' cells
             }
+
+            // If another cell was previously selected, deselect it
+            if (lastSelectedCell) {
+              lastSelectedCell.classList.remove("selected");
+            }
+
+            // Select the clicked cell and update the lastSelectedCell reference
+            col.classList.add("selected");
+            lastSelectedCell = col;
           });
         });
       });
