@@ -10,6 +10,7 @@ import { Loading } from "@empirica/core/player/react";
 import { TeacherExample } from "./stages/TeacherExample";
 import { LearnerFeedback } from "./stages/LearnerFeedback";
 
+
 export function Stage() {
   const game = useGame();
   const player = usePlayer();
@@ -22,6 +23,9 @@ export function Stage() {
 
   console.log(learner.round.get("sliderValuesSoFar"))
   // const problems = player.get("problems");
+
+  console.log("Teacher hypothesis order: ", teacher.round.get("hypothesis_order"));
+  console.log("Learner hypothesis order: ", learner.round.get("hypothesis_order"));
 
   if (player.stage.get("submit")) {
     if (players.length === 1) {
@@ -44,7 +48,8 @@ export function Stage() {
       return (
         <TeacherExample
           hint_state={round.get("problem")["A"]}
-          hypothesis_order={["B", "A", "C", "D"]}
+          teacher_hypothesis_order={teacher.round.get("hypothesis_order")}
+          learner_hypothesis_order={learner.round.get("hypothesis_order")}
           problem_states={round.get("problem")}
           selected_cells={teacher.round.get("selectedCellsSoFar")}
           role = {player.get("role")}
@@ -55,7 +60,8 @@ export function Stage() {
       return (
         <LearnerFeedback
           hint_state={round.get("problem")["A"]}
-          hypothesis_order={["B", "A", "C", "D"]}
+          teacher_hypothesis_order={teacher.round.get("hypothesis_order")}
+          learner_hypothesis_order={learner.round.get("hypothesis_order")}
           problem_states={round.get("problem")}
           selected_cells={teacher.round.get("selectedCellsSoFar")}
           role = {player.get("role")}

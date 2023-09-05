@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ReactBootstrapSlider from "react-bootstrap-slider";
 
 function Cell({ value }) {
   return <td className={value > 0 ? "pos" : ""}>&nbsp;</td>;

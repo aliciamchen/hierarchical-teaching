@@ -6,7 +6,8 @@ import { Hypotheses } from "../components/Hypotheses";
 
 export function TeacherExample({
   hint_state,
-  hypothesis_order,
+  teacher_hypothesis_order,
+  learner_hypothesis_order,
   problem_states,
   selected_cells,
   role,
@@ -42,7 +43,7 @@ export function TeacherExample({
         />
         <p>Bet description goes here?</p>
         <Hypotheses
-          hypothesis_order={hypothesis_order}
+          hypothesis_order={learner_hypothesis_order}
           problem_states={problem_states}
           role = {role}
           disabled={true}
@@ -66,7 +67,7 @@ export function TeacherExample({
           />
           <p>Bet description goes here?</p>
           <Hypotheses
-            hypothesis_order={hypothesis_order}
+            hypothesis_order={teacher_hypothesis_order}
             problem_states={problem_states}
             role = {role}
             sliderValues={sliderValues}

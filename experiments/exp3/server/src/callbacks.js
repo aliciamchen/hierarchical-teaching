@@ -26,8 +26,8 @@ Empirica.onGameStart(({ game }) => {
   // Add a round for each problem
   problems_shuffled.forEach((problem, i) => {
     const round = game.addRound({
-      name: `Problem ${i}`,
-      problem: problem,
+      name: `Problem ${i + 1}`,
+      problem: problem
     })
     // Should I also save problem index?
     // Should I also save problem for each stage?
@@ -47,7 +47,15 @@ Empirica.onRoundStart(({ round }) => {
   const players = round.currentGame.players;
   const teacher = players.find((player) => player.get("role") === "teacher");
   const learner = players.find((player) => player.get("role") === "learner");
+
+  const teacher_hypothesis_order = _.shuffle(['A', 'B', 'C', 'D']);
+  const learner_hypothesis_order = _.shuffle(['A', 'B', 'C', 'D']);
+
+  teacher.round.set("hypothesis_order", teacher_hypothesis_order);
+  learner.round.set("hypothesis_order", learner_hypothesis_order);
+
   teacher.round.set("selectedCellsSoFar", []);
+
   learner.round.set("sliderValuesSoFar", [{A: 0, B: 0, C: 0, D: 0}]); // initial slider values for each teaching problem
 
 });
