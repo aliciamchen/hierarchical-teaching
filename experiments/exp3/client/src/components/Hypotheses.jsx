@@ -15,8 +15,16 @@ function Row({ rowData }) {
   );
 }
 
-function HypothesisTable({_key, title, data, role, disabled }) {
-    // draw one hypothesis table
+function HypothesisTable({
+  _key,
+  title,
+  data,
+  role,
+  disabled,
+  updateSliderValue,
+  initialSliderValue,
+}) {
+  // draw one hypothesis table
 
   // role is either "learner" or "teacher"
   // if role is "learner", then the slider should be disabled
@@ -24,49 +32,76 @@ function HypothesisTable({_key, title, data, role, disabled }) {
 
   // data is a list of lists of 0s and 1s, aka the current hypothesis
 
-  const [sliderValue, setSliderValue] = useState(30);
+  //   const [sliderValue, setSliderValue] = useState(30);
 
   // add class 'true' for the hypothesis with key 'A'
 
-
   return (
     <div className="hypothesis-wrapper">
-        <div className={_key === 'A' && role === 'teacher' ? 'true' : ''}>
-      <h2> {title} </h2>
-      <table className="hypothesis">
-        <tbody>
-          {data.map((row, index) => (
-            <Row key={index} rowData={row} />
-          ))}
-        </tbody>
-      </table>
+      <div className={_key === "A" && role === "teacher" ? "true" : ""}>
+        <h2> {title} </h2>
+        <table className="hypothesis">
+          <tbody>
+            {data.map((row, index) => (
+              <Row key={index} rowData={row} />
+            ))}
+          </tbody>
+        </table>
       </div>
       <br></br>
-      <div><SliderComponent enabled={role != "teacher" && !disabled}/></div>
+      <div>
+        <SliderComponent
+          enabled={role != "teacher" && !disabled}
+          updateSliderValue={(newValue) => updateSliderValue(_key, newValue)}
+          initialSliderValue={initialSliderValue}
+        />
+      </div>
     </div>
   );
 }
 
-export function Hypotheses({ hypothesis_order, problem_states, role, disabled}) {
-    // draw all hypothesis tables
-    // if role is "teacher", then the true hypothesis (A) is selected
-    const labels = ["A", "B", "C", "D"]
+export function Hypotheses({
+  hypothesis_order,
+  problem_states,
+  role,
+  disabled,
+  updateSliderValue,
+  sliderValues,
+}) {
+  // draw all hypothesis tables
+  // if role is "teacher", then the true hypothesis (A) is selected
+  const labels = ["A", "B", "C", "D"];
   return (
     <div id="hypothesis-space">
       {hypothesis_order.map((key, index) => (
-        <HypothesisTable key={key} _key={key} title={labels[index]} data={problem_states[key]} role={role} disabled={disabled}/>
+        <HypothesisTable
+          key={key}
+          _key={key}
+          title={labels[index]}
+          data={problem_states[key]}
+          role={role}
+          disabled={disabled}
+          updateSliderValue={updateSliderValue}
+          initialSliderValue={sliderValues[key]}
+        />
       ))}
     </div>
   );
 }
 
-export function SliderComponent({ enabled }) {
+export function SliderComponent({
+  enabled,
+  updateSliderValue,
+  initialSliderValue,
+}) {
   // State to keep track of the current slider value
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(initialSliderValue);
 
   // Function to handle slider value changes
   const handleSliderChange = (event) => {
-    setSliderValue(event.target.value);
+    const newValue = event.target.value;
+    setSliderValue(newValue);
+    updateSliderValue(newValue);
   };
 
   return (

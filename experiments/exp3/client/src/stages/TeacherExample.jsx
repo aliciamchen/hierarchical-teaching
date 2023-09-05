@@ -9,7 +9,8 @@ export function TeacherExample({
   hypothesis_order,
   problem_states,
   selected_cells,
-  role
+  role,
+  sliderValues
 }) {
   const player = usePlayer();
   const players = usePlayers();
@@ -45,6 +46,7 @@ export function TeacherExample({
           problem_states={problem_states}
           role = {role}
           disabled={true}
+          sliderValues={sliderValues}
         />
         <p>Please press Continue when you are ready to see teacher's example </p>
         <Button className="m-5" handleClick={() => onClick()}>
@@ -67,6 +69,7 @@ export function TeacherExample({
             hypothesis_order={hypothesis_order}
             problem_states={problem_states}
             role = {role}
+            sliderValues={sliderValues}
           />
           {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
           <Button className="m-5" handleClick={() => onClick()}>

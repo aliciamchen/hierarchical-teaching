@@ -20,15 +20,21 @@ Empirica.onGameStart(({ game }) => {
   });
 
   round.addStage({ name: "TeacherExample", duration: 100000 });
+  round.addStage({ name: "LearnerFeedback", duration: 100000 });
   round.addStage({ name: "TeacherExample", duration: 100000 });
+  round.addStage({ name: "LearnerFeedback", duration: 100000 });
   round.addStage({ name: "TeacherExample", duration: 100000 });
+  round.addStage({ name: "LearnerFeedback", duration: 100000 });
 });
 
 Empirica.onRoundStart(({ round }) => {
   console.log("round started")
   const players = round.currentGame.players;
   const teacher = players.find((player) => player.get("role") === "teacher");
+  const learner = players.find((player) => player.get("role") === "learner");
   teacher.round.set("selectedCellsSoFar", []);
+  learner.round.set("sliderValuesSoFar", [{A: 0, B: 0, C: 0, D: 0}]);
+
 });
 
 Empirica.onStageStart(({ stage }) => {});
@@ -51,6 +57,18 @@ Empirica.onStageEnded(({ stage }) => {
     teacher.round.set("selectedCellsSoFar", pushAndReturn(selectedCellsSoFar, selected_cell));
 
     console.log(teacher.round.get("selectedCellsSoFar"))
+  }
+
+  if (stage.get("name") === "LearnerFeedback") {
+    console.log("learner feedback")
+    const players = stage.currentGame.players;
+    const teacher = players.find((player) => player.get("role") === "teacher");
+    const learner = players.find((player) => player.get("role") === "learner");
+
+    const sliderValues = learner.stage.get("sliderValues");
+    console.log(sliderValues)
+    const sliderValuesSoFar = learner.round.get("sliderValuesSoFar") || [];
+    learner.round.set("sliderValuesSoFar", pushAndReturn(sliderValuesSoFar, sliderValues));
   }
 });
 
