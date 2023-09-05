@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-export function CanvasClicker({ hypothesis, selected_cells, onCellSelect }) {
+export function CanvasClicker({ hypothesis, selected_cells, onCellSelect, disable_click=false }) {
   // For the teacher to select cells to show learner
   // Select cells when clicked
   // selected_cells is a list of [row, col] pairs
@@ -32,7 +32,7 @@ export function CanvasClicker({ hypothesis, selected_cells, onCellSelect }) {
           }
 
           col.addEventListener("click", () => {
-            if (col.classList.contains("past") || !col.classList.contains("pos")) {
+            if (col.classList.contains("past") || !col.classList.contains("pos") || disable_click) {
               return; // Do nothing for 'past' or 'pos' cells
             }
 

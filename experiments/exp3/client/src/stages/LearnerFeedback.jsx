@@ -30,6 +30,7 @@ export function LearnerFeedback({
 
   function onClick() {
     player.stage.set("submit", true);
+    partner.stage.set("submit", true);
     player.stage.set("sliderValues", sliderValues);
   }
   // const [lastSelectedCell, setLastSelectedCell] = useState(null);
@@ -50,13 +51,14 @@ export function LearnerFeedback({
     // player.stage.set("submit", true);
     return (
       <div id="student-betting" class="slide">
-        <h1>Problem %i/%i</h1> {/* Problem number goes here */}
-        <p>Look at hypotheses send bet time</p>
+        <br></br>
+        <h1>Update your bets</h1> {/* Problem number goes here */}
+        <p>Teacher's hints so far</p>
         <Canvas
           selected_cells={selected_cells} // Change later to blank screen or just examples selected
           //   selected_cells={selected_cells}
         />
-        <p>Bet description goes here?</p>
+        <h2>Submit bets below</h2>
         <Hypotheses
           hypothesis_order={learner_hypothesis_order}
           problem_states={problem_states}
@@ -65,24 +67,23 @@ export function LearnerFeedback({
           updateSliderValue={updateSliderValue}
           sliderValues={sliderValues}
         />
-        <p>
-          Please press Continue when you are ready to send bet{" "}
-        </p>
+        <h2>Press the button below when you're ready to submit bets</h2>
         <Button className="m-5" handleClick={() => onClick()}>
-          Continue
+          Send bets to teacher
         </Button>
       </div>
     );
   } else if (role === "teacher") {
     return (
       <div id="student-betting" class="slide">
-        <h1>Problem %i/%i</h1> {/* Problem number goes here */}
-        <p>Problem description goes here</p>
+        <h1>Waiting for learner to submit bets...</h1> {/* Problem number goes here */}
+        <p>Your selected hints so far</p>
         <CanvasClicker
           hypothesis={hint_state}
           selected_cells={selected_cells}
+          disable_click={true}
         />
-        <p>Bet description goes here?</p>
+        <p>Learner bets so far</p>
         <Hypotheses
           hypothesis_order={teacher_hypothesis_order}
           problem_states={problem_states}
@@ -90,12 +91,7 @@ export function LearnerFeedback({
           disabled={true}
           sliderValues={sliderValues}
         />
-        <p>Press continue when you are ready to see bets</p>
-        {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
-        <Button className="m-5" handleClick={() => onClick()}>
-          Send example to learner
-        </Button>
-        {/* Might have to add an option for the button to be disabled */}
+        {/* <h2>Press continue when you are ready to see ✨new bets✨</h2> */}
       </div>
     );
   }

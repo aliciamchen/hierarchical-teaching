@@ -11,7 +11,7 @@ export function TeacherExample({
   problem_states,
   selected_cells,
   role,
-  sliderValues
+  sliderValues,
 }) {
   const player = usePlayer();
   const players = usePlayers();
@@ -26,7 +26,16 @@ export function TeacherExample({
   };
 
   function onClick() {
+    if (role === "teacher") {
+        // only submit if teacher has selected a cell
+        if (lastSelectedCell === null) {
+            return;
+        }
+
+    }
     player.stage.set("submit", true);
+    partner.stage.set("submit", true);
+    // partner.stage.set("submit", true);
     player.stage.set("selected_cell", lastSelectedCell);
   }
   // hint_state might have to be passed in as a prop
@@ -34,51 +43,48 @@ export function TeacherExample({
   if (role === "learner") {
     // player.stage.set("submit", true);
     return (
-        <div id="student-betting" class="slide">
-        <h1>Problem %i/%i</h1> {/* Problem number goes here */}
-        <p>Look at hypotheses</p>
+      <div id="student-betting" class="slide">
+        <br></br>
+        <h1>Waiting for teacher to select a hint...</h1>
         <Canvas
           selected_cells={selected_cells} // Change later to blank screen or just examples selected
-        //   selected_cells={selected_cells}
+          //   selected_cells={selected_cells}
         />
-        <p>Bet description goes here?</p>
+        <h2>Your current bets</h2>
         <Hypotheses
           hypothesis_order={learner_hypothesis_order}
           problem_states={problem_states}
-          role = {role}
+          role={role}
           disabled={true}
           sliderValues={sliderValues}
         />
-        <p>Please press Continue when you are ready to see teacher's example </p>
-        <Button className="m-5" handleClick={() => onClick()}>
-            Continue
-          </Button>
+        <br></br>
+        {/* paragraph with bold style */}
       </div>
-    )
+    );
   } else if (role === "teacher") {
     return (
-        <div id="student-betting" class="slide">
-          <h1>Problem %i/%i</h1> {/* Problem number goes here */}
-          <p>Problem description goes here</p>
-          <CanvasClicker
-            hypothesis={hint_state}
-            selected_cells={selected_cells}
-            onCellSelect={handleCellSelect}
-          />
-          <p>Bet description goes here?</p>
-          <Hypotheses
-            hypothesis_order={teacher_hypothesis_order}
-            problem_states={problem_states}
-            role = {role}
-            sliderValues={sliderValues}
-          />
-          {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
-          <Button className="m-5" handleClick={() => onClick()}>
-            Send example to learner
-          </Button>
-          {/* Might have to add an option for the button to be disabled */}
-        </div>
-      );
+      <div id="student-betting" class="slide">
+        <h1>Submit hint for learner</h1>
+        <p>Select hint below</p>
+        <CanvasClicker
+          hypothesis={hint_state}
+          selected_cells={selected_cells}
+          onCellSelect={handleCellSelect}
+        />
+        <h2>Learner's current bets</h2>
+        <Hypotheses
+          hypothesis_order={teacher_hypothesis_order}
+          problem_states={problem_states}
+          role={role}
+          sliderValues={sliderValues}
+        />
+        {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
+        <Button className="m-5" handleClick={() => onClick()}>
+          Send hint to learner
+        </Button>
+        {/* Might have to add an option for the button to be disabled */}
+      </div>
+    );
   }
-
 }
