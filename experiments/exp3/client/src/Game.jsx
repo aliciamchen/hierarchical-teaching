@@ -14,9 +14,9 @@ export function Game() {
           <Stage />
         </div>
       </div>
-      <div className="h-full w-128 border-l flex justify-center items-center">
+      {/* <div className="h-full w-128 border-l flex justify-center items-center">
         <Chat scope={game} attribute="chat" />
-      </div>
+      </div> */}
     </div>
   );
 }
