@@ -118,14 +118,30 @@ Meanwhile, embedding slider css below.
 
 h1, h2, h3, h4 {
   text-align: center;
+  margin: 0.2em 0;
+}
+
+/* Make h1 bold and bigger */
+h1 {
+  font-size: 1.8em;
+  font-weight: bold;
+  /* Add padding above */
+  margin-top: 0.5em;
 }
 
 p {
   text-align: center;
+  margin: 0.2vh 0;
 }
 
 .standalone {
   padding: 25vh 0;
+}
+
+.slider-value {
+  font-size: 1em;
+  color: cornflowerblue;
+  text-align: center;
 }
 
 /* button {
