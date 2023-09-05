@@ -53,6 +53,7 @@ function HypothesisTable({
           enabled={role != "teacher" && !disabled}
           updateSliderValue={(newValue) => updateSliderValue(_key, newValue)}
           initialSliderValue={initialSliderValue}
+          role={role}
         />
       </div>
     </div>
@@ -92,6 +93,7 @@ export function SliderComponent({
   enabled,
   updateSliderValue,
   initialSliderValue,
+  role
 }) {
   // State to keep track of the current slider value
   const [sliderValue, setSliderValue] = useState(initialSliderValue);
@@ -113,7 +115,9 @@ export function SliderComponent({
         onChange={handleSliderChange}
         disabled={!enabled}
       />
-      <p>Current value: {sliderValue}</p>
+      {/* Display and center current slider value */}
+        <div className="slider-value">{role == 'teacher' ? 'Learner bet:' : 'Current value:'} {sliderValue}</div>
+      {/* Current value: {sliderValue} */}
     </div>
   );
 }
