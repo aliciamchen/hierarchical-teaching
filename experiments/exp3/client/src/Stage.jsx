@@ -21,7 +21,7 @@ export function Stage() {
   const learner = players.find((player) => player.get("role") === "learner");
 
   console.log(learner.round.get("sliderValuesSoFar"))
-  const problems = player.get("problems");
+  // const problems = player.get("problems");
 
   if (player.stage.get("submit")) {
     if (players.length === 1) {
@@ -43,9 +43,9 @@ export function Stage() {
     case "TeacherExample":
       return (
         <TeacherExample
-          hint_state={problems[0]["A"]}
+          hint_state={round.get("problem")["A"]}
           hypothesis_order={["B", "A", "C", "D"]}
-          problem_states={problems[0]}
+          problem_states={round.get("problem")}
           selected_cells={teacher.round.get("selectedCellsSoFar")}
           role = {player.get("role")}
           sliderValues={learner.round.get("sliderValuesSoFar").slice(-1)[0]}
@@ -54,9 +54,9 @@ export function Stage() {
     case "LearnerFeedback":
       return (
         <LearnerFeedback
-          hint_state={problems[0]["A"]}
+          hint_state={round.get("problem")["A"]}
           hypothesis_order={["B", "A", "C", "D"]}
-          problem_states={problems[0]}
+          problem_states={round.get("problem")}
           selected_cells={teacher.round.get("selectedCellsSoFar")}
           role = {player.get("role")}
           initialSliderValues={learner.round.get("sliderValuesSoFar").slice(-1)[0]} // later change to learner's prev guess aka sliderSoFar

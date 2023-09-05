@@ -1,5 +1,6 @@
 import { problems } from "./constants.js";
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
+import _ from "lodash";
 
 export const Empirica = new ClassicListenersCollector();
 // console.log(problems)
@@ -9,22 +10,36 @@ Empirica.onGameStart(({ game }) => {
   const players = game.players;
   const roles = ["teacher", "learner"]
 
+  const problems_shuffled = _.shuffle(problems);
+
   players.forEach((player, i) => {
     player.set("playerIndex", i);
     player.set("role", roles[i]);
     player.set("problems", problems)
+    player.set("problems_shuffled", problems_shuffled)
   })
 
-  const round = game.addRound({
-    name: `test round`,
-  });
+  // const round = game.addRound({
+  //   name: `test round`,
+  // });
 
-  round.addStage({ name: "TeacherExample", duration: 100000 });
-  round.addStage({ name: "LearnerFeedback", duration: 100000 });
-  round.addStage({ name: "TeacherExample", duration: 100000 });
-  round.addStage({ name: "LearnerFeedback", duration: 100000 });
-  round.addStage({ name: "TeacherExample", duration: 100000 });
-  round.addStage({ name: "LearnerFeedback", duration: 100000 });
+  // Add a round for each problem
+  problems_shuffled.forEach((problem, i) => {
+    const round = game.addRound({
+      name: `Problem ${i}`,
+      problem: problem,
+    })
+    // Should I also save problem index?
+    // Should I also save problem for each stage?
+    round.addStage({ name: "LearnerFeedback", duration: 100000 }); // TODO: change duration to something reasonable
+    round.addStage({ name: "TeacherExample", duration: 100000 });
+    round.addStage({ name: "LearnerFeedback", duration: 100000 });
+    round.addStage({ name: "TeacherExample", duration: 100000 });
+    round.addStage({ name: "LearnerFeedback", duration: 100000 });
+    round.addStage({ name: "TeacherExample", duration: 100000 });
+    round.addStage({ name: "LearnerFeedback", duration: 100000 });
+  })
+
 });
 
 Empirica.onRoundStart(({ round }) => {
@@ -33,7 +48,7 @@ Empirica.onRoundStart(({ round }) => {
   const teacher = players.find((player) => player.get("role") === "teacher");
   const learner = players.find((player) => player.get("role") === "learner");
   teacher.round.set("selectedCellsSoFar", []);
-  learner.round.set("sliderValuesSoFar", [{A: 0, B: 0, C: 0, D: 0}]);
+  learner.round.set("sliderValuesSoFar", [{A: 0, B: 0, C: 0, D: 0}]); // initial slider values for each teaching problem
 
 });
 
@@ -77,7 +92,10 @@ Empirica.onRoundEnded(({ round }) => {
 });
 
 
-Empirica.onGameEnded(({ game }) => {});
+Empirica.onGameEnded(({ game }) => {
+  // TODO: figure out bonus structure
+
+});
 
 
 function calculateJellyBeansScore(stage) {
