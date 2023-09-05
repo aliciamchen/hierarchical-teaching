@@ -118,15 +118,18 @@ Meanwhile, embedding slider css below.
 
 h1, h2, h3, h4 {
   text-align: center;
-  margin: 0.2em 0;
+  font-weight: bold;
 }
 
 /* Make h1 bold and bigger */
 h1 {
   font-size: 1.8em;
-  font-weight: bold;
-  /* Add padding above */
-  margin-top: 0.5em;
+  padding-top: 0.7em;
+}
+
+h2 {
+  font-size: 1.2em;
+  margin-top: 1em;
 }
 
 p {
