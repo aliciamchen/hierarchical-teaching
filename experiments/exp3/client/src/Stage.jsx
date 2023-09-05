@@ -9,6 +9,7 @@ import {
 import { Loading } from "@empirica/core/player/react";
 import { TeacherExample } from "./stages/TeacherExample";
 import { LearnerFeedback } from "./stages/LearnerFeedback";
+import { NextProblem } from "./stages/NextProblem";
 
 
 export function Stage() {
@@ -27,7 +28,7 @@ export function Stage() {
   console.log("Teacher hypothesis order: ", teacher.round.get("hypothesis_order"));
   console.log("Learner hypothesis order: ", learner.round.get("hypothesis_order"));
 
-  if (player.stage.get("submit")) {
+  if (player.stage.get("submit")) { // sometimes this is undefined? why
     if (players.length === 1) {
       return <Loading />;
     }
@@ -69,6 +70,8 @@ export function Stage() {
         />
       )
     // return <TeacherExample hint_state={} hypothesis_order={} problem_states={}/>;
+    case "NextProblem":
+      return <NextProblem />;
     default:
       return <div>Loading...</div>;
   }

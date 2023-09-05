@@ -6,18 +6,19 @@ export const Empirica = new ClassicListenersCollector();
 // console.log(problems)
 
 Empirica.onGameStart(({ game }) => {
-  console.log("game started")
+  console.log("game started");
   const players = game.players;
-  const roles = ["teacher", "learner"]
+  const roles = ["teacher", "learner"];
 
   const problems_shuffled = _.shuffle(problems);
+  console.log(problems.length);
 
   players.forEach((player, i) => {
     player.set("playerIndex", i);
     player.set("role", roles[i]);
-    player.set("problems", problems)
-    player.set("problems_shuffled", problems_shuffled)
-  })
+    player.set("problems", problems);
+    player.set("problems_shuffled", problems_shuffled);
+  });
 
   // const round = game.addRound({
   //   name: `test round`,
@@ -27,8 +28,8 @@ Empirica.onGameStart(({ game }) => {
   problems_shuffled.forEach((problem, i) => {
     const round = game.addRound({
       name: `Problem ${i + 1}`,
-      problem: problem
-    })
+      problem: problem,
+    });
     // Should I also save problem index?
     // Should I also save problem for each stage?
     round.addStage({ name: "LearnerFeedback", duration: 100000 }); // TODO: change duration to something reasonable
@@ -38,26 +39,25 @@ Empirica.onGameStart(({ game }) => {
     round.addStage({ name: "LearnerFeedback", duration: 100000 });
     round.addStage({ name: "TeacherExample", duration: 100000 });
     round.addStage({ name: "LearnerFeedback", duration: 100000 });
-  })
-
+    round.addStage({ name: "NextProblem", duration: 1000 });
+  });
 });
 
 Empirica.onRoundStart(({ round }) => {
-  console.log("round started")
+  console.log("round started");
   const players = round.currentGame.players;
   const teacher = players.find((player) => player.get("role") === "teacher");
   const learner = players.find((player) => player.get("role") === "learner");
 
-  const teacher_hypothesis_order = _.shuffle(['A', 'B', 'C', 'D']);
-  const learner_hypothesis_order = _.shuffle(['A', 'B', 'C', 'D']);
+  const teacher_hypothesis_order = _.shuffle(["A", "B", "C", "D"]);
+  const learner_hypothesis_order = _.shuffle(["A", "B", "C", "D"]);
 
   teacher.round.set("hypothesis_order", teacher_hypothesis_order);
   learner.round.set("hypothesis_order", learner_hypothesis_order);
 
   teacher.round.set("selectedCellsSoFar", []);
 
-  learner.round.set("sliderValuesSoFar", [{A: 0, B: 0, C: 0, D: 0}]); // initial slider values for each teaching problem
-
+  learner.round.set("sliderValuesSoFar", [{ A: 0, B: 0, C: 0, D: 0 }]); // initial slider values for each teaching problem
 });
 
 Empirica.onStageStart(({ stage }) => {});
@@ -66,32 +66,38 @@ Empirica.onStageEnded(({ stage }) => {
   // This is where I log the example(s) the teacher selected
   // or the bets the students made
   if (stage.get("name") === "TeacherExample") {
-    console.log("teacher example")
+    console.log("teacher example");
     const players = stage.currentGame.players;
     const teacher = players.find((player) => player.get("role") === "teacher");
 
-    const selected_cell = teacher.stage.get("selected_cell") || []
-    console.log(selected_cell)
+    const selected_cell = teacher.stage.get("selected_cell") || [];
+    console.log(selected_cell);
 
     const selectedCellsSoFar = teacher.round.get("selectedCellsSoFar") || [];
-    console.log(selectedCellsSoFar)
+    console.log(selectedCellsSoFar);
     // console.log(selectedCellsSoFar.push(selected_cell))
 
-    teacher.round.set("selectedCellsSoFar", pushAndReturn(selectedCellsSoFar, selected_cell));
+    teacher.round.set(
+      "selectedCellsSoFar",
+      pushAndReturn(selectedCellsSoFar, selected_cell)
+    );
 
-    console.log(teacher.round.get("selectedCellsSoFar"))
+    console.log(teacher.round.get("selectedCellsSoFar"));
   }
 
   if (stage.get("name") === "LearnerFeedback") {
-    console.log("learner feedback")
+    console.log("learner feedback");
     const players = stage.currentGame.players;
     const teacher = players.find((player) => player.get("role") === "teacher");
     const learner = players.find((player) => player.get("role") === "learner");
 
     const sliderValues = learner.stage.get("sliderValues");
-    console.log(sliderValues)
+    console.log(sliderValues);
     const sliderValuesSoFar = learner.round.get("sliderValuesSoFar") || [];
-    learner.round.set("sliderValuesSoFar", pushAndReturn(sliderValuesSoFar, sliderValues));
+    learner.round.set(
+      "sliderValuesSoFar",
+      pushAndReturn(sliderValuesSoFar, sliderValues)
+    );
   }
 });
 
@@ -99,12 +105,9 @@ Empirica.onRoundEnded(({ round }) => {
   // This is where I log
 });
 
-
 Empirica.onGameEnded(({ game }) => {
   // TODO: figure out bonus structure
-
 });
-
 
 function calculateJellyBeansScore(stage) {
   if (
