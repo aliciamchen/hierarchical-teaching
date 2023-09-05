@@ -16,6 +16,7 @@ export function Button({
   autoFocus = false,
 }) {
   return (
+    <div className="flex justify-center items-center"> {/* This centers the button */}
     <button
       type={type}
       onClick={handleClick}
@@ -24,5 +25,6 @@ export function Button({
     >
       {children}
     </button>
+    </div>
   );
 }

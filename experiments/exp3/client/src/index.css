@@ -128,13 +128,13 @@ p {
   padding: 25vh 0;
 }
 
-button {
+/* button {
   width: 12.5vw;
   height: 5vh;
   border-radius: 7.5px;
   display: block;
   margin: 0 auto;
-}
+} */
 
 .inactive {
   color: #999;
