@@ -116,6 +116,12 @@ Meanwhile, embedding slider css below.
 
 /* Experiment-specific styles */
 
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 h1, h2, h3, h4 {
   text-align: center;
   font-weight: bold;
@@ -167,6 +173,15 @@ p {
   background-color: #fff;
   padding: 2.5%;
   margin: 0 auto;
+}
+
+.consent p {
+  /* align text to left */
+  text-align: left;
+  /* add space between paragraphs */
+  margin: 0.7em 0;
+  /* increase text size */
+  font-size: 1.2em;
 }
 
 .slide {

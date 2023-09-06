@@ -5,6 +5,7 @@ import React from "react";
 import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Introduction } from "./intro-exit/Introduction";
+import { ConsentPage } from "./intro-exit/Consent";
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -14,7 +15,7 @@ export default function App() {
   const url = `${protocol}//${host}/query`;
 
   function introSteps({ game, player }) {
-    return [Introduction];
+    return [ConsentPage, Introduction];
   }
 
   function exitSteps({ game, player }) {
