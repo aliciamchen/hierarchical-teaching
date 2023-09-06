@@ -106,7 +106,7 @@ export function SliderComponent({
   };
 
   return (
-    <div>
+    <div className="slider-container">
       <input
         type="range"
         min="0"
