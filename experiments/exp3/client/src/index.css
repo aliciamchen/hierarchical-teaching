@@ -127,6 +127,11 @@ h1, h2, h3, h4 {
   font-weight: bold;
 }
 
+/* make headings in instructions left aligned
+.instructions h2, .instructions h3, .instructions h4 {
+  text-align: left;
+} */
+
 /* Make h1 bold and bigger */
 h1 {
   font-size: 1.8em;
@@ -147,6 +152,20 @@ p {
   padding: 25vh 0;
 }
 
+ol {
+  list-style-type: decimal;
+  text-align: left;
+  list-style-position: inside;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
 .slider-value {
   font-size: 1em;
   color: cornflowerblue;
@@ -160,6 +179,14 @@ p {
   display: block;
   margin: 0 auto;
 } */
+
+.image-centered {
+  /* width: 75vw; */
+  display: block;
+  margin: auto;
+  /* add space before and after image */
+  padding: 1em 0;
+}
 
 .inactive {
   color: #999;
@@ -182,6 +209,24 @@ p {
   margin: 0.7em 0;
   /* increase text size */
   font-size: 1.2em;
+}
+
+.instructions {
+  text-align: justify;
+  width: 90vw;
+  display: block;
+  background-color: #fff;
+  padding: 2.5%;
+  margin: 0 auto;
+}
+
+.instructions p {
+   /* align text to left */
+   text-align: left;
+   /* add space between paragraphs */
+   margin: 0.7em 0;
+   /* increase text size */
+   font-size: 1em;
 }
 
 .slide {
