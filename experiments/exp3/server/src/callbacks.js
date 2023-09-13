@@ -24,6 +24,12 @@ Empirica.onGameStart(({ game }) => {
   //   name: `test round`,
   // });
 
+  // add a first round with only one stage where participant is told their role
+  const round = game.addRound({
+    name: `Role`,
+  });
+  round.addStage({name: "ShowRole", duration: 60})
+
   // Add a round for each problem
   problems_shuffled.forEach((problem, i) => {
     const round = game.addRound({
@@ -32,14 +38,14 @@ Empirica.onGameStart(({ game }) => {
     });
     // Should I also save problem index?
     // Should I also save problem for each stage?
-    round.addStage({ name: "LearnerFeedback", duration: 100000 }); // TODO: change duration to something reasonable
-    round.addStage({ name: "TeacherExample", duration: 100000 });
-    round.addStage({ name: "LearnerFeedback", duration: 100000 });
-    round.addStage({ name: "TeacherExample", duration: 100000 });
-    round.addStage({ name: "LearnerFeedback", duration: 100000 });
-    round.addStage({ name: "TeacherExample", duration: 100000 });
-    round.addStage({ name: "LearnerFeedback", duration: 100000 });
-    round.addStage({ name: "NextProblem", duration: 1000 });
+    round.addStage({ name: "LearnerFeedback", duration: 60 }); // TODO: change duration to something reasonable
+    round.addStage({ name: "TeacherExample", duration: 60 });
+    round.addStage({ name: "LearnerFeedback", duration: 60 });
+    round.addStage({ name: "TeacherExample", duration: 60 });
+    round.addStage({ name: "LearnerFeedback", duration: 60 });
+    round.addStage({ name: "TeacherExample", duration: 60 });
+    round.addStage({ name: "LearnerFeedback", duration: 60 });
+    round.addStage({ name: "NextProblem", duration: 60 });
   });
 });
 
