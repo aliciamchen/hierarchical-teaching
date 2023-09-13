@@ -10,6 +10,7 @@ import { Loading } from "@empirica/core/player/react";
 import { TeacherExample } from "./stages/TeacherExample";
 import { LearnerFeedback } from "./stages/LearnerFeedback";
 import { NextProblem } from "./stages/NextProblem";
+import { ShowRole } from "./stages/ShowRole";
 
 
 export function Stage() {
@@ -72,6 +73,8 @@ export function Stage() {
     // return <TeacherExample hint_state={} hypothesis_order={} problem_states={}/>;
     case "NextProblem":
       return <NextProblem />;
+    case "ShowRole":
+      return <ShowRole />;
     default:
       return <div>Loading...</div>;
   }
