@@ -760,9 +760,11 @@ export function Introduction3({ next }) {
         If you think an option is <em>definitely right</em>, you should go “all
         in” and move the slider all the way to the right.
       </p>
-      <p>If there's a chance that several options could be right,
-        you can improve your chances of getting a bonus by distributing the
-        chips among multiple options.</p>
+      <p>
+        If there's a chance that several options could be right, you can improve
+        your chances of getting a bonus by distributing the chips among multiple
+        options.
+      </p>
       <p>Try it now!</p>
       <div id="hypothesis-space">
         <div class="hypothesis-wrapper">
@@ -1112,6 +1114,12 @@ export function Introduction5({ next }) {
         bets again. Finally, the teacher sends a third hint. The learner will
         then see the teacher's third hint and update their bets one last time.
       </p>
+      <p>
+        Each time, you have one minute to select your response. If you do not
+        select a response within one minute, the game will automatically
+         <strong>progress to the next stage when the time is up</strong> and you
+        cannot receive a bonus for that stage, so please stay focused.
+      </p>
 
       <hr></hr>
       <h2>To summarize, for each teaching problem:</h2>
@@ -1128,6 +1136,7 @@ export function Introduction5({ next }) {
           <li>Teacher sees updated learner bets and sends a second hint</li>
           <li>Learner sees teacher's second hint and updates their bets</li>
           <li>Teacher sees updated learner bets and sends a third hint</li>
+          <li>Then, you will move on to the next teaching problem</li>
         </ol>
 
         {/* Maybe add a box around this */}

@@ -116,7 +116,7 @@ export function SliderComponent({
         disabled={!enabled}
       />
       {/* Display and center current slider value */}
-        <div className="slider-value">{role == 'teacher' ? 'Learner bet:' : 'Current value:'} {sliderValue}</div>
+        {/* <div className="slider-value">{role == 'teacher' ? 'Learner bet:' : 'Current value:'} {sliderValue}</div> */}
       {/* Current value: {sliderValue} */}
     </div>
   );
