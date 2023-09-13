@@ -11,7 +11,7 @@ export function LearnerFeedback({
   problem_states,
   selected_cells,
   role,
-  initialSliderValues
+  initialSliderValues,
 }) {
   const player = usePlayer();
   const players = usePlayers();
@@ -29,23 +29,14 @@ export function LearnerFeedback({
   };
 
   function onClick() {
+    // if you haven't moved sliders, don't submit
+    if (sliderValues === initialSliderValues) {
+      return;
+    }
     player.stage.set("submit", true);
     partner.stage.set("submit", true);
     player.stage.set("sliderValues", sliderValues);
   }
-  // const [lastSelectedCell, setLastSelectedCell] = useState(null);
-
-  // const handleCellSelect = (cellElement, rowIndex, colIndex) => {
-  //   // Do something with the cell element if needed
-  //   // For now, we'll just update the lastSelectedCell state
-  //   setLastSelectedCell([rowIndex, colIndex]);
-  // };
-
-  // function onClick() {
-  //   player.stage.set("submit", true);
-  //   player.stage.set("selected_cell", lastSelectedCell);
-  // }
-  // hint_state might have to be passed in as a prop
 
   if (role === "learner") {
     // player.stage.set("submit", true);
@@ -77,7 +68,8 @@ export function LearnerFeedback({
   } else if (role === "teacher") {
     return (
       <div id="student-betting" class="slide">
-        <h1>Waiting for learner to submit bets...</h1> {/* Problem number goes here */}
+        <h1>Waiting for learner to submit bets...</h1>{" "}
+        {/* Problem number goes here */}
         <p>Your selected hints so far</p>
         <CanvasClicker
           hypothesis={hint_state}
