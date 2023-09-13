@@ -14,23 +14,27 @@ const questions = [
     correctAnswer: "B & C",
   },
   {
-    question: "Which of these statements correctly describes how your bonus is calculated?",
-    choices: ["(A) My bonus will be calculated based on the bets the learner placed on 15 random trials.",
-        "(B) I can increase my bonus if the learner bets more chips on the options that are more likely to be right.",
-        "(C) If the learner bets on the right answer, this increases both the teacher's and the learner's bonus.",
-        "(D) All of the above"],
+    question:
+      "Which of these statements correctly describes how your bonus is calculated?",
+    choices: [
+      "(A) My bonus will be calculated based on the bets the learner placed on 15 random trials.",
+      "(B) I can increase my bonus if the learner bets more chips on the options that are more likely to be right.",
+      "(C) If the learner bets on the right answer, this increases both the teacher's and the learner's bonus.",
+      "(D) All of the above",
+    ],
     correctAnswer: "(D) All of the above",
   },
   {
     question: "What information can I see from my partner?",
-    choices: ["If I am the teacher, I can see my partner's bets. If I am the learner, I can see my partner's hints."],
-    correctAnswer: "If I am the teacher, I can see my partner's bets. If I am the learner, I can see my partner's hints.",
+    choices: [
+      "If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them.",
+      "I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
+      "I can send bets or hints to my partner, but I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
+    ],
+    correctAnswer:
+      "If I am the teacher, I can see my partner's bets. If I am the learner, I can see my partner's hints.",
   },
 ];
-
-// const Button = ({ handleClick, children }) => {
-//   return <button onClick={handleClick}>{children}</button>;
-// };
 
 export default function Quiz({ next }) {
   const [answers, setAnswers] = useState({});
@@ -93,13 +97,4 @@ export default function Quiz({ next }) {
       </form>
     </div>
   );
-}
-
-// Example usage of App with next prop
-const nextFunction = () => {
-  alert("Congratulations, you answered all questions correctly!");
-};
-
-function Wrapper() {
-  return <App next={nextFunction} />;
 }
