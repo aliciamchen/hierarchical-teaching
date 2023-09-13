@@ -1148,9 +1148,9 @@ export function Introduction5({ next }) {
       <p>
         At the end of the experiment, we will calculate your bonus based on the
         bets the learner placed on 15 random trials across the experiment. So
-        regardless of which role you're in, make sure that you do as well as
+        regardless of which role you're in, make sure that the learner does as well as
         possible on each trial (regardless of how many examples the teacher has
-        sent) on each teaching problem!
+        sent so far) on each teaching problem!
       </p>
       <br></br>
     </div>
