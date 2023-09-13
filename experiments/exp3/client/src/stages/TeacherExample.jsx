@@ -44,7 +44,6 @@ export function TeacherExample({
     // player.stage.set("submit", true);
     return (
       <div id="student-betting" class="slide">
-        <br></br>
         <h1>Waiting for teacher to select a hint...</h1>
         <Canvas
           selected_cells={selected_cells} // Change later to blank screen or just examples selected

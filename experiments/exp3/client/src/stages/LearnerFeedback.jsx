@@ -67,6 +67,7 @@ export function LearnerFeedback({
           updateSliderValue={updateSliderValue}
           sliderValues={sliderValues}
         />
+        <br></br>
         <h2>Press the button below when you're ready to submit bets</h2>
         <Button className="m-5" handleClick={() => onClick()}>
           Send bets to teacher
