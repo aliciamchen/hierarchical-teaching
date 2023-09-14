@@ -29,6 +29,7 @@ export function TeacherExample({
     if (role === "teacher") {
         // only submit if teacher has selected a cell
         if (lastSelectedCell === null) {
+            alert("You must select an example to submit.")
             return;
         }
 

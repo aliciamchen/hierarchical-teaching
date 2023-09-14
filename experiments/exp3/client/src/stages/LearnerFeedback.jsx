@@ -13,6 +13,7 @@ export function LearnerFeedback({
   role,
   initialSliderValues,
 }) {
+
   const player = usePlayer();
   const players = usePlayers();
   const partner = players.filter((p) => p.id !== player.id)[0];
@@ -31,8 +32,13 @@ export function LearnerFeedback({
   function onClick() {
     // if you haven't moved sliders, don't submit
     if (sliderValues === initialSliderValues) {
+      alert("You must move at least one slider to submit.")
       return;
     }
+
+    // handle case where there is a timeout
+
+
     player.stage.set("submit", true);
     partner.stage.set("submit", true);
     player.stage.set("sliderValues", sliderValues);
