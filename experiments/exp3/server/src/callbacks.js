@@ -28,7 +28,7 @@ Empirica.onGameStart(({ game }) => {
   const round = game.addRound({
     name: `Role`,
   });
-  round.addStage({name: "ShowRole", duration: 60})
+  round.addStage({ name: "ShowRole", duration: 60 });
 
   // Add a round for each problem
   problems_shuffled.forEach((problem, i) => {
@@ -97,7 +97,12 @@ Empirica.onStageEnded(({ stage }) => {
     const teacher = players.find((player) => player.get("role") === "teacher");
     const learner = players.find((player) => player.get("role") === "learner");
 
-    const sliderValues = learner.stage.get("sliderValues");
+    const sliderValues =
+      learner.stage.get("sliderValues") ||
+      learner.round.get("sliderValuesSoFar")[
+        learner.round.get("sliderValuesSoFar").length - 1
+      ]; // if no slider values are selected, use the last ones
+
     console.log(sliderValues);
     const sliderValuesSoFar = learner.round.get("sliderValuesSoFar") || [];
     learner.round.set(
