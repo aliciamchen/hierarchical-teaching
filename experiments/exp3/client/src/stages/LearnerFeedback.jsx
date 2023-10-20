@@ -41,6 +41,12 @@ export function LearnerFeedback({
 
     player.stage.set("submit", true);
     partner.stage.set("submit", true);
+
+    // change sliderValues to ints not strings
+    for (const key in sliderValues) {
+      sliderValues[key] = parseInt(sliderValues[key]);
+    }
+
     player.stage.set("sliderValues", sliderValues);
   }
 
