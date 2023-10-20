@@ -1013,9 +1013,10 @@ export function Introduction4({ next }) {
       <p>
         If you are the <strong>teacher</strong>, you will be shown the correct
         answer to the question, highlighted in <strong>yellow</strong> below.
-        You will also see the learner's current bets for what they think the
-        right answer is. Your job is to give hints to the learner to help them
-        pick out the right answer.
+        (The order of the four options will be shuffled between you and the
+        learner.) You will also see the learner's current bets for what they
+        think the right answer is. Your job is to give hints to the learner to
+        help them pick out the right answer.
       </p>
       <p>
         You can give hints by clicking on the canvas below. The learner will see
@@ -1115,9 +1116,13 @@ export function Introduction5({ next }) {
         then see the teacher's third hint and update their bets one last time.
       </p>
       <p>
+        At the end of each problem, the learner will see what the right answer
+        was.
+      </p>
+      <p>
         Each time, you have one minute to select your response. If you do not
         select a response within one minute, the game will automatically
-         <strong>progress to the next stage when the time is up</strong> and you
+        <strong>progress to the next stage when the time is up</strong> and you
         cannot receive a bonus for that stage, so please stay focused.
       </p>
 
@@ -1148,9 +1153,9 @@ export function Introduction5({ next }) {
       <p>
         At the end of the experiment, we will calculate your bonus based on the
         bets the learner placed on 15 random trials across the experiment. So
-        regardless of which role you're in, make sure that the learner does as well as
-        possible on each trial (regardless of how many examples the teacher has
-        sent so far) on each teaching problem!
+        regardless of which role you're in, make sure that the learner does as
+        well as possible on each trial (regardless of how many examples the
+        teacher has sent so far) on each teaching problem!
       </p>
       <br></br>
     </div>

@@ -12,7 +12,6 @@ import { LearnerFeedback } from "./stages/LearnerFeedback";
 import { NextProblem } from "./stages/NextProblem";
 import { ShowRole } from "./stages/ShowRole";
 
-
 export function Stage() {
   const game = useGame();
   const player = usePlayer();
@@ -23,13 +22,20 @@ export function Stage() {
   const teacher = players.find((player) => player.get("role") === "teacher");
   const learner = players.find((player) => player.get("role") === "learner");
 
-  console.log(learner.round.get("sliderValuesSoFar"))
+  console.log(learner.round.get("sliderValuesSoFar"));
   // const problems = player.get("problems");
 
-  console.log("Teacher hypothesis order: ", teacher.round.get("hypothesis_order"));
-  console.log("Learner hypothesis order: ", learner.round.get("hypothesis_order"));
+  console.log(
+    "Teacher hypothesis order: ",
+    teacher.round.get("hypothesis_order")
+  );
+  console.log(
+    "Learner hypothesis order: ",
+    learner.round.get("hypothesis_order")
+  );
 
-  if (player.stage.get("submit")) { // sometimes this is undefined? why
+  if (player.stage.get("submit")) {
+    // sometimes this is undefined? why
     if (players.length === 1) {
       return <Loading />;
     }
@@ -39,8 +45,6 @@ export function Stage() {
         Please wait for other player(s).
       </div>
     );
-
-
   }
 
   // console.log(player.round.get("selectedCellsSoFar"))
@@ -54,7 +58,7 @@ export function Stage() {
           learner_hypothesis_order={learner.round.get("hypothesis_order")}
           problem_states={round.get("problem")}
           selected_cells={teacher.round.get("selectedCellsSoFar")}
-          role = {player.get("role")}
+          role={player.get("role")}
           sliderValues={learner.round.get("sliderValuesSoFar").slice(-1)[0]}
         /> // TODO: change slider values based on learner's prev guess
       );
@@ -66,13 +70,25 @@ export function Stage() {
           learner_hypothesis_order={learner.round.get("hypothesis_order")}
           problem_states={round.get("problem")}
           selected_cells={teacher.round.get("selectedCellsSoFar")}
-          role = {player.get("role")}
-          initialSliderValues={learner.round.get("sliderValuesSoFar").slice(-1)[0]} // later change to learner's prev guess aka sliderSoFar
+          role={player.get("role")}
+          initialSliderValues={
+            learner.round.get("sliderValuesSoFar").slice(-1)[0]
+          } // later change to learner's prev guess aka sliderSoFar
         />
-      )
+      );
     // return <TeacherExample hint_state={} hypothesis_order={} problem_states={}/>;
     case "NextProblem":
-      return <NextProblem />;
+      return (
+        <NextProblem
+          hint_state={round.get("problem")["A"]}
+          teacher_hypothesis_order={teacher.round.get("hypothesis_order")}
+          learner_hypothesis_order={learner.round.get("hypothesis_order")}
+          problem_states={round.get("problem")}
+          selected_cells={teacher.round.get("selectedCellsSoFar")}
+          role={player.get("role")}
+          sliderValues={learner.round.get("sliderValuesSoFar").slice(-1)[0]}
+        />
+      );
     case "ShowRole":
       return <ShowRole />;
     default:

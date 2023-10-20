@@ -32,7 +32,7 @@ const questions = [
       "I can send bets or hints to my partner, but I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
     ],
     correctAnswer:
-      "If I am the teacher, I can see my partner's bets. If I am the learner, I can see my partner's hints.",
+    "If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them."
   },
 ];
 
