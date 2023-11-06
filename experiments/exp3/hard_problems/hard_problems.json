@@ -1,0 +1,98 @@
+[
+  {
+    "random_intercept": -0.1012,
+    "problem": 2
+  },
+  {
+    "random_intercept": -0.1397,
+    "problem": 4
+  },
+  {
+    "random_intercept": -0.0105,
+    "problem": 7
+  },
+  {
+    "random_intercept": -0.1565,
+    "problem": 8
+  },
+  {
+    "random_intercept": -0.041,
+    "problem": 9
+  },
+  {
+    "random_intercept": -0.1294,
+    "problem": 13
+  },
+  {
+    "random_intercept": -0.0833,
+    "problem": 16
+  },
+  {
+    "random_intercept": -0.1423,
+    "problem": 17
+  },
+  {
+    "random_intercept": -0.0084,
+    "problem": 18
+  },
+  {
+    "random_intercept": -0.1014,
+    "problem": 19
+  },
+  {
+    "random_intercept": -0.1202,
+    "problem": 20
+  },
+  {
+    "random_intercept": -0.1374,
+    "problem": 21
+  },
+  {
+    "random_intercept": -0.0376,
+    "problem": 22
+  },
+  {
+    "random_intercept": -0.094,
+    "problem": 24
+  },
+  {
+    "random_intercept": -0.1401,
+    "problem": 25
+  },
+  {
+    "random_intercept": -0.0669,
+    "problem": 26
+  },
+  {
+    "random_intercept": -0.0882,
+    "problem": 27
+  },
+  {
+    "random_intercept": -0.0015,
+    "problem": 28
+  },
+  {
+    "random_intercept": -0.0521,
+    "problem": 29
+  },
+  {
+    "random_intercept": -0.058,
+    "problem": 31
+  },
+  {
+    "random_intercept": -0.0238,
+    "problem": 32
+  },
+  {
+    "random_intercept": -0.0144,
+    "problem": 33
+  },
+  {
+    "random_intercept": -0.0863,
+    "problem": 36
+  },
+  {
+    "random_intercept": -0.0223,
+    "problem": 39
+  }
+]
