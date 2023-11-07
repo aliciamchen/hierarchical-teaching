@@ -1157,6 +1157,14 @@ export function Introduction5({ next }) {
         well as possible on each trial (regardless of how many examples the
         teacher has sent so far) on each teaching problem!
       </p>
+
+      <h2 style={{ textAlign: "left" }}>Partner dropout</h2>
+      <p>
+        Because this is an interactive game and you are paired with a real person, both people have to finish the game in order to receive a bonus. If your partner leaves the game, you will receive the base pay for the task.
+      </p>
+      <p>
+        If you have any technical difficulties, please reload the page. If the issues persist, contact us on Prolific and we will reward you your base pay.
+      </p>
       <br></br>
     </div>
   );

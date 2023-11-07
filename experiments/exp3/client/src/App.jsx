@@ -6,7 +6,7 @@ import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Instructions } from "./intro-exit/Introduction";
 import { ConsentPage } from "./intro-exit/Consent";
-import Quiz from "./intro-exit/Comprehension";
+import { Sorry } from "./intro-exit/Sorry";
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -20,7 +20,11 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
-    return [ExitSurvey];
+    if (player.get("ended") == "finished") {
+      return [ExitSurvey];
+    } else {
+      return [Sorry];
+    }
   }
 
   return (

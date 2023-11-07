@@ -48,7 +48,7 @@ export function NextProblem({
         />
         <h2>Here's what the right answer was:</h2>
         <Hypotheses
-          hypothesis_order={teacher_hypothesis_order}
+          hypothesis_order={learner_hypothesis_order}
           problem_states={problem_states}
           role={"teacher"}
           sliderValues={sliderValues}
