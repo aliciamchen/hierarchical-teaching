@@ -41,14 +41,14 @@ Empirica.onGameStart(({ game }) => {
       original_problem_idx: problem_indices[problems.indexOf(problem)], // 0 to 39 in Natalia's paper
     });
 
-    round.addStage({ name: "LearnerFeedback", duration: 60, stageIdx: 0}); // TODO: change duration to something reasonable
-    round.addStage({ name: "TeacherExample", duration: 60, stageIdx: 1});
-    round.addStage({ name: "LearnerFeedback", duration: 60, stageIdx: 1});
-    round.addStage({ name: "TeacherExample", duration: 60, stageIdx: 2});
-    round.addStage({ name: "LearnerFeedback", duration: 60, stageIdx: 2 });
-    round.addStage({ name: "TeacherExample", duration: 60, stageIdx: 3 });
-    round.addStage({ name: "LearnerFeedback", duration: 60, stageIdx: 3 });
-    round.addStage({ name: "NextProblem", duration: 60 });
+    round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 0}); // TODO: change duration to something reasonable
+    round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 1});
+    round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 1});
+    round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 2});
+    round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 2 });
+    round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 3 });
+    round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 3 });
+    round.addStage({ name: "NextProblem", duration: 90 });
   });
 });
 
