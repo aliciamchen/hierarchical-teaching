@@ -12,6 +12,7 @@ export function LearnerFeedback({
   selected_cells,
   role,
   initialSliderValues,
+  stageIdx
 }) {
 
   const player = usePlayer();
@@ -55,7 +56,7 @@ export function LearnerFeedback({
     return (
       <div id="student-betting" class="slide">
         <br></br>
-        <h1>Update your bets</h1> {/* Problem number goes here */}
+        <h1>{stageIdx == 0 ? 'Submit your first bets' : 'Update your bets'}</h1> {/* Problem number goes here */}
         <p>Teacher's hints so far</p>
         <Canvas
           selected_cells={selected_cells} // Change later to blank screen or just examples selected

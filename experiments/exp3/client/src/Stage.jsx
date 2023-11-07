@@ -74,6 +74,7 @@ export function Stage() {
           initialSliderValues={
             learner.round.get("sliderValuesSoFar").slice(-1)[0]
           } // later change to learner's prev guess aka sliderSoFar
+          stageIdx={stage.get("stageIdx")}
         />
       );
     // return <TeacherExample hint_state={} hypothesis_order={} problem_states={}/>;
