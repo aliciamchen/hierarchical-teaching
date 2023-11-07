@@ -26,3 +26,5 @@ experiments/teacher_2d
 model/teacher_2d
 writing/old
 site
+__pycache__
+experiments/exp3/problems

@@ -1,4 +1,9 @@
-export const problems = [
+export const max_block_bonus = 0.8; // max bonus participants can earn per teaching problem
+export const problem_indices = [
+  2, 4, 7, 8, 9, 13, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29, 31, 32,
+  33, 36, 39,
+]; // indices of the problems we want to include in the task
+export const all_problems = [
   {
     A: [
       [0, 0, 1, 1, 0, 0],
@@ -1364,4 +1369,3 @@ export const problems = [
     ],
   },
 ];
-

@@ -1,14 +1,18 @@
-import { problems } from "./constants.js";
+import { all_problems, problem_indices, max_block_bonus } from "./constants.js";
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 import _ from "lodash";
 
 export const Empirica = new ClassicListenersCollector();
 // console.log(problems)
+const problems = all_problems.filter((problem, i) => problem_indices.includes(i)); // does it work here?
 
 Empirica.onGameStart(({ game }) => {
   console.log("game started");
   const players = game.players;
   const roles = ["teacher", "learner"];
+
+  // filter all_problems to only include problems that are in problem_indices
+
 
   const problems_shuffled = _.shuffle(problems);
   console.log(problems.length);
@@ -20,10 +24,6 @@ Empirica.onGameStart(({ game }) => {
     player.set("problems_shuffled", problems_shuffled);
   });
 
-  // const round = game.addRound({
-  //   name: `test round`,
-  // });
-
   // add a first round with only one stage where participant is told their role
   const round = game.addRound({
     name: `Role`,
@@ -33,24 +33,28 @@ Empirica.onGameStart(({ game }) => {
   // Add a round for each problem
   problems_shuffled.forEach((problem, i) => {
     const round = game.addRound({
+      idx: i,
       name: `Problem ${i + 1}`,
       problem: problem,
+      // save the index of the problem in the original list
+      problem_idx: problems.indexOf(problem),
+      original_problem_idx: problem_indices[problems.indexOf(problem)], // 0 to 39 in Natalia's paper
     });
-    // Should I also save problem index?
-    // Should I also save problem for each stage?
-    round.addStage({ name: "LearnerFeedback", duration: 60 }); // TODO: change duration to something reasonable
-    round.addStage({ name: "TeacherExample", duration: 60 });
-    round.addStage({ name: "LearnerFeedback", duration: 60 });
-    round.addStage({ name: "TeacherExample", duration: 60 });
-    round.addStage({ name: "LearnerFeedback", duration: 60 });
-    round.addStage({ name: "TeacherExample", duration: 60 });
-    round.addStage({ name: "LearnerFeedback", duration: 60 });
+
+    round.addStage({ name: "LearnerFeedback", duration: 60, stageIdx: 0}); // TODO: change duration to something reasonable
+    round.addStage({ name: "TeacherExample", duration: 60, stageIdx: 1});
+    round.addStage({ name: "LearnerFeedback", duration: 60, stageIdx: 1});
+    round.addStage({ name: "TeacherExample", duration: 60, stageIdx: 2});
+    round.addStage({ name: "LearnerFeedback", duration: 60, stageIdx: 2 });
+    round.addStage({ name: "TeacherExample", duration: 60, stageIdx: 3 });
+    round.addStage({ name: "LearnerFeedback", duration: 60, stageIdx: 3 });
     round.addStage({ name: "NextProblem", duration: 60 });
   });
 });
 
 Empirica.onRoundStart(({ round }) => {
   console.log("round started");
+  console.log("problem idx" + round.get("original_problem_idx"))
   const players = round.currentGame.players;
   const teacher = players.find((player) => player.get("role") === "teacher");
   const learner = players.find((player) => player.get("role") === "learner");
@@ -61,6 +65,10 @@ Empirica.onRoundStart(({ round }) => {
   teacher.round.set("hypothesis_order", teacher_hypothesis_order);
   learner.round.set("hypothesis_order", learner_hypothesis_order);
 
+  // set the original problem index for each player (hope this works)
+  teacher.round.set("original_problem_idx", round.get("original_problem_idx"));
+  learner.round.set("original_problem_idx", round.get("original_problem_idx"));
+
   teacher.round.set("selectedCellsSoFar", []);
 
   learner.round.set("sliderValuesSoFar", [{ A: 0, B: 0, C: 0, D: 0 }]); // initial slider values for each teaching problem
@@ -69,6 +77,8 @@ Empirica.onRoundStart(({ round }) => {
 Empirica.onStageStart(({ stage }) => {});
 
 Empirica.onStageEnded(({ stage }) => {
+
+
   // This is where I log the example(s) the teacher selected
   // or the bets the students made
   if (stage.get("name") === "TeacherExample") {
@@ -109,42 +119,47 @@ Empirica.onStageEnded(({ stage }) => {
       "sliderValuesSoFar",
       pushAndReturn(sliderValuesSoFar, sliderValues)
     );
+
+    // after last LearnerFeedback stage, calculate bonus
+    if (stage.get("stageIdx") == 3) {
+      // rescale sliderValues to sum up to 1
+      const sliderValuesSum = _.sum(Object.values(sliderValues));
+      const sliderValuesRescaled = _.mapValues(
+        sliderValues,
+        (value) => value / sliderValuesSum
+      );
+
+      console.log(sliderValuesRescaled);
+
+      const thisRoundBonus = sliderValuesRescaled['A'] * max_block_bonus
+      learner.round.set("thisRoundBonus", thisRoundBonus);
+      teacher.round.set("thisRoundBonus", thisRoundBonus);
+
+      const bonusSoFar = (learner.get("bonus") && teacher.get("bonus")) || 0;
+      learner.round.set("bonusSoFar", bonusSoFar + thisRoundBonus);
+      teacher.round.set("bonusSoFar", bonusSoFar + thisRoundBonus);
+
+      learner.set("bonus", bonusSoFar + thisRoundBonus);
+      teacher.set("bonus", bonusSoFar + thisRoundBonus);
+    }
   }
 });
 
 Empirica.onRoundEnded(({ round }) => {
-  // This is where I log
+  // If it's the last round, set for the player that it is finished
+  if (round.get("idx") == problems.length - 1) {
+    const players = round.currentGame.players;
+    players.forEach((player) => {
+      player.set("ended", "finished");
+    });
+  }
+  // player.get("ended") === "finished"
+
 });
 
 Empirica.onGameEnded(({ game }) => {
   // TODO: figure out bonus structure
 });
-
-function calculateJellyBeansScore(stage) {
-  if (
-    stage.get("name") !== "Answer" ||
-    stage.round.get("task") !== "jellybeans"
-  ) {
-    return;
-  }
-
-  for (const player of stage.currentGame.players) {
-    let roundScore = 0;
-
-    const playerGuess = player.round.get("guess");
-
-    if (playerGuess) {
-      const deviation = Math.abs(playerGuess - jellyBeansCount);
-      const score = Math.round((1 - deviation / jellyBeansCount) * 10);
-      roundScore = Math.max(0, score);
-    }
-
-    player.round.set("score", roundScore);
-
-    const totalScore = player.get("score") || 0;
-    player.set("score", totalScore + roundScore);
-  }
-}
 
 function pushAndReturn(arr, value) {
   arr.push(value);
