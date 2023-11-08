@@ -27,12 +27,12 @@ const questions = [
   {
     question: "What information can I see from my partner?",
     choices: [
-      "If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them.",
-      "I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
-      "I can send bets or hints to my partner, but I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
+      "(A) If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them.",
+      "(B) I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
+      "(C) I can send bets or hints to my partner, but I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
     ],
     correctAnswer:
-    "If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them."
+    "(A) If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them."
   },
 ];
 

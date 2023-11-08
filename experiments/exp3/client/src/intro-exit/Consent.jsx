@@ -24,7 +24,7 @@ export function ConsentPage({ next }) {
       </p>
 
       <p>
-        <strong>Time required:</strong> This experiment will take 30-40 minutes
+        <strong>Time required:</strong> This experiment will take around 45 minutes
         to complete.
       </p>
 
@@ -41,8 +41,8 @@ export function ConsentPage({ next }) {
       </p>
 
       <p>
-        <strong>Compensation:</strong> You will receive $2 for completing the
-        experiment and a performance bonus of up to $5.
+        <strong>Compensation:</strong> You will receive $5 for completing the
+        experiment and a performance bonus of up to $10.
       </p>
 
       <p>

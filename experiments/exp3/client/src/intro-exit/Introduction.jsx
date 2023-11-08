@@ -1096,7 +1096,7 @@ export function Introduction5({ next }) {
       </p>
       {/* <h2 style={{ textAlign: 'left' }}>Three 3️⃣ hints per problem</h2> */}
       <p>
-        You will see a total of 23 problems. For each problem, the teacher will
+        You will see a total of 24 problems. For each problem, the teacher will
         send <strong>three</strong> 3️⃣ hints to the learner.
       </p>
       <p>
@@ -1121,7 +1121,7 @@ export function Introduction5({ next }) {
       </p>
       <p>
         Each time, you have one minute to select your response. If you do not
-        select a response within one minute, the game will automatically
+        select a response within 90 seconds, the game will automatically
         <strong>progress to the next stage when the time is up</strong> and you
         cannot receive a bonus for that stage, so please stay focused.
       </p>
@@ -1160,10 +1160,10 @@ export function Introduction5({ next }) {
 
       <h2 style={{ textAlign: "left" }}>Partner dropout</h2>
       <p>
-        Because this is an interactive game and you are paired with a real person, both people have to finish the game in order to receive a bonus. If your partner leaves the game, you will receive the base pay for the task.
+        Because this is an interactive game and you are paired with a real person, both people have to finish the game in order to receive a bonus. If your partner leaves the game, you will receive the base pay for the task plus the amount you have earned up until that point.
       </p>
       <p>
-        If you have any technical difficulties, please reload the page. If the issues persist, contact us on Prolific and we will reward you your base pay.
+        If you have any technical difficulties, please reload the page. If the issues persist, contact us and we will reward you your base pay.
       </p>
       <br></br>
     </div>

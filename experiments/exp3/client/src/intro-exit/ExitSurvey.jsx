@@ -38,7 +38,7 @@ export function ExitSurvey({ next }) {
       <Alert title="Bonus">
         <p>
           Please submit the following code to receive your bonus:{" "}
-          <strong>{player.id}</strong>.
+          <strong>Ytg3zZbwnwq0</strong>.
         </p>
         <p className="pt-1">
           Your final <strong>bonus</strong> is <strong>{player.get("bonus").toFixed(2)}</strong>.
