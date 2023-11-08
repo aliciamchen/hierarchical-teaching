@@ -83,6 +83,7 @@ var S_uncertain = cache(function(beliefs, previousData, theta) {
 });
 
 
+
 var L0Mean = function (examples, learnerHypers) {
     return (learnerHypers.heads + examples.heads) / (learnerHypers.heads + learnerHypers.tails + examples.heads + examples.tails)
 }
