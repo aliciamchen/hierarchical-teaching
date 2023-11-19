@@ -9,8 +9,8 @@ export function Sorry({}) {
         the game.
       </p>
       <p>
-        Please submit <em>3B021164</em> as the survey code in order to receive
-        the base pay for your time today.
+        Please submit <em>Ytg3zZbwnwq0</em> as the survey code in order to receive
+        your pay for your time today.
       </p>
     </div>
   );
