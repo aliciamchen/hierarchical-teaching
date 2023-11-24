@@ -1120,7 +1120,7 @@ export function Introduction5({ next }) {
         was.
       </p>
       <p>
-        Each time, you have one minute to select your response. If you do not
+        Each time, you have 90 seconds to select your response. If you do not
         select a response within 90 seconds, the game will automatically
         <strong>progress to the next stage when the time is up</strong> and you
         cannot receive a bonus for that stage, so please stay focused.
@@ -1152,7 +1152,7 @@ export function Introduction5({ next }) {
       <h2 style={{ textAlign: "left" }}>How to earn a bonus</h2>
       <p>
         At the end of the experiment, we will calculate your bonus based on the
-        bets the learner placed on 15 random trials across the experiment. So
+        bets the learner placed across the experiment. So
         regardless of which role you're in, make sure that the learner does as
         well as possible on each trial (regardless of how many examples the
         teacher has sent so far) on each teaching problem!

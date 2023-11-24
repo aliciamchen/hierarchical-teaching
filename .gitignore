@@ -28,3 +28,8 @@ writing/old
 site
 __pycache__
 experiments/exp3/problems
+tajriba.json
+*.tar.zst
+writing
+experiments/exp3/old_zip_files
+experiments/exp3/data
