@@ -141,6 +141,15 @@ Empirica.onStageEnded(({ stage }) => {
 
       learner.set("bonus", bonusSoFar + thisRoundBonus);
       teacher.set("bonus", bonusSoFar + thisRoundBonus);
+
+      // Add info about condition (so I don't have to dig in a bunch of csvs)
+      // console.log(stage.currentGame)
+      const treatment = stage.currentGame.get("treatment");
+      // console.log(treatment)
+      const feedback = treatment.feedback;
+      // console.log("feedback: " + feedback)
+      learner.round.set("feedback", feedback);
+      teacher.round.set("feedback", feedback);
     }
   }
 });
