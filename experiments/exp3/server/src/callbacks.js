@@ -41,7 +41,7 @@ Empirica.onGameStart(({ game }) => {
       original_problem_idx: problem_indices[problems.indexOf(problem)], // 0 to 39 in Natalia's paper
     });
 
-    round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 0}); // TODO: change duration to something reasonable
+    round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 0});
     round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 1});
     round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 1});
     round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 2});
@@ -87,7 +87,6 @@ Empirica.onStageEnded(({ stage }) => {
     const teacher = players.find((player) => player.get("role") === "teacher");
 
     const selected_cell = teacher.stage.get("selected_cell") || [];
-    console.log(selected_cell);
 
     const selectedCellsSoFar = teacher.round.get("selectedCellsSoFar") || [];
     console.log(selectedCellsSoFar);
@@ -122,16 +121,17 @@ Empirica.onStageEnded(({ stage }) => {
 
     // after last LearnerFeedback stage, calculate bonus
     if (stage.get("stageIdx") == 3) {
-      // rescale sliderValues to sum up to 1
-      const sliderValuesSum = _.sum(Object.values(sliderValues));
+
+      // choose a random slider value from the last 3 rounds; rescale
+      const randomSliderItem = _.sample(sliderValuesSoFar.slice(1));
+      const sliderValuesSum = _.sum(Object.values(randomSliderItem));
       const sliderValuesRescaled = _.mapValues(
-        sliderValues,
+        randomSliderItem,
         (value) => value / sliderValuesSum
       );
 
-      console.log(sliderValuesRescaled);
-
-      const thisRoundBonus = sliderValuesRescaled['A'] * max_block_bonus
+      const thisRoundBonus = sliderValuesRescaled['A'] * max_block_bonus || 0;
+      console.log("this round bonus: " + thisRoundBonus);
       learner.round.set("thisRoundBonus", thisRoundBonus);
       teacher.round.set("thisRoundBonus", thisRoundBonus);
 
@@ -153,12 +153,11 @@ Empirica.onRoundEnded(({ round }) => {
       player.set("ended", "finished");
     });
   }
-  // player.get("ended") === "finished"
 
 });
 
 Empirica.onGameEnded(({ game }) => {
-  // TODO: figure out bonus structure
+  console.log("game ended")
 });
 
 function pushAndReturn(arr, value) {
