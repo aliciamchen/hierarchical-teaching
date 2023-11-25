@@ -26,9 +26,21 @@ export function NextProblem({
 
   if (player.get("role") === "teacher") {
     return (
-      <div>
+      <div id="student-betting" class="slide">
         <h1>Problem finished</h1>
         <p>Finished problem! Correct answer shown to learner.</p>
+        <CanvasClicker
+          hypothesis={hint_state}
+          selected_cells={selected_cells}
+          // onCellSelect={handleCellSelect}
+        />
+        <h2>Here's what the learner's bets were:</h2>
+        <Hypotheses
+          hypothesis_order={teacher_hypothesis_order}
+          problem_states={problem_states}
+          role={"teacher"}
+          sliderValues={sliderValues}
+        />
         <p>Click below to advance to the next problem.</p>
         <Button handleClick={() => onClick()}>Next problem</Button>
       </div>
@@ -50,9 +62,7 @@ export function NextProblem({
           sliderValues={sliderValues}
         />
         <p>Click below to advance to the next problem.</p>
-        {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
         <Button handleClick={() => onClick()}>Next problem</Button>
-        {/* Might have to add an option for the button to be disabled */}
       </div>
     );
   }

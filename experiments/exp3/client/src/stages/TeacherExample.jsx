@@ -59,7 +59,6 @@ export function TeacherExample({
           sliderValues={sliderValues}
         />
         <br></br>
-        {/* paragraph with bold style */}
       </div>
     );
   } else if (role === "teacher") {
