@@ -1,19 +1,21 @@
 factors:
-  - desc: playerCount determines the number of Players are in a Game.
-    name: playerCount
-    values:
-      - value: 1
-      - value: 2
-      - value: 3
-      - value: 5
-      - value: 8
-      - value: 13
+    - name: playerCount
+      desc: playerCount determines the number of Players are in a Game.
+      values:
+        - value: 2
+    - name: feedback
+      desc: feedback determines whether the teacher can see the learner's bets.
+      values:
+        - value: "yes"
+        - value: "no"
 treatments:
-  - desc: "Single-player Game"
-    factors:
-      playerCount: 1
-    name: Solo
-  - desc: "Two-player Game"
-    factors:
-      playerCount: 2
-    name: Two Players
+    - name: feedback
+      desc: feedback
+      factors:
+        feedback: "yes"
+        playerCount: 2
+    - name: no-feedback
+      desc: no feedback
+      factors:
+        feedback: "no"
+        playerCount: 2
