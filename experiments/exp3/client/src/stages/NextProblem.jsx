@@ -29,10 +29,6 @@ export function NextProblem({
       <div>
         <h1>Problem finished</h1>
         <p>Finished problem! Correct answer shown to learner.</p>
-        <p>
-          You have earned ${player.round.get("thisRoundBonus").toFixed(2)} for this
-          teaching problem. You have earned ${player.get("bonus").toFixed(2)} so far.
-        </p>
         <p>Click below to advance to the next problem.</p>
         <Button handleClick={() => onClick()}>Next problem</Button>
       </div>
@@ -53,11 +49,6 @@ export function NextProblem({
           role={"teacher"}
           sliderValues={sliderValues}
         />
-        <p>
-          You have earned <strong>${player.round.get("thisRoundBonus").toFixed(2)}</strong>{" "}
-          for this teaching problem. You have earned{" "}
-          <strong>${player.get("bonus").toFixed(2)}</strong> so far.
-        </p>
         <p>Click below to advance to the next problem.</p>
         {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
         <Button handleClick={() => onClick()}>Next problem</Button>
@@ -65,11 +56,4 @@ export function NextProblem({
       </div>
     );
   }
-  // return (
-  //   <div>
-  //     <h1>Problem finished</h1>
-  //     <p>Finished problem! Click below to advance to the next problem.</p>
-  //     <Button handleClick={() => onClick()}>Next problem</Button>
-  //   </div>
-  // );
 }
