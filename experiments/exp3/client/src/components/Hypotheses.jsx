@@ -22,6 +22,7 @@ function HypothesisTable({
   disabled,
   updateSliderValue,
   initialSliderValue,
+  disappearSlider,
 }) {
   // draw one hypothesis table
 
@@ -34,30 +35,55 @@ function HypothesisTable({
   //   const [sliderValue, setSliderValue] = useState(30);
 
   // add class 'true' for the hypothesis with key 'A'
-
-  return (
-    <div className="hypothesis-wrapper">
-      <div className={_key === "A" && role === "teacher" ? "true" : ""}>
-        <h2> {title} </h2>
-        <table className="hypothesis">
-          <tbody>
-            {data.map((row, index) => (
-              <Row key={index} rowData={row} />
-            ))}
-          </tbody>
-        </table>
+  if (disappearSlider) {
+    return (
+      <div className="hypothesis-wrapper">
+        <div className={_key === "A" && role === "teacher" ? "true" : ""}>
+          <h2> {title} </h2>
+          <table className="hypothesis">
+            <tbody>
+              {data.map((row, index) => (
+                <Row key={index} rowData={row} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <br></br>
+        {/* <div>
+          <SliderComponent
+            enabled={role != "teacher" && !disabled}
+            updateSliderValue={(newValue) => updateSliderValue(_key, newValue)}
+            initialSliderValue={initialSliderValue}
+            role={role}
+          />
+        </div> */}
       </div>
-      <br></br>
-      <div>
-        <SliderComponent
-          enabled={role != "teacher" && !disabled}
-          updateSliderValue={(newValue) => updateSliderValue(_key, newValue)}
-          initialSliderValue={initialSliderValue}
-          role={role}
-        />
+    );
+  } else {
+    return (
+      <div className="hypothesis-wrapper">
+        <div className={_key === "A" && role === "teacher" ? "true" : ""}>
+          <h2> {title} </h2>
+          <table className="hypothesis">
+            <tbody>
+              {data.map((row, index) => (
+                <Row key={index} rowData={row} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <br></br>
+        <div>
+          <SliderComponent
+            enabled={role != "teacher" && !disabled}
+            updateSliderValue={(newValue) => updateSliderValue(_key, newValue)}
+            initialSliderValue={initialSliderValue}
+            role={role}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export function Hypotheses({
@@ -67,6 +93,7 @@ export function Hypotheses({
   disabled,
   updateSliderValue,
   sliderValues,
+  disappearSlider,
 }) {
   // draw all hypothesis tables
   // if role is "teacher", then the true hypothesis (A) is selected
@@ -83,6 +110,7 @@ export function Hypotheses({
           disabled={disabled}
           updateSliderValue={updateSliderValue}
           initialSliderValue={sliderValues[key]}
+          disappearSlider={disappearSlider}
         />
       ))}
     </div>
@@ -93,7 +121,7 @@ export function SliderComponent({
   enabled,
   updateSliderValue,
   initialSliderValue,
-  role
+  role,
 }) {
   // State to keep track of the current slider value
   const [sliderValue, setSliderValue] = useState(initialSliderValue);
@@ -116,7 +144,7 @@ export function SliderComponent({
         disabled={!enabled}
       />
       {/* Display and center current slider value */}
-        {/* <div className="slider-value">{role == 'teacher' ? 'Learner bet:' : 'Current value:'} {sliderValue}</div> */}
+      {/* <div className="slider-value">{role == 'teacher' ? 'Learner bet:' : 'Current value:'} {sliderValue}</div> */}
       {/* Current value: {sliderValue} */}
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { usePlayer, usePlayers } from "@empirica/core/player/classic/react";
+import { usePlayer, usePlayers, useGame } from "@empirica/core/player/classic/react";
 import { Button } from "../components/Button";
 import { CanvasClicker, Canvas } from "../components/Canvas";
 import { Hypotheses } from "../components/Hypotheses";
@@ -14,7 +14,9 @@ export function LearnerFeedback({
   initialSliderValues,
   stageIdx
 }) {
-
+  const game = useGame();
+  const treatment = game.get("treatment");
+  const { feedback } = treatment;
   const player = usePlayer();
   const players = usePlayers();
   const partner = players.filter((p) => p.id !== player.id)[0];
@@ -89,13 +91,14 @@ export function LearnerFeedback({
           selected_cells={selected_cells}
           disable_click={true}
         />
-        <p>Learner bets so far</p>
+        <p>{feedback == "yes" ? "Learner bets so far" : ""}</p>
         <Hypotheses
           hypothesis_order={teacher_hypothesis_order}
           problem_states={problem_states}
           role={role}
           disabled={true}
           sliderValues={sliderValues}
+          disappearSlider={feedback == "yes" ? false : true}
         />
         {/* <h2>Press continue when you are ready to see ✨new bets✨</h2> */}
       </div>

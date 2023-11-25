@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { usePlayer, usePlayers } from "@empirica/core/player/classic/react";
+import { usePlayer, usePlayers, useGame } from "@empirica/core/player/classic/react";
 import { Button } from "../components/Button";
 import { CanvasClicker, Canvas } from "../components/Canvas";
 import { Hypotheses } from "../components/Hypotheses";
@@ -13,6 +13,9 @@ export function TeacherExample({
   role,
   sliderValues,
 }) {
+  const game = useGame();
+  const treatment = game.get("treatment");
+  const { feedback } = treatment;
   const player = usePlayer();
   const players = usePlayers();
   const partner = players.filter((p) => p.id !== player.id)[0];
@@ -71,12 +74,13 @@ export function TeacherExample({
           selected_cells={selected_cells}
           onCellSelect={handleCellSelect}
         />
-        <h2>Learner's current bets</h2>
+        <h2>{feedback == "yes" ? "Learner's current bets" : ""}</h2>
         <Hypotheses
           hypothesis_order={teacher_hypothesis_order}
           problem_states={problem_states}
           role={role}
           sliderValues={sliderValues}
+          disappearSlider={feedback == "yes" ? false : true} // change later
         />
         {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
         <Button className="m-5" handleClick={() => onClick()}>

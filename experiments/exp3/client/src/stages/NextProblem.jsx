@@ -34,7 +34,7 @@ export function NextProblem({
           selected_cells={selected_cells}
           // onCellSelect={handleCellSelect}
         />
-        <h2>Here's what the learner's bets were:</h2>
+        <h2>Here's what the learner's final bets were:</h2>
         <Hypotheses
           hypothesis_order={teacher_hypothesis_order}
           problem_states={problem_states}
