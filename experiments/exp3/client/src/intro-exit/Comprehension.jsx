@@ -1,43 +1,49 @@
 import React, { useState } from "react";
+import { useGame } from "@empirica/core/player/classic/react";
 import { Button } from "../components/Button";
 
-const questions = [
-  {
-    question: "How should the learner distribute their chips on each bet?",
-    choices: [
-      "(A) They should put all of their chips on the prettiest option.",
-      "(B) They should distribute the chips across all four options, putting more chips on options that are more likely to be right.",
-      "(C) If an option is definitely wrong, they should bet 0 chips on that option; if an option is definitely correct, they should go “all in” and bet 100 chips on that option.",
-      "A & B",
-      "B & C",
-    ],
-    correctAnswer: "B & C",
-  },
-  {
-    question:
-      "Which of these statements correctly describes how your bonus is calculated?",
-    choices: [
-      "(A) My bonus will be calculated based on the bets the learner placed on 15 random trials.",
-      "(B) I can increase my bonus if the learner bets more chips on the options that are more likely to be right.",
-      "(C) If the learner bets on the right answer, this increases both the teacher's and the learner's bonus.",
-      "(D) All of the above",
-    ],
-    correctAnswer: "(D) All of the above",
-  },
-  {
-    question: "What information can I see from my partner?",
-    choices: [
-      "(A) If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them.",
-      "(B) I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
-      "(C) I can send bets or hints to my partner, but I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
-    ],
-    correctAnswer:
-    "(A) If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them."
-  },
-];
-
 export default function Quiz({ next }) {
+  const game = useGame();
+  const treatment = game.get("treatment");
+  const { feedback } = treatment;
   const [answers, setAnswers] = useState({});
+
+  const questions = [
+    {
+      question: "How should the learner distribute their chips on each bet?",
+      choices: [
+        "(A) They should put all of their chips on the prettiest option.",
+        "(B) They should distribute the chips across all four options, putting more chips on options that are more likely to be right.",
+        "(C) If an option is definitely wrong, they should bet 0 chips on that option; if an option is definitely correct, they should go “all in” and bet 100 chips on that option.",
+        "A & B",
+        "B & C",
+      ],
+      correctAnswer: "B & C",
+    },
+    {
+      question:
+        "Which of these statements correctly describes how your bonus is calculated?",
+      choices: [
+        "(A) My bonus will be calculated based on the bets the learner placed on random trials across the game.",
+        "(B) I can increase my bonus if the learner bets more chips on the options that are more likely to be right.",
+        "(C) If the learner bets on the right answer, this increases both the teacher's and the learner's bonus.",
+        "(D) All of the above",
+      ],
+      correctAnswer: "(D) All of the above",
+    },
+    {
+      question: "What information can I see from my partner?",
+      choices: [
+        "(A) If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them.",
+        "(B) If I am the teacher, I won't be able to see any information about my partner's bets until the end of each teaching problem. If I am the learner, I can see my partner's hints after they submit them.",
+        "(C) I can send bets or hints to my partner, but I won't be able to see any information about my partner's bets or hints until the end of each teaching problem.",
+      ],
+      correctAnswer:
+        feedback == "yes"
+          ? "(A) If I am the teacher, I can see my partner's bets after they submit them. If I am the learner, I can see my partner's hints after they submit them."
+          : "(B) If I am the teacher, I won't be able to see any information about my partner's bets until the end of each teaching problem. If I am the learner, I can see my partner's hints after they submit them.",
+    },
+  ];
 
   const handleChoiceChange = (questionIndex, event) => {
     setAnswers({
