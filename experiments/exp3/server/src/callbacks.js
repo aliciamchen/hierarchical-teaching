@@ -89,7 +89,7 @@ Empirica.onStageEnded(({ stage }) => {
     const selected_cell = teacher.stage.get("selected_cell") || [];
 
     const selectedCellsSoFar = teacher.round.get("selectedCellsSoFar") || [];
-    console.log(selectedCellsSoFar);
+    // console.log(selectedCellsSoFar);
     // console.log(selectedCellsSoFar.push(selected_cell))
 
     teacher.round.set(
@@ -106,18 +106,23 @@ Empirica.onStageEnded(({ stage }) => {
     const teacher = players.find((player) => player.get("role") === "teacher");
     const learner = players.find((player) => player.get("role") === "learner");
 
-    const sliderValues =
-      learner.stage.get("sliderValues") ||
-      learner.round.get("sliderValuesSoFar")[
-        learner.round.get("sliderValuesSoFar").length - 1
-      ]; // if no slider values are selected, use the last ones
+    // const sliderValues =
+    //   learner.stage.get("sliderValues") ||
+    //   learner.round.get("sliderValuesSoFar")[
+    //     learner.round.get("sliderValuesSoFar").length - 1
+    //   ]; // if no slider values are selected, use the last ones
 
-    console.log(sliderValues);
+    const sliderValues =
+    learner.stage.get("sliderValues") || {A: null, B: null, C: null, D: null}
+
+
     const sliderValuesSoFar = learner.round.get("sliderValuesSoFar") || [];
     learner.round.set(
       "sliderValuesSoFar",
       pushAndReturn(sliderValuesSoFar, sliderValues)
     );
+
+    console.log(sliderValuesSoFar)
 
     // after last LearnerFeedback stage, calculate bonus
     if (stage.get("stageIdx") == 3) {
