@@ -7,6 +7,7 @@ import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Instructions } from "./intro-exit/Introduction";
 import { ConsentPage } from "./intro-exit/Consent";
 import { Sorry } from "./intro-exit/Sorry";
+import { ReturnHIT } from "./intro-exit/ReturnHIT";
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -20,8 +21,11 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
+    console.log(game.get("endedReason"))
     if (player.get("ended") == "finished") {
       return [ExitSurvey];
+    } else if (game.get("endedReason") == "shared lobby timeout") {
+      return [ReturnHIT];
     } else {
       return [Sorry];
     }
