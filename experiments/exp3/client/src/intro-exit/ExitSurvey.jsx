@@ -41,7 +41,7 @@ export function ExitSurvey({ next }) {
           <strong>Ytg3zZbwnwq0</strong>.
         </p>
         <p className="pt-1">
-          Your final <strong>bonus</strong> is <strong>{player.get("bonus").toFixed(2)}</strong>.
+          Your final <strong>bonus</strong> is $<strong>{player.get("bonus").toFixed(2) < 10 ? player.get("bonus").toFixed(2) : 10}</strong>.
         </p>
       </Alert>
 
