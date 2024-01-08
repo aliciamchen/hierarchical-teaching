@@ -21,7 +21,8 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
-    console.log(game.get("endedReason"))
+    // console.log(player.get("ended"));
+    // console.log(player.get("endedReason"));
     if (player.get("ended") == "finished") {
       return [ExitSurvey];
     } else if (game.get("endedReason") == "shared lobby timeout") {
