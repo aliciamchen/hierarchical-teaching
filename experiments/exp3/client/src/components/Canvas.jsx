@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-export function CanvasClicker({ hypothesis, selected_cells, onCellSelect, disable_click=false }) {
+export function CanvasClicker({ hypothesis, selected_cells, onCellSelect=(cellElement, rowIndex, colIndex) => {return}, disable_click=false }) {
   // For the teacher to select cells to show learner
   // Select cells when clicked
   // selected_cells is a list of [row, col] pairs
@@ -115,7 +115,7 @@ export function CanvasClicker({ hypothesis, selected_cells, onCellSelect, disabl
 export function Canvas({ selected_cells }) {
   // TODO: maybe change hint_state to selected_cells
   const tableRef = useRef(null);
-  console.log(selected_cells)
+  // console.log(selected_cells)
 
   useEffect(() => {
     if (tableRef.current) {
