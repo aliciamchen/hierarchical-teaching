@@ -22,17 +22,17 @@ export function Stage() {
   const teacher = players.find((player) => player.get("role") === "teacher");
   const learner = players.find((player) => player.get("role") === "learner");
 
-  console.log(learner.round.get("sliderValuesSoFar"));
-  // const problems = player.get("problems");
+  // console.log(learner.round.get("sliderValuesSoFar"));
+  // // const problems = player.get("problems");
 
-  console.log(
-    "Teacher hypothesis order: ",
-    teacher.round.get("hypothesis_order")
-  );
-  console.log(
-    "Learner hypothesis order: ",
-    learner.round.get("hypothesis_order")
-  );
+  // console.log(
+  //   "Teacher hypothesis order: ",
+  //   teacher.round.get("hypothesis_order")
+  // );
+  // console.log(
+  //   "Learner hypothesis order: ",
+  //   learner.round.get("hypothesis_order")
+  // );
 
   // If timeout last trial, display the values from the trial before
   function isAllNaN(obj) {
@@ -40,8 +40,8 @@ export function Stage() {
       (value) => value === null || Number.isNaN(value)
     );
   }
-  console.log("slider values so far");
-  console.log(learner.round.get("sliderValuesSoFar").slice(-1)[0]);
+  // console.log("slider values so far");
+  // console.log(learner.round.get("sliderValuesSoFar").slice(-1)[0]);
 
 
   function returnLastSliderValues() {
@@ -67,7 +67,7 @@ export function Stage() {
 
   const lastSliderValues = returnLastSliderValues();
 
-  console.log("Last slider values " + lastSliderValues);
+  // console.log("Last slider values " + lastSliderValues);
 
   if (player && player.stage) { // don't know why we have to catch this
     if (player.stage.get("submit")) {
