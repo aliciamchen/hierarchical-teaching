@@ -15,7 +15,7 @@ Empirica.onGameStart(({ game }) => {
 
 
   const problems_shuffled = _.shuffle(problems);
-  console.log(problems.length);
+  console.log(problems_shuffled.length);
 
   players.forEach((player, i) => {
     player.set("playerIndex", i);
@@ -54,7 +54,7 @@ Empirica.onGameStart(({ game }) => {
 
 Empirica.onRoundStart(({ round }) => {
   console.log("round started");
-  console.log("problem idx" + round.get("original_problem_idx"))
+  console.log("problem idx " + round.get("original_problem_idx"))
   const players = round.currentGame.players;
   const teacher = players.find((player) => player.get("role") === "teacher");
   const learner = players.find((player) => player.get("role") === "learner");
@@ -105,12 +105,6 @@ Empirica.onStageEnded(({ stage }) => {
     const players = stage.currentGame.players;
     const teacher = players.find((player) => player.get("role") === "teacher");
     const learner = players.find((player) => player.get("role") === "learner");
-
-    // const sliderValues =
-    //   learner.stage.get("sliderValues") ||
-    //   learner.round.get("sliderValuesSoFar")[
-    //     learner.round.get("sliderValuesSoFar").length - 1
-    //   ]; // if no slider values are selected, use the last ones
 
     const sliderValues =
     learner.stage.get("sliderValues") || {A: null, B: null, C: null, D: null}
@@ -166,12 +160,23 @@ Empirica.onRoundEnded(({ round }) => {
     players.forEach((player) => {
       player.set("ended", "finished");
     });
+
+    // set final bonus for each player in game, because it sometimes doesn't show up in player
+    // round.game.set("finalBonus", players[0].get("bonus")); // this doesn't work, it has to be currentGame
+    round.currentGame.set("finalBonus", players[0].get("bonus"));
   }
 
 });
 
 Empirica.onGameEnded(({ game }) => {
   console.log("game ended")
+  // console.log(game.players)
+  // const players = game.players;
+
+  // players.forEach((player, i) => {
+  //   player.set("endedReason", game.get("endedReason"));
+  // });
+
 });
 
 function pushAndReturn(arr, value) {
