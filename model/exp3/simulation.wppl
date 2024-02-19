@@ -20,9 +20,13 @@ var isInConcept = function (concept, example) {
 }
 
 var L0 = cache(function (example, problem) {
+    var consistentHypotheses = filter(function (H) { return isInConcept(problem[H], example) }, params.hypothesisLabels);
+    return Categorical({vs: consistentHypotheses});
+});
+
+var L = cache(function (example, problem) {
     return Infer ({ method: 'enumerate' }, function () {
         var H = sample(hypothesisPrior);
-
         var d = sampleFromConcept(problem[H]);
         condition(d === example);
         return H;
