@@ -1,0 +1,38 @@
+var params = {
+    alpha: 1,
+    hypothesisLabels: ['A', 'B'],
+    problem: {
+        A: [0, 0, 0, 1],
+        B: [0, 1, 0, 1]
+    }
+}
+
+var hypothesisPrior = Categorical({vs: params.hypothesisLabels});
+
+var sampleFromConcept = function (concept) {
+    // sample from indices where value is 1
+    var indicesOfOnes = filter(function (x) { return concept[x] === 1 }, _.range(concept.length));
+    return uniformDraw(indicesOfOnes);
+}
+
+var isInConcept = function (concept, example) {
+    return concept[example] === 1;
+}
+
+var L0 = cache(function (example, problem) {
+    return Infer ({ method: 'enumerate' }, function () {
+        var H = sample(hypothesisPrior);
+
+        var d = sampleFromConcept(problem[H]);
+        condition(d === example);
+        return H;
+    })
+});
+
+var S1 = cache(function (hypothesis, problem) {
+    return Infer ({ method: 'enumerate' }, function () {
+        var d = sampleFromConcept(problem[hypothesis]);
+        observe(L0(d, problem), hypothesis);
+        return d;
+    })
+})
