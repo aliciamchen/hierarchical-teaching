@@ -38,11 +38,11 @@ var sampleNextExample = function (concept, past_examples) {
     return uniformDraw(possibleNextExamples);
 }
 
-var sampleFromConcept = function (concept) {
-    // sample from indices where value is 1
-    var indicesOfOnes = filter(function (x) { return concept[x] === 1 }, _.range(concept.length));
-    return uniformDraw(indicesOfOnes);
-}
+// var sampleFromConcept = function (concept) {
+//     // sample from indices where value is 1
+//     var indicesOfOnes = filter(function (x) { return concept[x] === 1 }, _.range(concept.length));
+//     return uniformDraw(indicesOfOnes);
+// }
 
 var isInConcept = function (concept, examples) {
     return all(function(x) {return concept[x] === 1}, examples); //concept[example] === 1;
