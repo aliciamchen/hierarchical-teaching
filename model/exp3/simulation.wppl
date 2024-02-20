@@ -9,34 +9,156 @@ var params = {
 
 var hypothesisPrior = Categorical({vs: params.hypothesisLabels});
 
+var findUniqueElements = function(array1, array2) {
+    // Find elements in array1 that are not in array2
+    var isInSecondArray = function(element, secondArray) {
+      return reduce(function(current, acc) {
+        return acc || (element === current); // Return true if element is found, else keep previous value
+      }, false, secondArray); // Start with false (not found)
+    };
+
+    var diff = filter(function(item) {
+      return !isInSecondArray(item, array2); // Only include items not found in array2
+    }, array1);
+
+    return diff;
+  };
+
+
+
+var sampleNextExample = function (concept, past_examples) {
+    var findConsistentExamples = function (concept, past_examples) {
+        // given an array of past examples and a concept, return possible next examples
+        var indicesOfOnes = filter(function (x) { return concept[x] === 1 }, _.range(concept.length)); // indices of true concept
+        var possibleNextExamples = findUniqueElements(indicesOfOnes, past_examples);
+        return possibleNextExamples;
+    }
+
+    var possibleNextExamples = findConsistentExamples(concept, past_examples);
+    return uniformDraw(possibleNextExamples);
+}
+
 var sampleFromConcept = function (concept) {
     // sample from indices where value is 1
     var indicesOfOnes = filter(function (x) { return concept[x] === 1 }, _.range(concept.length));
     return uniformDraw(indicesOfOnes);
 }
 
-var isInConcept = function (concept, example) {
-    return concept[example] === 1;
+var isInConcept = function (concept, examples) {
+    return all(function(x) {return concept[x] === 1}, examples); //concept[example] === 1;
 }
 
-var L0 = cache(function (example, problem) {
-    var consistentHypotheses = filter(function (H) { return isInConcept(problem[H], example) }, params.hypothesisLabels);
-    return Categorical({vs: consistentHypotheses});
-});
 
-var L = cache(function (example, problem) {
+// TODO: write filter_consistent_examples function --- what is the example space for the next hypothesis? should take in past examples and a hypothesis, and return consistent next examples
+// and then sample from those consistent examples (samplePossibleExamples)
+
+// consistentHyptohesis, isInConcept, etc, for L0 should also take in mutliple examples
+
+// L function should be updateListenerBeliefs
+
+// and hten should just take in those beliefs?
+
+// S1 should have example space? and past examples. L should e updated beliefs based on past examples
+
+var L0 = cache(function (examples, problem, learnerPrior) {
     return Infer ({ method: 'enumerate' }, function () {
-        var H = sample(hypothesisPrior);
-        var d = sampleFromConcept(problem[H]);
-        condition(d === example);
+        var H = sample(learnerPrior);
+        var consistentHypotheses = filter(function (H) { return isInConcept(problem[H], examples) }, params.hypothesisLabels);
+        var learnerPosterior = Categorical({vs: consistentHypotheses});
+        observe(learnerPosterior, H);
         return H;
     })
 });
 
-var S1 = cache(function (hypothesis, problem) {
+
+var S1 = cache(function (hypothesis, problem, past_examples, learnerPrior) {
     return Infer ({ method: 'enumerate' }, function () {
-        var d = sampleFromConcept(problem[hypothesis]);
-        observe(L0(d, problem), hypothesis);
-        return d;
+        var nextExample = sampleNextExample(problem[hypothesis], past_examples) // sampleFromConcept(problem[hypothesis]); // samplePossibleExamples(problem[hypothesis], past_examples); // write this function
+        factor(params.alpha * L0(past_examples.concat(nextExample), problem, learnerPrior).score(hypothesis));
+        return nextExample;
     })
 })
+
+var updateLearnerPosterior = cache(function (example, past_examples, problem, learnerPrior) {
+    return Infer ({ method: 'enumerate' }, function () {
+        var H = sample(learnerPrior); // hypothesisPrior if L0
+        observe(S1(H, problem,  past_examples, learnerPrior), example);
+        return H;
+    })
+});
+
+
+var sequential = cache(function (condition, problem) {
+    return Infer({ method: 'enumerate' }, function () {
+        if (condition == 'feedback') {
+            var empiricalPrior = Categorical({vs: params.hypothesisLabels}); // start with uniform prior. In practice this is participants' empirical prior
+            var firstExample = sample(S1('A', problem, [], empiricalPrior));
+            var firstFeedback = updateLearnerPosterior(firstExample, [], problem, empiricalPrior);
+            var secondExample = sample(S1('A', problem, [firstExample], firstFeedback));
+            var secondFeedback = updateLearnerPosterior(secondExample, [firstExample], problem, firstFeedback);
+            var thirdExample = sample(S1('A', problem, [firstExample, secondExample], secondFeedback));
+            var thirdFeedback = updateLearnerPosterior(thirdExample, [firstExample, secondExample], problem, secondFeedback);
+
+            return {
+                firstExample: firstExample,
+                firstFeedback: sample(firstFeedback),
+                secondExample: secondExample,
+                secondFeedback: sample(secondFeedback),
+                thirdExample: thirdExample,
+                thirdFeedback: sample(thirdFeedback)
+
+            }
+        } else if (condition == 'no_feedback') {
+            var empiricalPrior = Categorical({vs: params.hypothesisLabels}); // start with uniform prior. In practice this is participants' empirical prior
+            var firstExample = sample(S1('A', problem, [], empiricalPrior));
+            var secondExample = sample(S1('A', problem, [firstExample], empiricalPrior));
+            var thirdExample = sample(S1('A', problem, [firstExample, secondExample], empiricalPrior));
+            var thirdFeedback = updateLearnerPosterior(thirdExample, [firstExample, secondExample], problem, empiricalPrior);
+
+            return {
+                firstExample: firstExample,
+                secondExample: secondExample,
+                thirdExample: thirdExample,
+                thirdFeedback: sample(thirdFeedback)
+            }
+        }
+    })
+})
+
+
+
+
+// var S1 = cache(function (hypothesis, problem) {
+//     return Infer ({ method: 'enumerate' }, function () {
+//         var d = sampleFromConcept(problem[hypothesis]);
+//         observe(L0(d, problem), hypothesis);
+//         return d;
+//     })
+// })
+
+// if (past_examples.length === 0) {
+//     listenerBeliefs = L0(d, problem)
+// } else {
+//     listenerBeliefs = updateListenerBeliefs(past_examples, problem, listenerpriorbelief)
+// }
+
+// // pragmatic listener and speaker
+
+// var L = cache(function (example, problem, priorBeliefs) {
+//     return Infer ({ method: 'enumerate' }, function () {
+//         var H = sample(priorBeliefs); // hypothesisPrior if L0
+//         observe(S1(H, problem), example);
+//         return H;
+//     })
+// });
+
+// var S = cache(function (hypothesis, problem, listenerPriorBelief) {
+//     return Infer ({ method: 'enumerate' }, function () {
+//         var d = sampleFromConcept(problem[hypothesis]);
+//         factor(params.alpha * L(d, problem, listenerPriorBelief).score(hypothesis));
+//         return d;
+//     })
+// });
+
+
+
