@@ -3736,10 +3736,6 @@ var all_problems = [
     }
 ]
 
-// print(all_problems)
-console.log(all_problems)
-// var all_problems_flattened = map(function (problem) {return mapObject(function(_, concept) {return _.flatten(concept)}, problem)}, params.all_problems);
-
 var hypothesisPrior = Categorical({ vs: params.hypothesisLabels });
 
 var findUniqueElements = function (array1, array2) {
@@ -3857,6 +3853,7 @@ var sequential = cache(function (condition, problem) {
       );
 
       return {
+        empiricalPrior: sample(empiricalPrior),
         firstExample: firstExample,
         firstFeedback: sample(firstFeedback),
         secondExample: secondExample,
@@ -3898,6 +3895,7 @@ var sequential = cache(function (condition, problem) {
 
 
       return {
+        empiricalPrior: sample(empiricalPrior),
         firstExample: firstExample,
         firstFeedback: sample(firstFeedback),
         secondExample: secondExample,
@@ -3930,6 +3928,14 @@ mapN(function(i) {
         params.alpha,
         params.problem_indices[i],
         'feedback',
+        0,
+        Math.exp(marginalize(feedback_dist, 'empiricalPrior').score('A'))
+    ].join(','), f)
+
+    csv.writeLine([
+        params.alpha,
+        params.problem_indices[i],
+        'feedback',
         1,
         Math.exp(marginalize(feedback_dist, 'firstFeedback').score('A'))
     ].join(','), f)
@@ -3956,6 +3962,14 @@ mapN(function(i) {
         params.alpha,
         params.problem_indices[i],
         'no_feedback',
+        0,
+        Math.exp(marginalize(no_feedback_dist, 'empiricalPrior').score('A'))
+    ].join(','), f)
+
+    csv.writeLine([
+        params.alpha,
+        params.problem_indices[i],
+        'no_feedback',
         1,
         Math.exp(marginalize(no_feedback_dist, 'firstFeedback').score('A'))
     ].join(','), f)
@@ -3976,6 +3990,6 @@ mapN(function(i) {
         Math.exp(marginalize(no_feedback_dist, 'thirdFeedback').score('A'))
     ].join(','), f)
 
-}, all_problems.length) //all_problems.length
+}, all_problems.length)
 
 csv.close(f)
