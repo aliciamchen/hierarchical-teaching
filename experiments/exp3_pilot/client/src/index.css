@@ -122,6 +122,16 @@ Meanwhile, embedding slider css below.
   align-items: center;
 }
 
+.slider-container-highlight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #c9fff8;
+  padding: 0.8em;
+  border-radius: 0.5em;
+  margin: 0.5em 0;
+}
+
 h1, h2, h3, h4 {
   text-align: center;
   font-weight: bold;
