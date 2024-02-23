@@ -120,6 +120,9 @@ Meanwhile, embedding slider css below.
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* padding: 0.8em;
+  border-radius: 0.5em;
+  margin: 0.5em 0; */
 }
 
 .slider-container-highlight {

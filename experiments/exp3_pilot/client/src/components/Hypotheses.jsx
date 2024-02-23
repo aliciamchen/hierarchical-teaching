@@ -139,7 +139,7 @@ export function SliderComponent({
   };
 
   return (
-    <div className={`slider-container-${highlightSlider ? 'highlight' : ''}`}>
+    <div className={`slider-container${highlightSlider ? '-highlight' : ''}`}>
       <input
         type="range"
         min="0"
