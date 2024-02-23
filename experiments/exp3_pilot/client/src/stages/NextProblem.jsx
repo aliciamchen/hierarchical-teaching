@@ -40,7 +40,9 @@ export function NextProblem({
           problem_states={problem_states}
           role={"teacher"}
           sliderValues={sliderValues}
+          highlightSlider={true}
         />
+        <br></br>
         <p><strong>Click below to advance to the next problem.</strong></p>
         <Button handleClick={() => onClick()}>Next problem</Button>
       </div>
@@ -61,7 +63,8 @@ export function NextProblem({
           role={"teacher"}
           sliderValues={sliderValues}
         />
-        <p>Click below to advance to the next problem.</p>
+        <br></br>
+        <p><strong>Click below to advance to the next problem.</strong></p>
         <Button handleClick={() => onClick()}>Next problem</Button>
       </div>
     );

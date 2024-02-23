@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { usePlayer, usePlayers, useGame } from "@empirica/core/player/classic/react";
+import {
+  usePlayer,
+  usePlayers,
+  useGame,
+} from "@empirica/core/player/classic/react";
 import { Button } from "../components/Button";
 import { CanvasClicker, Canvas } from "../components/Canvas";
 import { Hypotheses } from "../components/Hypotheses";
@@ -30,12 +34,11 @@ export function TeacherExample({
 
   function onClick() {
     if (role === "teacher") {
-        // only submit if teacher has selected a cell
-        if (lastSelectedCell === null) {
-            alert("You must select an example to submit.")
-            return;
-        }
-
+      // only submit if teacher has selected a cell
+      if (lastSelectedCell === null) {
+        alert("You must select an example to submit.");
+        return;
+      }
     }
     player.stage.set("submit", true);
     partner.stage.set("submit", true);
@@ -81,7 +84,20 @@ export function TeacherExample({
           role={role}
           sliderValues={sliderValues}
           disappearSlider={feedback == "yes" ? false : true} // change later
+          highlightSlider={feedback == "yes" ? true : false}
         />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <h2
+            style={{
+              padding: "10px",
+              backgroundColor: "#c9fff8",
+              width: "fit-content",
+            }}
+          >
+            Learner's bets
+          </h2>
+        </div>
+        <br></br>
         {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
         <Button className="m-5" handleClick={() => onClick()}>
           Send hint to learner

@@ -91,13 +91,14 @@ export function LearnerFeedback({
           selected_cells={selected_cells}
           disable_click={true}
         />
-        <p>{feedback == "yes" ? "Learner bets so far" : ""}</p>
+        <h2>{feedback == "yes" ? "Learner bets so far" : ""}</h2>
         <Hypotheses
           hypothesis_order={teacher_hypothesis_order}
           problem_states={problem_states}
           role={role}
           disabled={true}
           sliderValues={sliderValues}
+          highlightSlider={feedback == "yes" ? true : false}
           disappearSlider={feedback == "yes" ? false : true}
         />
         {/* <h2>Press continue when you are ready to see ✨new bets✨</h2> */}

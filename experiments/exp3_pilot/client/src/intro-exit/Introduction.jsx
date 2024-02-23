@@ -686,12 +686,12 @@ export function Introduction4({ next, feedback }) {
       <h2>Teacher role</h2>
       <p>
         If you are the <strong>teacher</strong>, you will be shown the correct
-        answer to the question, highlighted in <strong>yellow</strong> below.
+        answer to the question, highlighted in <strong>gold</strong> below.
         (The order of the four options will be shuffled between you and the
         learner.)
         {feedback === "yes"
           ? ` You will also see the learner's current bets for what they
-        think the right answer is. `
+        think the right answer is, highlighted in light blue below. `
           : " "}
         Your job is to give hints to the learner to help them pick out the right
         answer.
@@ -750,7 +750,9 @@ export function Introduction4({ next, feedback }) {
         }}
         role={"teacher"}
         sliderValues={{ A: 50, B: 75, C: 10, D: 0 }}
+        highlightSlider={true}
       />
+      <br></br>
       <p>
         <strong>
           Working together, both you and your partner will win more money if the
@@ -772,7 +774,7 @@ export function Introduction5({ next, feedback }) {
         Please read the following information carefully.
       </p>
       <p>
-        You will see a total of 24 problems. For each problem, the teacher will
+        You will see a total of <strong>4</strong> problems. For each problem, the teacher will
         send <strong>three</strong> 3️⃣ hints to the learner.
       </p>
       <p>
