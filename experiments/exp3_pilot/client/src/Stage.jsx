@@ -11,6 +11,7 @@ import { TeacherExample } from "./stages/TeacherExample";
 import { LearnerFeedback } from "./stages/LearnerFeedback";
 import { NextProblem } from "./stages/NextProblem";
 import { ShowRole } from "./stages/ShowRole";
+import { ShowFeedback } from "./stages/ShowFeedback";
 
 export function Stage() {
   const game = useGame();
@@ -128,6 +129,18 @@ export function Stage() {
       );
     case "ShowRole":
       return <ShowRole />;
+    case "ShowFeedback":
+      return (
+        <ShowFeedback
+          hint_state={round.get("problem")["A"]}
+          teacher_hypothesis_order={teacher.round.get("hypothesis_order")}
+          learner_hypothesis_order={learner.round.get("hypothesis_order")}
+          problem_states={round.get("problem")}
+          selected_cells={teacher.round.get("selectedCellsSoFar")}
+          role={player.get("role")}
+          sliderValues={lastSliderValues}
+        />
+      );
     default:
       return <div>Loading...</div>;
   }

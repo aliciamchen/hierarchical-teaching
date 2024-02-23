@@ -23,6 +23,7 @@ function HypothesisTable({
   updateSliderValue,
   initialSliderValue,
   disappearSlider,
+  highlightSlider
 }) {
   // draw one hypothesis table
 
@@ -79,6 +80,7 @@ function HypothesisTable({
             updateSliderValue={(newValue) => updateSliderValue(_key, newValue)}
             initialSliderValue={initialSliderValue}
             role={role}
+            highlightSlider={highlightSlider}
           />
         </div>
       </div>
@@ -94,6 +96,7 @@ export function Hypotheses({
   updateSliderValue,
   sliderValues,
   disappearSlider,
+  highlightSlider
 }) {
   // draw all hypothesis tables
   // if role is "teacher", then the true hypothesis (A) is selected
@@ -111,6 +114,7 @@ export function Hypotheses({
           updateSliderValue={updateSliderValue}
           initialSliderValue={sliderValues[key]}
           disappearSlider={disappearSlider}
+          highlightSlider={highlightSlider}
         />
       ))}
     </div>
@@ -122,7 +126,8 @@ export function SliderComponent({
   updateSliderValue,
   initialSliderValue,
   role,
-}) {
+  highlightSlider
+  }) {
   // State to keep track of the current slider value
   const [sliderValue, setSliderValue] = useState(initialSliderValue);
 
@@ -134,7 +139,7 @@ export function SliderComponent({
   };
 
   return (
-    <div className="slider-container">
+    <div className={`slider-container-${highlightSlider ? 'highlight' : ''}`}>
       <input
         type="range"
         min="0"
