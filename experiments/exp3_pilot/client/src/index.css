@@ -1,0 +1,424 @@
+@layer utilities {
+  /* Chrome, Safari, Edge, Opera */
+  input.number-arrows-none::-webkit-outer-spin-button,
+  input.number-arrows-none::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input.number-arrows-none[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+/*
+
+TODO fix @import "@empirica/core/assets/slider.css";
+
+Meanwhile, embedding slider css below.
+
+*/
+
+.slider-thumb,
+.slider-thumb-zero {
+  @apply appearance-none w-full bg-transparent cursor-pointer;
+}
+
+.slider-thumb:focus,
+.slider-thumb-zero:focus {
+  @apply outline-none;
+}
+
+/* Track */
+
+.slider-thumb::-webkit-slider-runnable-track {
+  @apply h-2 bg-gray-300 rounded;
+}
+
+.slider-thumb-zero::-webkit-slider-runnable-track {
+  @apply h-2 bg-gray-300 rounded;
+}
+
+.slider-thumb:focus::-webkit-slider-runnable-track {
+  @apply ring-2 ring-offset-2 ring-empirica-500;
+}
+
+.slider-thumb-zero:focus::-webkit-slider-runnable-track {
+  @apply ring-2 ring-offset-2 ring-empirica-500;
+}
+
+.slider-thumb::-moz-range-track {
+  @apply h-2 bg-gray-300 rounded;
+}
+
+.slider-thumb-zero::-moz-range-track {
+  @apply h-2 bg-gray-300 rounded;
+}
+
+.slider-thumb:focus::-moz-range-track {
+  @apply ring-2 ring-offset-2 ring-empirica-500;
+}
+
+.slider-thumb-zero:focus::-moz-range-track {
+  @apply ring-2 ring-offset-2 ring-empirica-500;
+}
+
+/* Thumb */
+
+.slider-thumb::-webkit-slider-thumb {
+  @apply appearance-none w-6 h-6 rounded-full bg-empirica-500 relative -top-2;
+}
+
+.slider-thumb:hover::-webkit-slider-thumb {
+  @apply bg-empirica-600;
+}
+
+.slider-thumb:disabled::-webkit-slider-thumb {
+  @apply bg-gray-400;
+}
+
+.slider-thumb:disabled:hover::-webkit-slider-thumb {
+  @apply bg-gray-400;
+}
+
+.slider-thumb-zero::-webkit-slider-thumb {
+  @apply appearance-none w-6 h-6 rounded-full bg-transparent border-gray-400 border-dashed border relative -top-2;
+}
+
+.slider-thumb-zero:hover::-webkit-slider-thumb {
+  @apply bg-empirica-600 border-none;
+}
+
+.slider-thumb::-moz-range-thumb {
+  @apply appearance-none border-none w-6 h-6 rounded-full bg-empirica-500;
+}
+
+.slider-thumb::-moz-range-thumb:hover {
+  @apply bg-empirica-600;
+}
+
+.slider-thumb:disabled::-moz-range-thumb {
+  @apply bg-gray-400;
+}
+
+.slider-thumb:disabled:hover::-moz-range-thumb {
+  @apply bg-gray-400;
+}
+
+.slider-thumb-zero::-moz-range-thumb {
+  @apply appearance-none w-6 h-6 rounded-full bg-transparent border-gray-400 border-dashed border;
+}
+
+.slider-thumb-zero:hover::-moz-range-thumb {
+  @apply bg-empirica-600 border-none;
+}
+
+/* Experiment-specific styles */
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1, h2, h3, h4 {
+  text-align: center;
+  font-weight: bold;
+}
+
+/* make headings in instructions left aligned
+.instructions h2, .instructions h3, .instructions h4 {
+  text-align: left;
+} */
+
+/* Make h1 bold and bigger */
+h1 {
+  font-size: 1.8em;
+  padding-top: 0.7em;
+}
+
+h2 {
+  font-size: 1.2em;
+  margin-top: 1em;
+}
+
+p {
+  text-align: center;
+  margin: 0.2vh 0;
+}
+
+.standalone {
+  padding: 25vh 0;
+}
+
+ol {
+  list-style-type: decimal;
+  text-align: left;
+  list-style-position: inside;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.slider-value {
+  font-size: 1em;
+  color: cornflowerblue;
+  text-align: center;
+}
+
+/* button {
+  width: 12.5vw;
+  height: 5vh;
+  border-radius: 7.5px;
+  display: block;
+  margin: 0 auto;
+} */
+
+.image-centered {
+  /* width: 75vw; */
+  display: block;
+  margin: auto;
+  /* add space before and after image */
+  padding: 1em 0;
+}
+
+.inactive {
+  color: #999;
+  background-color: #ccc;
+}
+
+.consent {
+  text-align: justify;
+  width: 75vw;
+  display: block;
+  background-color: #fff;
+  padding: 2.5%;
+  margin: 0 auto;
+}
+
+.consent p {
+  /* align text to left */
+  text-align: left;
+  /* add space between paragraphs */
+  margin: 0.7em 0;
+  /* increase text size */
+  font-size: 1.2em;
+}
+
+.instructions {
+  text-align: justify;
+  width: 90vw;
+  display: block;
+  background-color: #fff;
+  padding: 2.5%;
+  margin: 0 auto;
+}
+
+.instructions p {
+   /* align text to left */
+   text-align: left;
+   /* add space between paragraphs */
+   margin: 0.7em 0;
+   /* increase text size */
+   font-size: 1em;
+}
+
+.slide {
+  width: 100vw;
+}
+
+.hero {
+  height: 66vh;
+  display: inline-block;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table, th, td, tr {
+  border: 1px solid #777;
+
+}
+
+td {
+  color: white;
+  font-weight: bold;
+}
+
+.strategic {
+  table-layout: fixed;
+}
+
+#hypothesis-space {
+  width: 75vw;
+  margin: 0 auto;
+  display: block;
+}
+
+.hypothesis-wrapper {
+  width: 14vw;
+  height: 16.5vw;
+  display: inline-block;
+  text-align: justify;
+  margin: 0 1.77vw;
+}
+
+.hypothesis {
+  width: 12.5vw;
+  height: 12.5vw;
+  margin: 0 auto;
+}
+
+.hypothesis td {
+  background-color: white;
+}
+
+.true {
+  background: gold;
+}
+
+input[type=radio] {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+  transform: scale(1.5);
+  vertical-align: middle;
+}
+
+.true {
+  background: gold;
+}
+
+.square {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #777;
+}
+
+#canvas-wrapper {
+  width:20vw;
+  height: 20vw;
+  display: block;
+  margin: 2.5vh auto -2.5vh auto;
+}
+
+.canvas, .student-canvas {
+  width: 17.5vw;
+  height: 17.5vw;
+}
+
+.hypothesis .pos, .student-canvas .selected, .canvas .past, .black {
+  background: #333;
+}
+
+.canvas td, .metal {
+  background: rgb(204,204,204);
+  background: linear-gradient(45deg,
+       rgba(204,204,204,1) 0%,
+       rgba(255,255,255,1) 50%,
+       rgba(204,204,204,1) 100%
+  );
+  border-collapse: separate;
+}
+
+.gray {
+  background: #888;
+}
+
+.canvas .pos, .blue {
+  background: #75a8ff;
+}
+
+.student-canvas td {
+  background: #bbb;
+}
+
+.canvas .past {
+  background-color: #333;
+}
+
+.canvas .selected{
+  background-color: #134bad;
+}
+
+#continue-buttons {
+  width: 35.5vw;
+  margin: 0 auto;
+}
+
+#continue-buttons button{
+  display: inline-block;
+  margin: 0 2.5vw;
+}
+
+.form-group {
+  text-align: left;
+  margin-bottom: 1.5em;
+}
+
+.select_menu{
+  font-size: 12px;
+  outline: none;
+  border: thin #ddd solid;
+  background-color: #F7F7F7;
+}
+
+.quiz-wrapper {
+  width: 75vw;
+  display: block;
+}
+
+.quiz-wrapper .hero {
+  display: block;
+  margin: 2em auto;
+}
+
+.quiz-wrapper .form-check {
+  margin-bottom: 1em;
+}
+
+#hypothesis-space .form-group {
+  width: 3em;
+  display: block;
+  margin: 0 auto;
+}
+
+.debrief-slide {
+  width: 75vw;
+  margin: 0 auto;
+}
+
+.debrief-slide .alert {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+
+.total-bets-tally-container{
+  background-color:#e04848;
+  text-align: center;
+  height: 3em;
+  line-height: 3em;
+  margin-bottom: 10px;
+}
+
+.total-bets-tally{
+  font-size: 20px;
+}
+
+#betting-slider .slider-selection {
+background: #6caeb8;
+}
+
+#betting-slider {
+  width: 100%;
+  margin: 1em auto;
+}
