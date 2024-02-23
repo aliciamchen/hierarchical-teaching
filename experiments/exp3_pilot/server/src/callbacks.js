@@ -8,6 +8,9 @@ const problems = all_problems.filter((problem, i) => problem_indices.includes(i)
 
 Empirica.onGameStart(({ game }) => {
   console.log("game started");
+  const { feedback } = game.get("treatment");
+  console.log("feedback condition: " + feedback);
+
   const players = game.players;
   const roles = ["teacher", "learner"];
 
@@ -41,6 +44,8 @@ Empirica.onGameStart(({ game }) => {
       original_problem_idx: problem_indices[problems.indexOf(problem)], // 0 to 39 in Natalia's paper
     });
 
+
+    if (feedback === "no") {
     round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 0});
     round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 1});
     round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 1});
@@ -49,6 +54,19 @@ Empirica.onGameStart(({ game }) => {
     round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 3 });
     round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 3 });
     round.addStage({ name: "NextProblem", duration: 90 });
+    } else if (feedback === "yes") {
+      round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 0});
+      round.addStage({ name: "ShowFeedback", duration: 90, stageIdx: 1});
+      round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 1});
+      round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 1});
+      round.addStage({ name: "ShowFeedback", duration: 90, stageIdx: 1});
+      round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 2});
+      round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 2 });
+      round.addStage({ name: "ShowFeedback", duration: 90, stageIdx: 1});
+      round.addStage({ name: "TeacherExample", duration: 90, stageIdx: 3 });
+      round.addStage({ name: "LearnerFeedback", duration: 90, stageIdx: 3 });
+      round.addStage({ name: "NextProblem", duration: 90 });
+    }
   });
 });
 

@@ -57,7 +57,7 @@ export function ExitSurvey({ next }) {
               </h3>
               <p className="mt-1 text-sm text-gray-500">
                 Please answer the following short survey. You do not have to
-                provide any information you feel uncomfortable with.
+                provide any information you feel uncomfortable with. Your responses will not affect your pay.
               </p>
             </div>
 
@@ -138,7 +138,7 @@ export function ExitSurvey({ next }) {
                 </label>
 
                 <label className={labelClassName}>
-                  Do you feel the pay was fair?
+                  If you were the teacher, did you take into consideration learners' bets?
                 </label>
 
                 <label className={labelClassName}>

@@ -87,15 +87,17 @@ export function TeacherExample({
           highlightSlider={feedback == "yes" ? true : false}
         />
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <h2
-            style={{
-              padding: "10px",
-              backgroundColor: "#c9fff8",
-              width: "fit-content",
-            }}
-          >
-            Learner's bets
-          </h2>
+          {feedback === "yes" && (
+            <h2
+              style={{
+                padding: "10px",
+                backgroundColor: "#c9fff8",
+                width: "fit-content",
+              }}
+            >
+              Learner's bets
+            </h2>
+          )}
         </div>
         <br></br>
         {/* TODO: Save information from sliders in Hypotheses when button is clicked */}
