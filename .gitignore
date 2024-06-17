@@ -25,12 +25,13 @@ analysis/teacher_2d
 experiments/teacher_2d
 model/teacher_2d
 writing/old
+writing/paper
+writing/production
 site
 __pycache__
 experiments/exp3/problems
 tajriba.json
 *.tar.zst
-writing
 exp3
 experiments/exp3/old_zip_files
 experiments/exp3/data
