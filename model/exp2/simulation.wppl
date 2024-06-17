@@ -1,5 +1,3 @@
-// webppl simulation.wppl --require webppl-csv -- --speakerAlpha 3 --listenerAlpha 3 --guessCost 0.1 --exampleCost 0.001
-
 var params = {
     speakerAlpha: argv.speakerAlpha,
     listenerAlpha: argv.listenerAlpha,
