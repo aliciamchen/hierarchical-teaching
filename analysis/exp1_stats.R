@@ -32,6 +32,7 @@ seq.mod.toohigh <- lmer_alt(
   control = glmerControl(optimizer = "bobyqa")
 )
 
+
 summary(seq.mod.toohigh)
 
 d.toolow <-
@@ -47,34 +48,3 @@ seq.mod.toolow <- lmer_alt(
 )
 
 summary(seq.mod.toolow)
-
-nonseq.mod.bayes <- brm(
-  n_majority | trials(n_turtles) ~ 1
-  + student_prior * teacher_knowledge
-  + (1 + student_prior * teacher_knowledge | subject_id),
-  data = d.data,
-  family = binomial
-)
-
-summary(nonseq.mod.bayes)
-
-seq.mod.toohigh.bayes <- brm(
-  n_majority |
-    trials(n_turtles) ~ 1 + lesson_num * feedback + (1 + lesson_num * feedback |
-                                                      subject_id),
-  data = d.toohigh,
-  family = "binomial"
-)
-
-summary(seq.mod.toohigh.bayes)
-
-seq.mod.toolow.bayes <- brm(
-  n_majority |
-    trials(n_turtles) ~ 1 + lesson_num * feedback + (1 + lesson_num * feedback |
-                                                      subject_id),
-  data = d.toolow,
-  family = "binomial"
-)
-
-summary(seq.mod.toolow.bayes)
-

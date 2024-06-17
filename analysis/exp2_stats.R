@@ -6,16 +6,9 @@ library(lmerTest)
 d <- read.csv(here("data/exp2_data_cleaned.csv"))
 options(contrasts = c(unordered = "contr.sum", ordered = "contr.poly"))
 
-mod <- glmer(
-  guess ~ 1 + poly(first_examples_a, 2) + (1 + poly(first_examples_a, 2) | subject_id),
-  data = d,
-  family = binomial,
-  control = glmerControl(optimizer = "bobyqa"),
-)
 
-summary(mod)
 
-# Do participants do better after receiving second set of examples?
+# Do participants do better after receiving the second set of examples?
 
 d.guesses <- d %>% 
   mutate(correct_first_guess = first_guess == theta, 
@@ -50,3 +43,16 @@ guess.mod.inter <- glmer(
 )
 
 summary(guess.mod.inter)
+
+
+
+# Preregistered confirmatory analysis
+
+mod <- glmer(
+  guess ~ 1 + poly(first_examples_a, 2) + (1 + poly(first_examples_a, 2) | subject_id),
+  data = d,
+  family = binomial,
+  control = glmerControl(optimizer = "bobyqa"),
+)
+
+summary(mod)
