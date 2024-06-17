@@ -10,8 +10,6 @@ palette <- c(
   "#c6484d", "#0088ae","#7c5b7f",  "#a3654d", "#7593b6", "#9bb27e", "#e69d45", "#c06c5e", "#f97a3b", "#ba3f5d", "#0063a2", "#4fa091"
 )
 
-show_col(palette)
-
 n.ex <- 5
 theme_set(theme_few(base_size = 16))
 

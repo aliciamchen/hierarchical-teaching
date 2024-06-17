@@ -22,10 +22,11 @@ palette <- c(
   "#4fa091"
 )
 
-show_col(palette)
 
 
-## Experiment 1
+# Experiment 1 supplementary figures --------------------------------------
+
+
 
 d.model <-
   read.csv(here("model/cleaned_outputs/exp1_simulation_cleaned.csv"))
@@ -33,7 +34,17 @@ d.model <-
 d.model.nonseq <- d.model %>% filter(sequential == "non_sequential")
 
 d.model.nonseq.means <- d.model.nonseq %>%
-  group_by(alpha, student_prior, teacher_knowledge) %>%
+  group_by(alpha, priorWeight, student_prior, teacher_knowledge) %>%
+  tidyboot_mean(n_majority / n_turtles, na.rm = T)
+
+d.model.seq.toohigh.means <- d.model %>%
+  filter(sequential == "sequential", student_prior == "too_high") %>%
+  group_by(alpha, priorWeight, feedback, lesson_num) %>%
+  tidyboot_mean(n_majority / n_turtles, na.rm = T)
+
+d.model.seq.toolow.means <- d.model %>%
+  filter(sequential == "sequential", student_prior == "too_low") %>%
+  group_by(alpha, priorWeight, feedback, lesson_num) %>%
   tidyboot_mean(n_majority / n_turtles, na.rm = T)
 
 
@@ -52,7 +63,7 @@ fig.nonseq.model <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   theme(aspect.ratio = 1) +
   scale_color_manual(values = palette[1:2], labels = c("too high", "too low")) +
-  facet_grid(~ alpha, labeller = label_parsed) +
+  facet_grid(priorWeight ~ alpha, labeller = label_parsed) +
   labs(x = "teacher knowledge",
        y = "turtles sent",
        col = "student prior",
@@ -64,15 +75,10 @@ ggsave(
   here("writing/outputs/supp_exp1_nonseq.pdf"),
   plot = fig.nonseq.model,
   units = "in",
-  width = 12,
-  height = 5
+  width = 9,
+  height = 8
 )
 
-
-d.model.seq.toohigh.means <- d.model %>%
-  filter(sequential == "sequential", student_prior == "too_high") %>%
-  group_by(alpha, feedback, lesson_num) %>%
-  tidyboot_mean(n_majority / n_turtles, na.rm = T)
 
 fig.toohigh.model <-
   ggplot(
@@ -96,26 +102,20 @@ fig.toohigh.model <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   scale_x_discrete(name = "lesson", labels = c("first", "second")) +
   scale_color_manual(values = palette[3:4], labels = c("yes", "no")) +
-  facet_grid(~ alpha, labeller = label_parsed) +
+  facet_grid(priorWeight ~ alpha, labeller = label_parsed) +
   labs(x = "lesson num", y = "turtles sent", title = "too high (model)")
 
 fig.toohigh.model
-
 
 ggsave(
   here("writing/outputs/supp_exp1_toohigh.pdf"),
   plot = fig.toohigh.model,
   units = "in",
-  width = 12,
-  height = 5
+  width = 9,
+  height = 8
 )
 
 
-
-d.model.seq.toolow.means <- d.model %>%
-  filter(sequential == "sequential", student_prior == "too_low") %>%
-  group_by(alpha, feedback, lesson_num) %>%
-  tidyboot_mean(n_majority / n_turtles, na.rm = T)
 
 fig.toolow.model <-
   ggplot(
@@ -139,7 +139,7 @@ fig.toolow.model <-
   geom_hline(yintercept = 0.7, linetype = "dashed") +
   scale_x_discrete(name = "lesson", labels = c("first", "second")) +
   scale_color_manual(values = palette[3:4], labels = c("yes", "no")) +
-  facet_grid(~ alpha, labeller = label_parsed) +
+  facet_grid(priorWeight ~ alpha, labeller = label_parsed) +
   labs(x = "lesson num", y = "turtles sent", title = "too low (model)")
 
 fig.toolow.model
@@ -148,13 +148,15 @@ ggsave(
   here("writing/outputs/supp_exp1_toolow.pdf"),
   plot = fig.toolow.model,
   units = "in",
-  width = 12,
-  height = 5
+  width = 9,
+  height = 8
 )
 
 
 
-## Experiment 2
+# Experiment 2 supplementary figures --------------------------------------
+
+
 
 d <- read.csv(here("data/exp2_data_cleaned.csv"))
 d.model <-
@@ -193,7 +195,7 @@ guess.data <-
        col = "true proportion",
        title = "data")
 
-guess.data
+
 
 guess.model <-
   ggplot(
@@ -222,7 +224,7 @@ guess.model <-
        col = "true proportion",
        title = "model")
 
-guess.model
+
 
 fig.supp.guesses <-
   ggarrange(
@@ -297,4 +299,3 @@ ggsave(
   width = 10,
   height = 6
 )
-

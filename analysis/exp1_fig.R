@@ -22,8 +22,6 @@ palette <- c(
   "#4fa091"
 )
 
-show_col(palette)
-
 
 d.data <- read.csv(here("data/exp1_data_cleaned.csv"))
 d.model <-
@@ -54,7 +52,6 @@ fig.nonseq.data <-
        col = "student prior",
        title = "one-shot (data)")
 
-fig.nonseq.data
 
 # plots for too high
 
