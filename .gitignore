@@ -31,5 +31,8 @@ experiments/exp3/problems
 tajriba.json
 *.tar.zst
 writing
+exp3
 experiments/exp3/old_zip_files
 experiments/exp3/data
+experiments/exp3
+experiments/exp3_pilot
