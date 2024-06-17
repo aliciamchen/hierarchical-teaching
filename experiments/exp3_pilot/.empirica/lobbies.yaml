@@ -1,9 +1,0 @@
-lobbies:
-    - name: Default shared fail
-      kind: shared
-      duration: 5m0s
-      strategy: fail
-    - name: Test lobby timeout
-      kind: shared
-      duration: 15s
-      strategy: fail
