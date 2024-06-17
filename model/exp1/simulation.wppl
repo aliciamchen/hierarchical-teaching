@@ -3,6 +3,7 @@ var params = {
     speakerAlpha: argv.speakerAlpha,
     exampleCost: argv.exampleCost,
     trueThetas: [0.3, 0.7], // true coin flip weight
+    priorWeights: [0.5, 1, 2, 4, 8],
     maxFlips: 70,
     scenarios: ['seqFeedback', 'nonSeqFull', 'nonSeqPartial', 'seqNoFeedback'],
     learnerHypers: [
@@ -98,10 +99,6 @@ var updateSpeakerPosterior = cache(function (examples, guess) {
         observe(learnerDist, round(guess, 2))
         return learnerHypers;
 
-        // var learnerEstimate = L0Mean(examples[0], learnerHypers)
-
-        // condition(learnerEstimate == guess)
-        // return learnerHypers;
     })
 });
 
@@ -139,22 +136,25 @@ var simulate = cache(function (scenario, coinWeight, learnerHypers) {
 //// Simulate
 
 var f = csv.open('./output/indiv/' + 'sa' + params.speakerAlpha + '_cw' + params.exampleCost + '.csv')
-csv.writeLine('subject_id,alpha,costWeight,block_type,trial_num,theta,student_a,student_b,heads,tails', f)
+csv.writeLine('subject_id,alpha,priorWeight,costWeight,block_type,trial_num,theta,student_a,student_b,heads,tails', f)
 
 var makeTrials = function () {
     return _.flattenDeep(
         mapN(function (participant) {
             return map(function (scenario) {
                 return map(function (coinWeight) {
-                    return map(function(classHypers) {
-                        return {
-                            participantID: participant,
-                            scenario: scenario,
-                            coinWeight: coinWeight,
-                            student_a: classHypers.heads,
-                            student_b: classHypers.tails
-                        }
-                    }, params.learnerHypers)
+                    return map(function (priorWeight) {
+                        return map(function(classHypers) {
+                            return {
+                                participantID: participant,
+                                scenario: scenario,
+                                priorWeight: priorWeight,
+                                coinWeight: coinWeight,
+                                student_a: classHypers.heads,
+                                student_b: classHypers.tails
+                            }
+                        }, params.learnerHypers)
+                    }, params.priorWeights)
                 }, params.trueThetas)
             }, params.scenarios)
         }, params.participants)
@@ -168,8 +168,9 @@ map(function (trial) {
     // console.log(trial)
 
     var classHypers = {heads: trial.student_a, tails: trial.student_b}
+    var adjustedHypers = {heads: trial.student_a * trial.priorWeight, tails: trial.student_b * trial.priorWeight}
 
-    var response = sample(simulate(trial.scenario, trial.coinWeight, classHypers))
+    var response = sample(simulate(trial.scenario, trial.coinWeight, adjustedHypers))
     // console.log(response)
 
     if (trial.scenario === 'nonSeqFull' || trial.scenario === 'nonSeqPartial') {
@@ -177,6 +178,7 @@ map(function (trial) {
         csv.writeLine([
             trial.participantID,
             params.speakerAlpha,
+            trial.priorWeight,
             params.exampleCost,
             trial.scenario,
             0,
@@ -192,6 +194,7 @@ map(function (trial) {
         csv.writeLine([
             trial.participantID,
             params.speakerAlpha,
+            trial.priorWeight,
             params.exampleCost,
             trial.scenario,
             0,
@@ -205,6 +208,7 @@ map(function (trial) {
         csv.writeLine([
             trial.participantID,
             params.speakerAlpha,
+            trial.priorWeight,
             params.exampleCost,
             trial.scenario,
             1,
