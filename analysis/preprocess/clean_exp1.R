@@ -82,6 +82,7 @@ d.model %>%
     c(
       subject_id,
       alpha,
+      priorWeight,
       costWeight,
       lesson_num,
       sequential,
@@ -94,4 +95,3 @@ d.model %>%
     )
   ) %>%
   write_csv(here('model/cleaned_outputs/exp1_simulation_cleaned.csv'))
-
