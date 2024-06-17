@@ -1,0 +1,122 @@
+Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: n_majority/n_turtles ~ 1 + student_prior * teacher_knowledge +  
+    (1 + re1.student_prior1 + re1.teacher_knowledge1 + re1.student_prior1_by_teacher_knowledge1 |  
+        subject_id)
+   Data: data
+Weights: d.data$n_turtles
+Control: glmerControl(optimizer = "bobyqa")
+
+     AIC      BIC   logLik deviance df.resid 
+ 20224.1  20314.2 -10098.1  20196.1     4579 
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-11.8778  -0.3593   0.0355   0.5562   8.9792 
+
+Random effects:
+ Groups     Name                                     Variance Std.Dev. Corr 
+ subject_id (Intercept)                              0.36189  0.6016        
+            re1.student_prior1                       0.23518  0.4850   -0.54
+            re1.teacher_knowledge1                   0.05263  0.2294    0.27
+            re1.student_prior1_by_teacher_knowledge1 0.15688  0.3961   -0.55
+            
+            
+            
+ -0.56      
+  0.93 -0.60
+Number of obs: 4593, groups:  subject_id, 193
+
+Fixed effects:
+                                  Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                        1.15248    0.04707  24.486  < 2e-16 ***
+student_prior1                    -0.33727    0.03959  -8.519  < 2e-16 ***
+teacher_knowledge1                 0.18189    0.02414   7.534 4.92e-14 ***
+student_prior1:teacher_knowledge1 -0.27241    0.03384  -8.050 8.25e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) stdn_1 tchr_1
+studnt_prr1 -0.507              
+tchr_knwld1  0.383 -0.460       
+stdnt_p1:_1 -0.504  0.900 -0.488
+Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: 
+n_majority/n_turtles ~ 1 + lesson_num * feedback + (1 + re1.lesson_num1 +  
+    re1.feedback1 + re1.lesson_num1_by_feedback1 | subject_id)
+   Data: data
+Weights: d.toohigh$n_turtles
+Control: glmerControl(optimizer = "bobyqa")
+
+     AIC      BIC   logLik deviance df.resid 
+  6691.8   6766.5  -3331.9   6663.8     1511 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.5829 -0.2466  0.0323  0.4023  6.3872 
+
+Random effects:
+ Groups     Name                         Variance Std.Dev. Corr             
+ subject_id (Intercept)                  0.23984  0.4897                    
+            re1.lesson_num1              0.07644  0.2765    0.05            
+            re1.feedback1                0.04744  0.2178    0.19 -0.13      
+            re1.lesson_num1_by_feedback1 0.02964  0.1722    0.22  0.35 -0.25
+Number of obs: 1525, groups:  subject_id, 193
+
+Fixed effects:
+                      Estimate Std. Error z value Pr(>|z|)    
+(Intercept)            0.87020    0.04017  21.665  < 2e-16 ***
+lesson_num1            0.07658    0.02705   2.831  0.00463 ** 
+feedback1             -0.12461    0.02377  -5.243 1.58e-07 ***
+lesson_num1:feedback1  0.04240    0.02146   1.975  0.04822 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) lssn_1 fdbck1
+lesson_num1  0.033              
+feedback1    0.116 -0.059       
+lssn_nm1:f1  0.128  0.174 -0.122
+Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: 
+n_majority/n_turtles ~ 1 + lesson_num * feedback + (1 + re1.lesson_num1 +  
+    re1.feedback1 + re1.lesson_num1_by_feedback1 | subject_id)
+   Data: data
+Weights: d.toolow$n_turtles
+Control: glmerControl(optimizer = "bobyqa")
+
+     AIC      BIC   logLik deviance df.resid 
+  6555.1   6629.8  -3263.6   6527.1     1517 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.2140 -0.2828  0.0428  0.4811  5.3874 
+
+Random effects:
+ Groups     Name                         Variance Std.Dev. Corr             
+ subject_id (Intercept)                  0.41091  0.6410                    
+            re1.lesson_num1              0.08921  0.2987   -0.20            
+            re1.feedback1                0.04188  0.2046    0.60 -0.72      
+            re1.lesson_num1_by_feedback1 0.05277  0.2297   -0.48  0.54 -0.82
+Number of obs: 1531, groups:  subject_id, 193
+
+Fixed effects:
+                      Estimate Std. Error z value Pr(>|z|)    
+(Intercept)            1.05159    0.05046  20.840  < 2e-16 ***
+lesson_num1           -0.18277    0.02882  -6.342 2.27e-10 ***
+feedback1              0.10155    0.02338   4.342 1.41e-05 ***
+lesson_num1:feedback1 -0.10912    0.02492  -4.379 1.19e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) lssn_1 fdbck1
+lesson_num1 -0.170              
+feedback1    0.393 -0.419       
+lssn_nm1:f1 -0.327  0.343 -0.460
