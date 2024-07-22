@@ -4,7 +4,9 @@ A hierarchical Bayesian model of adaptive teaching
 
 Alicia M. Chen, Andrew Palacci, Natalia Vélez, Robert D. Hawkins*, Samuel J. Gershman*
 
-Preprint: https://psyarxiv.com/4u5g6
+Cognitive Science, 2024
+
+Paper: https://doi.org/10.1111/cogs.13477
 OSF project: https://osf.io/ubxjr
 
 ## Preregistrations
