@@ -14,7 +14,7 @@ var params = {
 };
 
 var round = function (num, precision) {
-	Number.parseFloat(num.toFixed(precision));
+	return Number.parseFloat(num.toFixed(precision));
 };
 
 // define priors for teacher and learner
